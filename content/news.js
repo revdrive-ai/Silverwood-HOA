@@ -13,13 +13,13 @@ export const news = [
   },
   {
     slug: "garage-sale",
-    title: "Neighborhood Garage Sale — Saturday, April 25th",
-    date: "2026",
+    title: "Neighborhood Garage Sale",
+    date: "2027",
     image: "/images/garage-sale.jpg",
-    summary: "The annual neighborhood garage sale is Saturday, April 25th, timed with nearby communities.",
+    summary: "We are planning to schedule the 2027 Garage sales in April so it is timed with nearby communities.",
     body: [
-      "The Silverwood neighborhood's annual garage sale is scheduled for Saturday, April 25th. The date coincides with sales in other nearby neighborhoods, which tends to bring more shoppers through the area.",
-      "Banners will be displayed around the neighborhood during the week of the sale. Watch the Facebook group and the member portal for reminders as the date approaches.",
+      "We are planning to schedule the 2027 Garage sales in April so it is timed with nearby communities.",
+      "Banners will be displayed around the neighborhood during the week of the sale. Watch the Facebook group and the member portal for reminders once the date is confirmed.",
     ],
   },
   {
