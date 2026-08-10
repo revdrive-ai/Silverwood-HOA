@@ -41,9 +41,9 @@ export const news = [
     image: "/images/pool.jpg",
     summary: "Pool hours, key access, and rules for the season.",
     body: [
-      "The community pool operates seasonally from Memorial Day weekend through Labor Day weekend. Hours vary by day: Mondays 1–10 PM (pool cleaning day), Tuesday–Sunday 9 AM–10 PM.",
+      "The community pool operates seasonally from Memorial Day weekend through Labor Day weekend. Hours vary by day: Mondays 1–9 PM (pool cleaning day), Tuesday–Thursday 9 AM–9 PM, Friday–Sunday 9 AM–10 PM.",
       "Electronic pool keys are available from Tim Sanderson or a board member. Residents must have current dues to obtain access — request a key through the contact page or via the Facebook group.",
-      "Please clean all tables and pick up all trash before leaving the pool area. Staying at the pool after 10 PM is not permitted.",
+      "Please clean all tables and pick up all trash before leaving the pool area. Staying at the pool after the posted closing time is not permitted.",
       "The exact closing date each season depends on weather and usage, since operating costs increase with extended hours. Watch for closure notices via Facebook and email.",
     ],
   },
