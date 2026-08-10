@@ -61,7 +61,8 @@ export const newResidentPages = [
   {
     slug: "power-outage",
     title: "What To Do In a Power Outage",
-    image: null,
+    image: "/images/pso-logo.jpg",
+    imageFit: "contain",
     summary: "Guidance from PSO for staying safe during an outage.",
     body: [
       "Report an outage using your cellphone if possible, via the PSO website.",

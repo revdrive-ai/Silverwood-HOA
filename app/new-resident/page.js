@@ -9,7 +9,14 @@ export default function NewResidentPage() {
       <PageHero title="New Resident Info" subtitle="Everything you need to get settled into Silverwood." />
       <div className="mx-auto max-w-6xl px-4 sm:px-6 py-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {newResidentPages.map((p) => (
-          <Card key={p.slug} href={`/new-resident/${p.slug}`} image={p.image} title={p.title} description={p.summary} />
+          <Card
+            key={p.slug}
+            href={`/new-resident/${p.slug}`}
+            image={p.image}
+            imageFit={p.imageFit}
+            title={p.title}
+            description={p.summary}
+          />
         ))}
       </div>
     </div>
