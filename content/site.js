@@ -43,12 +43,12 @@ export const site = {
   amenities:
     "Dues support two neighborhood entrances (one with a guardhouse), a pool and pool house, and a retention pond with surrounding fence on the west side of the community.",
   poolInfo: {
-    hours: "Mon 1–10 PM (pool cleaning day) · Tue–Sun 9 AM–10 PM",
+    hours: "Mon 1–9 PM (pool cleaning day) · Tue–Thu 9 AM–9 PM · Fri–Sun 9 AM–10 PM",
     season: "Memorial Day weekend through Labor Day weekend (exact closing date depends on weather and usage)",
     access:
       "Electronic pool keys are available from Tim Sanderson or a board member — residents must have current dues to receive one. Request a key via the contact page or the Facebook group.",
     rules:
-      "Please clean all tables and pick up all trash before leaving the pool area. Staying at the pool after 10 PM is not permitted.",
+      "Please clean all tables and pick up all trash before leaving the pool area. Staying at the pool after the posted closing time is not permitted.",
   },
   footerNote: "Content on this site is maintained by Silverwood HOA board volunteers.",
 };
