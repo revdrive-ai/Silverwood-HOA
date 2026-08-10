@@ -23,8 +23,17 @@ export default function ResidentDetailPage({ params }) {
       </Link>
       <h1 className="mt-4 font-sans font-bold text-3xl text-primary">{item.title}</h1>
       {item.image ? (
-        <div className="relative w-full h-56 mt-6 rounded-lg overflow-hidden">
-          <Image src={item.image} alt={item.title} fill className="object-cover" />
+        <div
+          className={`relative w-full h-56 mt-6 rounded-lg overflow-hidden ${
+            item.imageFit === "contain" ? "bg-white border border-cream2 p-6 max-w-xs" : ""
+          }`}
+        >
+          <Image
+            src={item.image}
+            alt={item.title}
+            fill
+            className={item.imageFit === "contain" ? "object-contain" : "object-cover"}
+          />
         </div>
       ) : null}
 

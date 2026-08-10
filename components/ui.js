@@ -19,7 +19,9 @@ export function SectionHeading({ children }) {
   );
 }
 
-export function Card({ href, image, title, description, external }) {
+// imageFit="contain" is for logo-type images (e.g. a utility company mark): the
+// image sits fully visible on white instead of being cropped to fill the slot.
+export function Card({ href, image, imageFit, title, description, external }) {
   const Wrapper = ({ children }) =>
     href ? (
       <a
@@ -37,8 +39,8 @@ export function Card({ href, image, title, description, external }) {
   return (
     <Wrapper>
       {image ? (
-        <div className="relative w-full h-40 bg-cream2">
-          <Image src={image} alt={title} fill className="object-cover" />
+        <div className={`relative w-full h-40 ${imageFit === "contain" ? "bg-white p-4" : "bg-cream2"}`}>
+          <Image src={image} alt={title} fill className={imageFit === "contain" ? "object-contain" : "object-cover"} />
         </div>
       ) : null}
       <div className="p-4">
