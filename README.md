@@ -71,3 +71,5 @@ once you're happy with the design and content.
 npm install
 npm run dev
 ```
+
+<!-- Vercel Git integration verified 2026-08-10 -->
