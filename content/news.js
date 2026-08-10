@@ -3,7 +3,7 @@ export const news = [
     slug: "annual-meeting-2027",
     title: "Annual Meeting 2027",
     date: "2027",
-    image: "https://silverwoodneighborhood.org/wp-content/uploads/2023/06/agenda-385x217.jpg",
+    image: "/images/annual-meeting.jpg",
     summary: "The 2027 Annual Meeting is set for May 2027. Time and location TBD.",
     body: [
       "The Silverwood HOA's 2027 Annual Meeting will be held in May 2027. Time and location are still to be determined.",
@@ -15,7 +15,7 @@ export const news = [
     slug: "garage-sale",
     title: "Neighborhood Garage Sale — Saturday, April 25th",
     date: "2026",
-    image: "https://silverwoodneighborhood.org/wp-content/uploads/2024/04/sale-370x300.jpg",
+    image: "/images/garage-sale.jpg",
     summary: "The annual neighborhood garage sale is Saturday, April 25th, timed with nearby communities.",
     body: [
       "The Silverwood neighborhood's annual garage sale is scheduled for Saturday, April 25th. The date coincides with sales in other nearby neighborhoods, which tends to bring more shoppers through the area.",
@@ -26,7 +26,7 @@ export const news = [
     slug: "new-management-robson",
     title: "Silverwood Now Managed by Robson Property Management",
     date: "2024",
-    image: "https://silverwoodneighborhood.org/wp-content/uploads/2023/06/2023-11-04-14-03-49.jpg",
+    image: "/images/management.jpg",
     summary: "Robson Property Management (RPM) has been hired by the Board as the new managing agent.",
     body: [
       "Robson Property Management (RPM) has been hired by your Board of Directors as the new managing agent, handling the day-to-day operations of the Association.",
@@ -38,7 +38,7 @@ export const news = [
     slug: "pool-information",
     title: "Pool Information",
     date: "Seasonal",
-    image: "https://silverwoodneighborhood.org/wp-content/uploads/2023/06/slide8.jpg",
+    image: "/images/pool.jpg",
     summary: "Pool hours, key access, and rules for the season.",
     body: [
       "The community pool operates seasonally from Memorial Day weekend through Labor Day weekend. Hours vary by day: Mondays 1–10 PM (pool cleaning day), Tuesday–Sunday 9 AM–10 PM.",

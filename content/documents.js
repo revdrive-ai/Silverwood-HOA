@@ -2,7 +2,7 @@ export const documents = [
   {
     slug: "bylaws-covenants",
     title: "Bylaws & Covenants",
-    image: "https://silverwoodneighborhood.org/wp-content/uploads/2023/06/contract.jpg",
+    image: "/images/bylaws.jpg",
     summary: "The governing documents for Silverwood HOA, plus adopted amendments.",
     body: [
       "This page is the central repository for Silverwood HOA's governing documents — the original bylaws and covenants, plus amendments adopted since.",
@@ -16,7 +16,7 @@ export const documents = [
   {
     slug: "arc-request-form",
     title: "Architectural Committee (ARC) Request Form",
-    image: "https://silverwoodneighborhood.org/wp-content/uploads/2023/06/BKS053667-c8536506b874467e8d0f3445ed4d6b06-e1688060063487-285x300.webp",
+    image: "/images/arc-request.webp",
     summary: "Exterior changes now go through the member portal; a paper backup remains for now.",
     body: [
       "ALL REQUESTS SHOULD NOW BE DONE THROUGH THE MEMBER PORTAL. Sign up at portal.silverwoodneighborhood.org — residents say it's a big improvement over the old paper process.",
@@ -27,7 +27,7 @@ export const documents = [
   {
     slug: "meeting-minutes",
     title: "Meeting Minutes",
-    image: "https://silverwoodneighborhood.org/wp-content/uploads/2023/06/1652243898247-285x300.jpg",
+    image: "/images/meeting-minutes.jpg",
     summary: "Archived annual meeting minutes. Current documents live in the member portal.",
     body: [
       "Current minutes and documents are available in the member portal at portal.silverwoodneighborhood.org. Historical archive below:",
@@ -46,7 +46,7 @@ export const documents = [
   {
     slug: "annual-dues",
     title: "Annual Dues",
-    image: "https://silverwoodneighborhood.org/wp-content/uploads/2023/06/shutterstock_1925972186-285x300.jpg",
+    image: "/images/annual-dues.jpg",
     summary: "Dues are mandatory and due in full by March 1 each year.",
     body: [
       "Silverwood HOA annual dues are mandatory and due in full by March 1 of every year. Per the HOA bylaws, interest may be charged on late payments and liens may be filed against properties with unpaid dues.",
@@ -57,7 +57,7 @@ export const documents = [
   {
     slug: "newsletters",
     title: "Newsletters",
-    image: "https://silverwoodneighborhood.org/wp-content/uploads/2023/07/newsletter-285x300.jpg",
+    image: "/images/newsletters.jpg",
     summary: "Quarterly community newsletter — now distributed by email.",
     body: [
       "As of 2024, Silverwood has moved to all-email newsletters. Recent issues:",

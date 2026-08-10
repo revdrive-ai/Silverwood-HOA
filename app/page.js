@@ -11,7 +11,7 @@ export default function HomePage() {
     <div>
       {/* Hero */}
       <div className="relative h-[320px] sm:h-[420px] w-full">
-        <Image src="https://silverwoodneighborhood.org/wp-content/uploads/2023/06/slide6.jpg" alt="Silverwood neighborhood entrance" fill priority className="object-cover" />
+        <Image src="/images/entrance.jpg" alt="Silverwood neighborhood entrance" fill priority className="object-cover" />
         <div className="absolute inset-0 bg-primary/50" />
         <div className="relative h-full mx-auto max-w-6xl px-4 sm:px-6 flex flex-col justify-center">
           <h1 className="font-sans font-bold text-3xl sm:text-5xl text-white max-w-2xl drop-shadow">
@@ -68,7 +68,7 @@ export default function HomePage() {
             <Card
               href={site.externalLinks.facebookGroup}
               external
-              image="https://silverwoodneighborhood.org/wp-content/uploads/2023/06/facebook-370x246.png"
+              image="/images/facebook.jpg"
               title="Facebook Group"
               description="Connect with your neighbors online."
             />
@@ -79,7 +79,7 @@ export default function HomePage() {
       {/* Amenities */}
       <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14 grid gap-8 sm:grid-cols-2 items-center">
         <div className="relative h-64 rounded-lg overflow-hidden">
-          <Image src="https://silverwoodneighborhood.org/wp-content/uploads/2023/06/slide8.jpg" alt="Silverwood community pool" fill className="object-cover" />
+          <Image src="/images/pool.jpg" alt="Silverwood community pool" fill className="object-cover" />
         </div>
         <div>
           <SectionHeading>Community Amenities</SectionHeading>

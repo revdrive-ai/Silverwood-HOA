@@ -8,7 +8,7 @@ export default function Header() {
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <div className="flex items-center justify-between py-3">
           <Link href="/" className="flex items-center gap-3">
-            <Image src="https://silverwoodneighborhood.org/wp-content/uploads/2023/06/logo140.png" alt="Silverwood HOA" width={168} height={62} priority />
+            <Image src="/images/logo.png" alt="Silverwood HOA" width={168} height={62} priority />
           </Link>
           <nav className="hidden md:flex items-center gap-6 text-sm font-sans font-semibold text-primary">
             {site.nav.map((item) => (
