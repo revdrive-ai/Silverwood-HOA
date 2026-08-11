@@ -1,0 +1,2784 @@
+<title>Heartland Foods — CFO Dashboard (Draft 1)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  /* ============================================================
+     TOKENS — light is the base; dark redefines tokens only.
+     Chart surfaces are the exact surfaces the palette was
+     validated against (#fcfcfb light / #1a1a19 dark).
+     ============================================================ */
+  :root {
+    color-scheme: light;
+
+    --ground:      #f4f3ee;
+    --panel:       #fcfcfb;
+    --panel-2:     #edece6;
+    --panel-3:     #f8f7f3;
+
+    --ink:         #0b0b0b;
+    --ink-2:       #52514e;
+    --ink-3:       #85837d;
+
+    --rule:        #e1e0d9;
+    --axis:        #c3c2b7;
+    --ring:        rgba(11, 11, 11, .10);
+
+    --navy:        #12224d;
+    --navy-2:      #1d3168;
+    --navy-3:      #2b4483;
+    --on-navy:     #ffffff;
+    --on-navy-2:   #b9c5e4;
+    --amber:       #e8a33d;
+    --amber-deep:  #b97b1d;
+    --forest:      #14452f;
+
+    /* categorical series — validated slots 1..3 (all-pairs) */
+    --s1:          #2a78d6;
+    --s2:          #eb6834;
+    --s3:          #1baf7a;
+    --s-neutral:   #a9a7a0;
+
+    /* ordinal blue ramp (validated --ordinal) */
+    --ord1:        #86b6ef;
+    --ord2:        #5598e7;
+    --ord3:        #2a78d6;
+    --ord4:        #184f95;
+
+    /* diverging poles */
+    --pos:         #2a78d6;
+    --neg:         #e34948;
+
+    /* status — fixed, never themed */
+    --good:        #0ca30c;
+    --warning:     #fab219;
+    --serious:     #ec835a;
+    --critical:    #d03b3b;
+
+    /* delta ink */
+    --up-good:     #006300;
+    --down-bad:    #a32b2b;
+
+    /* finance-domain codes (chrome, not data) */
+    --dom-cash:    #0f6f66;
+    --dom-rev:     #1d3168;
+    --dom-ar:      #a15c07;
+    --dom-trade:   #57409c;
+    --dom-inv:     #8f3413;
+
+    --shadow:      0 1px 2px rgba(18, 34, 77, .06), 0 6px 18px rgba(18, 34, 77, .05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --ground:    #0e0e0d;
+      --panel:     #1a1a19;
+      --panel-2:   #232322;
+      --panel-3:   #151514;
+      --ink:       #ffffff;
+      --ink-2:     #c3c2b7;
+      --ink-3:     #918f88;
+      --rule:      #2c2c2a;
+      --axis:      #383835;
+      --ring:      rgba(255, 255, 255, .10);
+      --navy:      #0d1730;
+      --navy-2:    #16234a;
+      --navy-3:    #33477f;
+      --on-navy:   #ffffff;
+      --on-navy-2: #9fb0d8;
+      --amber:     #e8a33d;
+      --amber-deep:#f0be71;
+      --forest:    #0e2e20;
+      --s1:        #3987e5;
+      --s2:        #d95926;
+      --s3:        #199e70;
+      --s-neutral: #7e7c76;
+      --ord1:      #cde2fb;
+      --ord2:      #86b6ef;
+      --ord3:      #3987e5;
+      --ord4:      #184f95;
+      --pos:       #3987e5;
+      --neg:       #e66767;
+      --up-good:   #0ca30c;
+      --down-bad:  #f08e8b;
+      --dom-cash:  #3fb3a4;
+      --dom-rev:   #7f9ae0;
+      --dom-ar:    #dda032;
+      --dom-trade: #a695ee;
+      --dom-inv:   #e08256;
+      --shadow:    0 1px 2px rgba(0, 0, 0, .5), 0 6px 18px rgba(0, 0, 0, .35);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --ground:    #0e0e0d;
+    --panel:     #1a1a19;
+    --panel-2:   #232322;
+    --panel-3:   #151514;
+    --ink:       #ffffff;
+    --ink-2:     #c3c2b7;
+    --ink-3:     #918f88;
+    --rule:      #2c2c2a;
+    --axis:      #383835;
+    --ring:      rgba(255, 255, 255, .10);
+    --navy:      #0d1730;
+    --navy-2:    #16234a;
+    --navy-3:    #33477f;
+    --on-navy:   #ffffff;
+    --on-navy-2: #9fb0d8;
+    --amber:     #e8a33d;
+    --amber-deep:#f0be71;
+    --forest:    #0e2e20;
+    --s1:        #3987e5;
+    --s2:        #d95926;
+    --s3:        #199e70;
+    --s-neutral: #7e7c76;
+    --ord1:      #cde2fb;
+    --ord2:      #86b6ef;
+    --ord3:      #3987e5;
+    --ord4:      #184f95;
+    --pos:       #3987e5;
+    --neg:       #e66767;
+    --up-good:   #0ca30c;
+    --down-bad:  #f08e8b;
+    --dom-cash:  #3fb3a4;
+    --dom-rev:   #7f9ae0;
+    --dom-ar:    #dda032;
+    --dom-trade: #a695ee;
+    --dom-inv:   #e08256;
+    --shadow:    0 1px 2px rgba(0, 0, 0, .5), 0 6px 18px rgba(0, 0, 0, .35);
+  }
+
+  /* ============================================================ TYPE + BASE */
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .mono { font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
+
+  .wrap { max-width: 1260px; margin: 0 auto; padding: 0 18px; }
+
+  h1, h2, h3 { margin: 0; text-wrap: balance; }
+
+  .eyebrow {
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+
+  a { color: inherit; }
+
+  :where(button, [tabindex]):focus-visible {
+    outline: 2px solid var(--amber);
+    outline-offset: 2px;
+    border-radius: 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+  }
+
+  /* ============================================================ MASTHEAD */
+  .masthead { background: var(--navy); color: var(--on-navy); border-bottom: 3px solid var(--amber); }
+
+  .masthead-in {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 16px 24px;
+    padding: 18px 0 16px;
+  }
+
+  .brand-mark {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .brand-glyph {
+    width: 42px; height: 42px;
+    flex: none;
+    border: 2px solid var(--amber);
+    border-radius: 3px;
+    display: grid; place-items: center;
+    font-weight: 800; font-size: 17px;
+    letter-spacing: -.03em;
+    color: var(--amber);
+  }
+
+  .brand-name {
+    font-size: clamp(21px, 3.4vw, 30px);
+    font-weight: 800;
+    letter-spacing: -.015em;
+    line-height: 1.05;
+    text-transform: uppercase;
+  }
+
+  .brand-sub {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-top: 3px;
+  }
+
+  .masthead-right { margin-left: auto; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+
+  .sample-chip {
+    display: inline-flex; align-items: center; gap: 7px;
+    background: var(--amber); color: #21160a;
+    font-size: 10.5px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase;
+    padding: 5px 10px; border-radius: 3px;
+  }
+
+  .kicker-strip {
+    background: var(--navy-2);
+    color: var(--on-navy-2);
+    font-size: 10.5px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase;
+    padding: 7px 0;
+  }
+  .kicker-strip .wrap { display: flex; flex-wrap: wrap; gap: 6px 18px; }
+  .kicker-strip b { color: var(--on-navy); font-weight: 800; }
+
+  /* ============================================================ CONTROL BAR */
+  .controlbar {
+    position: sticky; top: 0; z-index: 40;
+    background: var(--panel);
+    border-bottom: 1px solid var(--rule);
+    box-shadow: var(--shadow);
+  }
+  .controlbar-in {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px;
+    padding: 9px 0;
+  }
+
+  .tabs { display: flex; gap: 4px; background: var(--panel-2); padding: 3px; border-radius: 4px; }
+  .tab {
+    appearance: none; border: 0; cursor: pointer;
+    background: transparent; color: var(--ink-2);
+    font: inherit; font-size: 12px; font-weight: 800;
+    letter-spacing: .09em; text-transform: uppercase;
+    padding: 7px 13px; border-radius: 3px;
+    transition: background .12s, color .12s;
+  }
+  .tab:hover { background: var(--panel-3); color: var(--ink); }
+  .tab[aria-selected="true"] { background: var(--navy); color: #fff; }
+  .tab small { display: block; font-size: 9.5px; font-weight: 600; letter-spacing: .06em; opacity: .72; text-transform: none; }
+
+  .ctl { display: inline-flex; align-items: center; gap: 7px; }
+  .ctl-label { font-size: 10.5px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); }
+
+  select.picker {
+    appearance: none;
+    font: inherit; font-size: 12.5px; font-weight: 700;
+    color: var(--ink); background: var(--panel-3);
+    border: 1px solid var(--rule); border-radius: 3px;
+    padding: 6px 26px 6px 9px;
+    background-image: linear-gradient(45deg, transparent 50%, var(--ink-3) 50%), linear-gradient(135deg, var(--ink-3) 50%, transparent 50%);
+    background-position: calc(100% - 14px) 52%, calc(100% - 9px) 52%;
+    background-size: 5px 5px, 5px 5px;
+    background-repeat: no-repeat;
+    cursor: pointer;
+  }
+
+  .freshness {
+    margin-left: auto;
+    display: inline-flex; align-items: center; gap: 8px;
+    position: relative;
+  }
+  .freshness-btn {
+    appearance: none; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 7px;
+    background: var(--panel-3); border: 1px solid var(--rule); border-radius: 3px;
+    font: inherit; font-size: 11.5px; font-weight: 700; color: var(--ink-2);
+    padding: 6px 10px;
+  }
+  .freshness-btn:hover { border-color: var(--axis); color: var(--ink); }
+  .dot-ok { width: 8px; height: 8px; border-radius: 50%; background: var(--good); flex: none; }
+
+  .popover {
+    position: absolute; top: calc(100% + 8px); right: 0; z-index: 60;
+    width: min(340px, calc(100vw - 36px));
+    background: var(--panel); border: 1px solid var(--rule); border-radius: 4px;
+    box-shadow: var(--shadow); padding: 12px 13px;
+  }
+  .popover[hidden] { display: none; }
+  .popover h4 { font-size: 11px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 8px; }
+  .sync-row { display: flex; align-items: baseline; gap: 8px; padding: 5px 0; border-top: 1px solid var(--rule); font-size: 12.5px; }
+  .sync-row:first-of-type { border-top: 0; }
+  .sync-row .nm { font-weight: 700; }
+  .sync-row .tm { margin-left: auto; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+
+  /* ============================================================ SECTIONS */
+  .view { padding: 20px 0 8px; }
+  .view[hidden] { display: none; }
+
+  .view-intro {
+    display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 14px;
+    padding-bottom: 12px;
+  }
+  .view-q {
+    font-size: clamp(17px, 2.3vw, 22px); font-weight: 800; letter-spacing: -.01em;
+    color: var(--ink);
+  }
+  .view-note { font-size: 12.5px; color: var(--ink-2); }
+
+  .section-head {
+    display: flex; align-items: center; gap: 10px;
+    margin: 22px 0 10px;
+  }
+  .section-head h2 {
+    font-size: 12px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--ink);
+  }
+  .section-head .rule { flex: 1; height: 2px; background: var(--rule); }
+  .section-head .count { font-size: 11px; font-weight: 700; color: var(--ink-3); }
+
+  /* ============================================================ KPI TILES */
+  /* Column count is set per view from the tile count, so a row never leaves
+     a single orphan tile stretched across the grid. */
+  .tiles { display: grid; gap: 12px; grid-template-columns: repeat(var(--tile-cols, 5), 1fr); }
+  @media (max-width: 1180px) { .tiles { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 720px)  { .tiles { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 430px)  { .tiles { grid-template-columns: 1fr; } }
+
+  .tile {
+    position: relative;
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 13px 13px 11px;
+    display: flex; flex-direction: column; gap: 7px;
+    box-shadow: var(--shadow);
+    text-align: left;
+  }
+  .tile::before {
+    content: ""; position: absolute; inset: 0 0 auto 0; height: 4px;
+    border-radius: 4px 4px 0 0;
+    background: var(--dom, var(--navy-2));
+  }
+  button.tile { appearance: none; font: inherit; color: inherit; cursor: pointer; transition: border-color .12s, transform .12s; }
+  button.tile:hover { border-color: var(--axis); transform: translateY(-1px); }
+  button.tile::after {
+    content: "Detail →";
+    position: absolute; right: 11px; bottom: 9px;
+    font-size: 10px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase;
+    color: var(--ink-3); opacity: 0; transition: opacity .12s;
+  }
+  button.tile:hover::after, button.tile:focus-visible::after { opacity: 1; }
+
+  .tile-head { display: flex; align-items: center; gap: 6px; margin-top: 2px; }
+  .tile-id {
+    font-size: 9.5px; font-weight: 800; letter-spacing: .06em;
+    color: var(--dom, var(--navy-2));
+    border: 1px solid currentColor; border-radius: 2px;
+    padding: 0 3px; flex: none;
+  }
+  .tile-label { font-size: 11px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-2); }
+
+  .tile-value {
+    font-size: clamp(25px, 3.2vw, 31px); font-weight: 800; letter-spacing: -.025em;
+    line-height: 1; color: var(--ink);
+  }
+  .tile-value .unit { font-size: .58em; font-weight: 700; letter-spacing: 0; color: var(--ink-2); margin-left: 2px; }
+
+  .tile-delta { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 7px; font-size: 12px; }
+  .delta { font-weight: 800; display: inline-flex; align-items: center; gap: 3px; font-variant-numeric: tabular-nums; }
+  .delta.up { color: var(--up-good); }
+  .delta.down { color: var(--down-bad); }
+  .delta.flat { color: var(--ink-2); }
+  .delta-vs { color: var(--ink-3); font-size: 11.5px; }
+
+  .tile-second { font-size: 12px; color: var(--ink-2); }
+  .tile-second b { color: var(--ink); font-weight: 700; }
+
+  .tile-spark { margin-top: auto; padding-top: 4px; }
+  .tile-spark svg { display: block; width: 100%; height: auto; }
+
+  .scope-chip {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 9.5px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--ink-3); border: 1px solid var(--rule); border-radius: 2px; padding: 1px 4px;
+  }
+
+  /* ============================================================ ATTENTION FEED */
+  .attention { background: var(--panel); border: 1px solid var(--rule); border-radius: 4px; box-shadow: var(--shadow); overflow: hidden; }
+
+  .att-row {
+    display: grid;
+    grid-template-columns: 5px 96px 1fr auto;
+    align-items: center; gap: 0 12px;
+    width: 100%;
+    appearance: none; border: 0; border-top: 1px solid var(--rule);
+    background: transparent; color: inherit; font: inherit;
+    text-align: left; padding: 0; cursor: pointer;
+    transition: background .12s;
+  }
+  .att-row:first-child { border-top: 0; }
+  .att-row:hover { background: var(--panel-3); }
+  .att-row .stripe { align-self: stretch; background: var(--sev); }
+  .att-row .badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 9.5px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--ink-2); padding: 12px 0;
+  }
+  .att-row .badge .glyph { color: var(--sev); font-size: 11px; line-height: 1; }
+  .att-row .body { padding: 11px 0; font-size: 13.5px; }
+  .att-row .body strong { font-weight: 800; }
+  .att-row .body .why { display: block; color: var(--ink-2); font-size: 12px; margin-top: 1px; }
+  .att-row .go { padding: 11px 13px 11px 0; font-size: 10.5px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; color: var(--ink-3); white-space: nowrap; }
+  .att-row:hover .go { color: var(--ink); }
+
+  .att-empty { padding: 22px 14px; font-size: 13px; color: var(--ink-2); }
+
+  /* ============================================================ CARDS + CHARTS */
+  .grid { display: grid; gap: 12px; }
+  /* Two columns at most: a chart's viewBox is sized for this column width, so
+     narrower columns would shrink every label with it. */
+  /* min() keeps the track from forcing a 440px floor on a narrow phone. */
+  .grid.two { grid-template-columns: repeat(auto-fit, minmax(min(440px, 100%), 1fr)); }
+  .span-all { grid-column: 1 / -1; }
+
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    box-shadow: var(--shadow);
+    display: flex; flex-direction: column;
+    min-width: 0;
+  }
+
+  .card-head { display: flex; align-items: flex-start; gap: 10px; padding: 12px 13px 0; }
+  .card-title { font-size: 13.5px; font-weight: 800; letter-spacing: -.005em; }
+  .card-sub { font-size: 11.5px; color: var(--ink-2); margin-top: 2px; }
+  .card-tools { margin-left: auto; display: flex; gap: 5px; flex: none; }
+
+  .toolbtn {
+    appearance: none; cursor: pointer;
+    font: inherit; font-size: 10px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--ink-3); background: transparent;
+    border: 1px solid var(--rule); border-radius: 2px; padding: 3px 6px;
+  }
+  .toolbtn:hover { color: var(--ink); border-color: var(--axis); }
+  .toolbtn[aria-pressed="true"] { background: var(--navy); border-color: var(--navy); color: #fff; }
+
+  .card-body { padding: 8px 13px 13px; }
+
+  .legend { display: flex; flex-wrap: wrap; gap: 4px 14px; padding: 6px 13px 0; }
+  .legend-item { display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; color: var(--ink-2); }
+  .legend-key { width: 12px; height: 3px; border-radius: 2px; background: var(--k); flex: none; }
+  .legend-key.sq { width: 10px; height: 10px; border-radius: 2px; }
+
+  .chart-holder svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .chart-holder[hidden], .table-holder[hidden] { display: none; }
+
+  .table-holder { overflow-x: auto; }
+  table.dv { border-collapse: collapse; width: 100%; font-size: 12.5px; }
+  table.dv th, table.dv td { text-align: right; padding: 6px 8px; border-bottom: 1px solid var(--rule); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  table.dv th:first-child, table.dv td:first-child { text-align: left; font-variant-numeric: normal; }
+  table.dv thead th { font-size: 10.5px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); border-bottom: 2px solid var(--rule); }
+  table.dv tbody tr:hover { background: var(--panel-3); }
+  table.dv tr.total td { font-weight: 800; border-top: 2px solid var(--axis); }
+  table.dv td.pos { color: var(--up-good); }
+  table.dv td.neg { color: var(--down-bad); }
+
+  .footnote { font-size: 11.5px; color: var(--ink-3); padding: 8px 13px 0; }
+  .src-tag {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 10px; font-weight: 700; letter-spacing: .05em;
+    color: var(--ink-3);
+  }
+  .src-tag::before { content: ""; width: 6px; height: 6px; border-radius: 1px; background: var(--src, var(--s-neutral)); }
+
+  /* status pill */
+  .pill {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 10.5px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase;
+    padding: 2px 7px; border-radius: 999px;
+    border: 1px solid var(--rule); color: var(--ink-2);
+  }
+  .pill .glyph { color: var(--sev); }
+
+  /* meter */
+  .meter { display: grid; gap: 5px; }
+  .meter-track { position: relative; height: 10px; border-radius: 2px; background: var(--ord1); overflow: hidden; }
+  .meter-fill { height: 100%; background: var(--sev, var(--s1)); border-radius: 2px 0 0 2px; }
+  .meter-limit { position: absolute; top: -3px; bottom: -3px; width: 2px; background: var(--ink); }
+  .meter-scale { display: flex; justify-content: space-between; font-size: 10.5px; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+
+  /* phase-2 locked panel */
+  .locked {
+    border: 1px dashed var(--axis); border-radius: 4px;
+    background: repeating-linear-gradient(135deg, transparent 0 9px, var(--panel-3) 9px 18px);
+    padding: 16px 14px;
+  }
+  .locked h3 { font-size: 13.5px; font-weight: 800; }
+  .locked p { margin: 6px 0 0; font-size: 12.5px; color: var(--ink-2); max-width: 62ch; }
+  .locked .pill { background: var(--panel); }
+
+  /* ============================================================ P&L TABLE */
+  .pnl { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .pnl th, .pnl td { padding: 6px 6px; border-bottom: 1px solid var(--rule); text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .pnl th:first-child, .pnl td:first-child { text-align: left; font-variant-numeric: normal; }
+  .pnl thead th { font-size: 10px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3); border-bottom: 2px solid var(--axis); }
+  .pnl tr.rule-top td { border-top: 2px solid var(--axis); }
+  .pnl tr.strong td { font-weight: 800; }
+  .pnl tr.sub td:first-child { padding-left: 20px; color: var(--ink-2); }
+  .pnl td.v-good { color: var(--up-good); font-weight: 700; }
+  .pnl td.v-bad { color: var(--down-bad); font-weight: 700; }
+  .pnl tbody tr:hover { background: var(--panel-3); }
+
+  /* ============================================================ FORMULA RIBBON */
+  .ribbon {
+    background: var(--navy); color: var(--on-navy);
+    margin-top: 34px; padding: 26px 0 30px;
+    border-top: 3px solid var(--amber);
+  }
+  .ribbon-title {
+    text-align: center;
+    font-size: clamp(15px, 2.4vw, 20px); font-weight: 800;
+    letter-spacing: .1em; text-transform: uppercase;
+  }
+  .ribbon-sub { text-align: center; font-size: 12px; color: var(--on-navy-2); margin-top: 5px; max-width: 74ch; margin-inline: auto; }
+
+  .formula-grid { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); margin-top: 20px; }
+  .formula {
+    display: grid; grid-template-columns: 26px 1fr; gap: 11px;
+    background: rgba(255, 255, 255, .06);
+    border: 1px solid rgba(255, 255, 255, .12);
+    border-radius: 4px; padding: 11px 12px;
+  }
+  .formula .num {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: var(--amber); color: #21160a;
+    display: grid; place-items: center;
+    font-size: 12px; font-weight: 800;
+  }
+  .formula .fname { font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--amber); }
+  .formula .fbody { font-size: 13px; font-weight: 600; margin-top: 4px; line-height: 1.5; }
+  .formula .fbody .frac { display: inline-grid; vertical-align: middle; text-align: center; margin: 0 3px; }
+  .formula .fbody .frac .n { border-bottom: 1.5px solid currentColor; padding: 0 5px 1px; }
+  .formula .fbody .frac .d { padding: 1px 5px 0; }
+  .formula .fsrc { font-size: 10.5px; color: var(--on-navy-2); margin-top: 6px; letter-spacing: .03em; }
+
+  /* ============================================================ LINEAGE */
+  .lineage { background: var(--navy-2); color: var(--on-navy); padding: 18px 0; }
+  .lineage-in { display: grid; gap: 14px; }
+  .lineage-band { display: flex; flex-wrap: wrap; align-items: stretch; gap: 8px; justify-content: center; }
+  .lineage-cap {
+    text-align: center; font-size: 10px; font-weight: 800; letter-spacing: .16em;
+    text-transform: uppercase; color: var(--on-navy-2); margin-bottom: 7px;
+  }
+  .stage {
+    display: grid; gap: 2px;
+    background: rgba(255, 255, 255, .07);
+    border: 1px solid rgba(255, 255, 255, .14);
+    border-radius: 3px; padding: 8px 10px; min-width: 122px; flex: none;
+  }
+  .stage .sname { font-size: 11.5px; font-weight: 800; }
+  .stage .srole { font-size: 10px; letter-spacing: .07em; text-transform: uppercase; color: var(--on-navy-2); }
+  .stage.phase2 { border-style: dashed; opacity: .68; }
+  .arrow { color: var(--amber); font-weight: 800; font-size: 15px; align-self: center; flex: none; }
+
+  .contract {
+    background: var(--forest); color: #fff;
+    padding: 13px 0;
+    font-size: clamp(11px, 1.7vw, 13px); font-weight: 800;
+    letter-spacing: .1em; text-transform: uppercase;
+    text-align: center;
+  }
+  .contract .sep { color: var(--amber); margin: 0 8px; }
+
+  .closing { padding: 26px 0 44px; }
+  .closing h3 { font-size: 12px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); }
+  .closing ul { margin: 10px 0 0; padding-left: 20px; max-width: 84ch; }
+  .closing li { font-size: 13.5px; color: var(--ink-2); margin: 6px 0; }
+  .closing li b { color: var(--ink); }
+
+  /* ============================================================ DRAWER */
+  .scrim {
+    position: fixed; inset: 0; z-index: 90;
+    background: rgba(11, 18, 38, .5);
+    opacity: 0; pointer-events: none; transition: opacity .16s;
+  }
+  .scrim.open { opacity: 1; pointer-events: auto; }
+
+  .drawer {
+    position: fixed; top: 0; right: 0; bottom: 0; z-index: 91;
+    width: min(780px, 100vw);
+    background: var(--panel);
+    border-left: 1px solid var(--rule);
+    box-shadow: -14px 0 40px rgba(11, 18, 38, .22);
+    transform: translateX(102%); transition: transform .2s ease;
+    display: flex; flex-direction: column;
+  }
+  .drawer.open { transform: none; }
+  .drawer-head { padding: 15px 16px 12px; border-bottom: 1px solid var(--rule); }
+  .drawer-head .eyebrow { color: var(--ink-3); }
+  .drawer-head h3 { font-size: 17px; font-weight: 800; letter-spacing: -.01em; margin-top: 4px; }
+  .drawer-head p { margin: 5px 0 0; font-size: 12.5px; color: var(--ink-2); }
+  .drawer-close {
+    position: absolute; top: 12px; right: 13px;
+    appearance: none; cursor: pointer;
+    width: 28px; height: 28px; border-radius: 3px;
+    border: 1px solid var(--rule); background: var(--panel-3); color: var(--ink-2);
+    font-size: 15px; line-height: 1;
+  }
+  .drawer-close:hover { color: var(--ink); border-color: var(--axis); }
+  .drawer-body { padding: 12px 16px 26px; overflow: auto; }
+  .drawer-scroll { overflow-x: auto; }
+  .drawer-foot { font-size: 11.5px; color: var(--ink-3); padding: 10px 16px 16px; border-top: 1px solid var(--rule); }
+
+  /* ============================================================ TOOLTIP */
+  .tip {
+    position: fixed; z-index: 95; pointer-events: none;
+    background: var(--panel); color: var(--ink);
+    border: 1px solid var(--axis); border-radius: 3px;
+    box-shadow: var(--shadow);
+    padding: 7px 9px; font-size: 12px; min-width: 128px;
+    opacity: 0; transition: opacity .1s;
+  }
+  .tip.on { opacity: 1; }
+  .tip .t-title { font-weight: 800; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 4px; }
+  .tip .t-row { display: flex; align-items: center; gap: 7px; }
+  .tip .t-row + .t-row { margin-top: 2px; }
+  .tip .t-key { width: 9px; height: 9px; border-radius: 2px; background: var(--k); flex: none; }
+  .tip .t-name { color: var(--ink-2); }
+  .tip .t-val { margin-left: auto; font-weight: 800; font-variant-numeric: tabular-nums; }
+
+  @media (max-width: 620px) {
+    .att-row { grid-template-columns: 5px 1fr; gap: 0 10px; }
+    .att-row .badge { grid-column: 2; padding: 10px 0 0; }
+    .att-row .body { grid-column: 2; padding: 3px 0 11px; }
+    .att-row .go { display: none; }
+  }
+</style>
+
+<header class="masthead">
+  <div class="wrap masthead-in">
+    <div class="brand-mark">
+      <div class="brand-glyph" aria-hidden="true">HF</div>
+      <div>
+        <h1 class="brand-name">Heartland Foods</h1>
+        <div class="brand-sub">Office of the CFO</div>
+      </div>
+    </div>
+    <div class="masthead-right">
+      <span class="sample-chip">Draft 1 · illustrative sample data</span>
+    </div>
+  </div>
+</header>
+
+<div class="kicker-strip">
+  <div class="wrap">
+    <span><b>Cash</b> &nbsp;·&nbsp; <b>Net revenue</b> &nbsp;·&nbsp; <b>Trade</b> &nbsp;·&nbsp; <b>Deductions</b> &nbsp;·&nbsp; <b>Working capital</b></span>
+    <span style="margin-left:auto">One screen &nbsp;→&nbsp; zero required selections &nbsp;→&nbsp; the exceptions first</span>
+  </div>
+</div>
+
+<div class="controlbar">
+  <div class="wrap controlbar-in">
+    <div class="tabs" role="tablist" aria-label="Reporting cadence">
+      <button class="tab" role="tab" id="tab-daily" aria-controls="view-daily" aria-selected="true" data-tab="daily">Today<small>Tue Aug 11</small></button>
+      <button class="tab" role="tab" id="tab-weekly" aria-controls="view-weekly" aria-selected="false" data-tab="weekly">This week<small>Wk of Aug 10</small></button>
+      <button class="tab" role="tab" id="tab-monthly" aria-controls="view-monthly" aria-selected="false" data-tab="monthly">This month<small>Jul closed</small></button>
+      <button class="tab" role="tab" id="tab-quarterly" aria-controls="view-quarterly" aria-selected="false" data-tab="quarterly">This quarter<small>Q2 closed</small></button>
+    </div>
+
+    <div class="ctl">
+      <label class="ctl-label" for="entity">Entity</label>
+      <select class="picker" id="entity">
+        <option value="all">All companies</option>
+        <option value="hf">Heartland Foods LLC</option>
+        <option value="pp">Prairie Provisions (co-pack)</option>
+        <option value="hl">Heartland Logistics</option>
+      </select>
+    </div>
+
+    <div class="freshness">
+      <button class="freshness-btn" id="fresh-btn" aria-expanded="false" aria-controls="fresh-pop">
+        <span class="dot-ok" aria-hidden="true"></span>
+        Data as of 6:04 AM CT
+      </button>
+      <div class="popover" id="fresh-pop" hidden>
+        <h4>Last successful sync</h4>
+        <div id="sync-list"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<main class="wrap">
+  <section class="view" id="view-daily" role="tabpanel" aria-labelledby="tab-daily"></section>
+  <section class="view" id="view-weekly" role="tabpanel" aria-labelledby="tab-weekly" hidden></section>
+  <section class="view" id="view-monthly" role="tabpanel" aria-labelledby="tab-monthly" hidden></section>
+  <section class="view" id="view-quarterly" role="tabpanel" aria-labelledby="tab-quarterly" hidden></section>
+</main>
+
+<section class="ribbon">
+  <div class="wrap">
+    <div class="ribbon-title">How every number is calculated</div>
+    <p class="ribbon-sub">One definition per KPI, owned by the controller. If finance and the dashboard ever disagree, this is the tie-breaker.</p>
+    <div class="formula-grid" id="formula-grid"></div>
+  </div>
+</section>
+
+<section class="lineage">
+  <div class="wrap">
+    <div class="eyebrow" style="color:var(--on-navy-2); text-align:center; margin-bottom:12px">Where the numbers come from</div>
+    <div class="lineage-in" id="lineage"></div>
+  </div>
+</section>
+
+<div class="contract">
+  Right data <span class="sep">+</span> one definition <span class="sep">+</span> the exception first <span class="sep">=</span> a decision before the coffee is cold
+</div>
+
+<section class="wrap closing">
+  <h3>What this draft is asking you to react to</h3>
+  <ul>
+    <li><b>The four tabs, not four dashboards.</b> Cadence is the tab; the time grain is pre-picked. The only global control is the entity picker. Tell us if a fifth view (or a fifth tile on Today) is genuinely needed.</li>
+    <li><b>The attention feed is the product.</b> Everything above it is context. Thresholds (deduction size, aging jump, margin drift) live in one config table your controller edits — nothing here is hardcoded.</li>
+    <li><b>Phase 1 wiring covers everything on screen except two panels.</b> Trade-spend ROI and market share stay dashed until the NIQ feed lands in Phase 2.</li>
+    <li><b>Numbers are illustrative.</b> The shapes, definitions, comparisons, and drill paths are the real proposal; the values are placeholders sized to a company like Heartland until we point it at SYSPRO.</li>
+    <li><b>Open question for kickoff:</b> which 3–5 month-end reports would make close easier? Whatever finance names goes on the Month tab first, verbatim — ahead of anything we chose here.</li>
+  </ul>
+</section>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title" aria-hidden="true">
+  <div class="drawer-head">
+    <button class="drawer-close" id="drawer-close" aria-label="Close detail">✕</button>
+    <div class="eyebrow" id="drawer-eyebrow">Drill-down</div>
+    <h3 id="drawer-title">Detail</h3>
+    <p id="drawer-desc"></p>
+  </div>
+  <div class="drawer-body" id="drawer-body"></div>
+  <div class="drawer-foot" id="drawer-foot"></div>
+</aside>
+
+<div class="tip" id="tip" role="status" aria-live="polite"></div>
+
+<script>
+"use strict";
+
+/* ============================================================================
+   Heartland Foods — CFO dashboard, draft 1.
+   Everything on screen is illustrative sample data. The shapes, definitions,
+   comparisons and drill paths are the proposal; the values are placeholders
+   until the marts are pointed at SYSPRO.
+   ========================================================================== */
+
+/* ---------------------------------------------------------------- FORMATTING */
+
+// Money is carried in $ millions everywhere and formatted down to K when small.
+function usd(m, dp) {
+  if (m == null) return "—";
+  var neg = m < 0, a = Math.abs(m), out;
+  if (a >= 1) out = "$" + a.toFixed(dp == null ? 2 : dp) + "M";
+  else out = "$" + Math.round(a * 1000).toLocaleString("en-US") + "K";
+  return (neg ? "−" : "") + out;
+}
+function usdK(m) {
+  if (m == null) return "—";
+  var neg = m < 0;
+  return (neg ? "−" : "") + "$" + Math.round(Math.abs(m) * 1000).toLocaleString("en-US") + "K";
+}
+function pct(v, dp) { return v == null ? "—" : v.toFixed(dp == null ? 1 : dp) + "%"; }
+function pts(v) { return (v > 0 ? "+" : v < 0 ? "−" : "") + Math.abs(v).toFixed(1) + " pts"; }
+function num(v) { return v == null ? "—" : Math.round(v).toLocaleString("en-US"); }
+function days(v) { return v == null ? "—" : v.toFixed(1); }
+function signedPct(v, dp) { return (v > 0 ? "+" : v < 0 ? "−" : "") + Math.abs(v).toFixed(dp == null ? 1 : dp) + "%"; }
+function signedUsd(m) { return (m > 0 ? "+" : m < 0 ? "−" : "") + usd(Math.abs(m)); }
+
+/* ------------------------------------------------------------- DOM UTILITIES */
+
+function h(tag, attrs, kids) {
+  var n = document.createElement(tag);
+  if (attrs) for (var k in attrs) {
+    if (attrs[k] == null) continue;
+    if (k === "class") n.className = attrs[k];
+    else if (k === "html") n.innerHTML = attrs[k];
+    else if (k === "text") n.textContent = attrs[k];
+    else if (k === "style") n.setAttribute("style", attrs[k]);
+    else if (k.slice(0, 2) === "on") n.addEventListener(k.slice(2), attrs[k]);
+    else n.setAttribute(k, attrs[k]);
+  }
+  (kids || []).forEach(function (c) { if (c) n.appendChild(c); });
+  return n;
+}
+
+var NS = "http://www.w3.org/2000/svg";
+function s(tag, attrs) {
+  var n = document.createElementNS(NS, tag);
+  if (attrs) for (var k in attrs) { if (attrs[k] != null) n.setAttribute(k, attrs[k]); }
+  return n;
+}
+function st(x, y, str, attrs) {
+  var t = s("text", Object.assign({ x: x, y: y }, attrs || {}));
+  t.textContent = str;
+  return t;
+}
+function cssvar(name) {
+  return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+}
+
+/* Axis ticks rounded to clean numbers. */
+function niceTicks(min, max, count) {
+  count = count || 4;
+  if (min === max) { min = Math.min(0, min); max = max || 1; }
+  var span = max - min;
+  var raw = span / count;
+  var mag = Math.pow(10, Math.floor(Math.log10(raw)));
+  var norm = raw / mag;
+  var step = (norm <= 1 ? 1 : norm <= 2 ? 2 : norm <= 2.5 ? 2.5 : norm <= 5 ? 5 : 10) * mag;
+  var lo = Math.floor(min / step) * step, hi = Math.ceil(max / step) * step;
+  var out = [];
+  for (var v = lo; v <= hi + step * 1e-6; v += step) out.push(Math.abs(v) < step * 1e-6 ? 0 : v);
+  return out;
+}
+
+/* ------------------------------------------------------------------ TOOLTIP */
+
+var tipEl = document.getElementById("tip");
+function tipRows(title, rows) {
+  var html = '<div class="t-title">' + esc(title) + "</div>";
+  rows.forEach(function (r) {
+    html += '<div class="t-row">' +
+      (r.color ? '<span class="t-key" style="--k:' + r.color + '"></span>' : "") +
+      '<span class="t-name">' + esc(r.name) + "</span>" +
+      '<span class="t-val">' + esc(r.value) + "</span></div>";
+  });
+  return html;
+}
+function esc(v) { return String(v).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+function showTip(html, ev) { tipEl.innerHTML = html; tipEl.classList.add("on"); moveTip(ev); }
+function moveTip(ev) {
+  var r = tipEl.getBoundingClientRect();
+  var x = ev.clientX + 14, y = ev.clientY - 12;
+  if (x + r.width > window.innerWidth - 8) x = ev.clientX - r.width - 14;
+  if (y + r.height > window.innerHeight - 8) y = window.innerHeight - r.height - 8;
+  if (y < 8) y = 8;
+  tipEl.style.left = x + "px"; tipEl.style.top = y + "px";
+}
+function hideTip() { tipEl.classList.remove("on"); }
+
+/* =========================================================== CHART PRIMITIVES
+   Shared specs: bars capped at 24px, 4px rounded data-ends, 2px lines, >=8px
+   markers, 2px surface gaps between touching fills, hairline solid grid.
+   ========================================================================== */
+
+/* Chart viewBox widths match the card widths they render into, so one SVG unit
+   is about one CSS pixel and label sizes stay honest. WFULL = a full-width
+   card, WHALF = one column of the two-column grid. */
+var WFULL = 1180, WHALF = 580;
+
+var GRID, AXIS, MUTED, SURFACE, INK2;
+function refreshChartInk() {
+  GRID = cssvar("--rule"); AXIS = cssvar("--axis"); MUTED = cssvar("--ink-3");
+  SURFACE = cssvar("--panel"); INK2 = cssvar("--ink-2");
+}
+
+/* Rounded-top rectangle path: square at the baseline, 4px rounded data-end. */
+function barPath(x, y, w, hgt, r, dir) {
+  r = Math.min(r, w / 2, Math.abs(hgt));
+  if (hgt <= 0.4) return "M" + x + " " + y + "h" + w;
+  if (dir === "up") {
+    return "M" + x + " " + (y + hgt) + "V" + (y + r) + "a" + r + " " + r + " 0 0 1 " + r + " " + -r +
+      "h" + (w - 2 * r) + "a" + r + " " + r + " 0 0 1 " + r + " " + r + "V" + (y + hgt) + "Z";
+  }
+  if (dir === "down") {
+    return "M" + x + " " + y + "V" + (y + hgt - r) + "a" + r + " " + r + " 0 0 0 " + r + " " + r +
+      "h" + (w - 2 * r) + "a" + r + " " + r + " 0 0 0 " + r + " " + -r + "V" + y + "Z";
+  }
+  if (dir === "right") {
+    return "M" + x + " " + y + "h" + (w - r) + "a" + r + " " + r + " 0 0 1 " + r + " " + r +
+      "v" + (hgt - 2 * r) + "a" + r + " " + r + " 0 0 1 " + -r + " " + r + "H" + x + "Z";
+  }
+  return "M" + (x + w) + " " + y + "H" + (x + r) + "a" + r + " " + r + " 0 0 0 " + -r + " " + r +
+    "v" + (hgt - 2 * r) + "a" + r + " " + r + " 0 0 0 " + r + " " + r + "H" + (x + w) + "Z";
+}
+
+/* --------------------------------------------------------------- LINE CHART */
+function lineChart(cfg) {
+  var W = cfg.W || WHALF, H = cfg.H || 250;
+  var pad = Object.assign({ t: 16, r: cfg.endLabel ? 62 : 14, b: 30, l: 46 }, cfg.pad || {});
+  var svg = s("svg", { viewBox: "0 0 " + W + " " + H, role: "img", "aria-label": cfg.aria || cfg.title || "line chart" });
+  var pw = W - pad.l - pad.r, ph = H - pad.t - pad.b;
+  var all = [];
+  cfg.series.forEach(function (se) { se.values.forEach(function (v) { if (v != null) all.push(v); }); });
+  if (cfg.refLine) all.push(cfg.refLine.v);
+  var lo = cfg.yMin != null ? cfg.yMin : Math.min.apply(null, all);
+  var hi = cfg.yMax != null ? cfg.yMax : Math.max.apply(null, all);
+  var padY = (hi - lo) * 0.12 || 1;
+  var ticks = niceTicks(cfg.yMin != null ? lo : lo - padY, cfg.yMax != null ? hi : hi + padY, cfg.yTicks || 4);
+  var tLo = ticks[0], tHi = ticks[ticks.length - 1];
+  var X = function (i) { return pad.l + (cfg.labels.length === 1 ? pw / 2 : i * pw / (cfg.labels.length - 1)); };
+  var Y = function (v) { return pad.t + ph - (v - tLo) / (tHi - tLo) * ph; };
+
+  ticks.forEach(function (t) {
+    svg.appendChild(s("line", { x1: pad.l, x2: W - pad.r, y1: Y(t), y2: Y(t), stroke: GRID, "stroke-width": 1 }));
+    svg.appendChild(st(pad.l - 8, Y(t) + 3.5, cfg.yFmt(t), { fill: MUTED, "font-size": 10.5, "text-anchor": "end", style: "font-variant-numeric:tabular-nums" }));
+  });
+  svg.appendChild(s("line", { x1: pad.l, x2: W - pad.r, y1: Y(tLo), y2: Y(tLo), stroke: AXIS, "stroke-width": 1 }));
+
+  if (cfg.refLine) {
+    svg.appendChild(s("line", { x1: pad.l, x2: W - pad.r, y1: Y(cfg.refLine.v), y2: Y(cfg.refLine.v), stroke: AXIS, "stroke-width": 1.5 }));
+    svg.appendChild(st(W - pad.r, Y(cfg.refLine.v) - 5, cfg.refLine.label, { fill: INK2, "font-size": 10.5, "text-anchor": "end", "font-weight": 700 }));
+  }
+
+  var every = cfg.tickEvery || 1;
+  cfg.labels.forEach(function (lb, i) {
+    if (i % every !== 0 && i !== cfg.labels.length - 1) return;
+    svg.appendChild(st(X(i), H - pad.b + 15, lb, { fill: MUTED, "font-size": 10.5, "text-anchor": i === 0 ? "start" : (i === cfg.labels.length - 1 ? "end" : "middle") }));
+  });
+
+  cfg.series.forEach(function (se) {
+    var d = "", started = false;
+    se.values.forEach(function (v, i) {
+      if (v == null) return;
+      d += (started ? "L" : "M") + X(i).toFixed(1) + " " + Y(v).toFixed(1) + " ";
+      started = true;
+    });
+    if (cfg.area && cfg.series.length === 1) {
+      svg.appendChild(s("path", { d: d + "L" + X(se.values.length - 1) + " " + Y(tLo) + " L" + X(0) + " " + Y(tLo) + " Z", fill: se.color, "fill-opacity": .1 }));
+    }
+    svg.appendChild(s("path", { d: d, fill: "none", stroke: se.color, "stroke-width": 2, "stroke-linejoin": "round", "stroke-linecap": "round" }));
+    var li = se.values.length - 1;
+    svg.appendChild(s("circle", { cx: X(li), cy: Y(se.values[li]), r: 4.5, fill: se.color, stroke: SURFACE, "stroke-width": 2 }));
+    if (cfg.endLabel) {
+      svg.appendChild(st(X(li) + 9, Y(se.values[li]) + 4, cfg.yFmt(se.values[li]) + (se.endSuffix || ""), { fill: cssvar("--ink"), "font-size": 11.5, "font-weight": 800 }));
+    }
+  });
+
+  // crosshair + tooltip layer
+  var hair = s("line", { y1: pad.t, y2: pad.t + ph, stroke: AXIS, "stroke-width": 1, opacity: 0 });
+  svg.appendChild(hair);
+  var dots = cfg.series.map(function (se) {
+    var c = s("circle", { r: 4.5, fill: se.color, stroke: SURFACE, "stroke-width": 2, opacity: 0 });
+    svg.appendChild(c); return c;
+  });
+  var hit = s("rect", { x: pad.l, y: pad.t, width: pw, height: ph, fill: "transparent", style: "cursor:crosshair" });
+  svg.appendChild(hit);
+  function at(ev) {
+    var r = svg.getBoundingClientRect();
+    var vx = (ev.clientX - r.left) / r.width * W;
+    var i = Math.round((vx - pad.l) / (pw / Math.max(1, cfg.labels.length - 1)));
+    i = Math.max(0, Math.min(cfg.labels.length - 1, i));
+    hair.setAttribute("x1", X(i)); hair.setAttribute("x2", X(i)); hair.setAttribute("opacity", 1);
+    dots.forEach(function (c, k) {
+      var v = cfg.series[k].values[i];
+      if (v == null) { c.setAttribute("opacity", 0); return; }
+      c.setAttribute("cx", X(i)); c.setAttribute("cy", Y(v)); c.setAttribute("opacity", 1);
+    });
+    showTip(tipRows(cfg.labelPrefix ? cfg.labelPrefix + " " + cfg.labels[i] : cfg.labels[i],
+      cfg.series.map(function (se) { return { color: se.color, name: se.name, value: se.values[i] == null ? "—" : cfg.yFmt(se.values[i]) }; })), ev);
+  }
+  hit.addEventListener("pointermove", at);
+  hit.addEventListener("pointerenter", at);
+  hit.addEventListener("pointerleave", function () {
+    hideTip(); hair.setAttribute("opacity", 0); dots.forEach(function (c) { c.setAttribute("opacity", 0); });
+  });
+  return svg;
+}
+
+/* ------------------------------------------------------------ COLUMN CHART */
+function columnChart(cfg) {
+  var W = cfg.W || WHALF, H = cfg.H || 250;
+  var pad = Object.assign({ t: 22, r: 14, b: cfg.twoLineLabels ? 42 : 30, l: 48 }, cfg.pad || {});
+  var svg = s("svg", { viewBox: "0 0 " + W + " " + H, role: "img", "aria-label": cfg.aria || cfg.title || "column chart" });
+  var pw = W - pad.l - pad.r, ph = H - pad.t - pad.b;
+  var ns = cfg.series.length, ng = cfg.groups.length;
+  var totals = cfg.groups.map(function (g, i) {
+    if (cfg.stacked) return cfg.series.reduce(function (a, se) { return a + (se.values[i] || 0); }, 0);
+    return Math.max.apply(null, cfg.series.map(function (se) { return se.values[i] || 0; }));
+  });
+  var maxV = Math.max.apply(null, totals);
+  if (cfg.ref) maxV = Math.max(maxV, cfg.ref.v);
+  var ticks = niceTicks(0, maxV, cfg.yTicks || 4);
+  var tHi = ticks[ticks.length - 1];
+  var Y = function (v) { return pad.t + ph - v / tHi * ph; };
+  var band = pw / ng;
+  var GAP = 2; // surface gap between touching fills
+  var barW = Math.min(cfg.stacked || ns === 1 ? 24 : 22, (band * 0.62 - (ns - 1) * GAP) / (cfg.stacked ? 1 : ns));
+  if (cfg.stacked) barW = Math.min(26, band * 0.5);
+
+  ticks.forEach(function (t) {
+    svg.appendChild(s("line", { x1: pad.l, x2: W - pad.r, y1: Y(t), y2: Y(t), stroke: t === 0 ? AXIS : GRID, "stroke-width": 1 }));
+    svg.appendChild(st(pad.l - 8, Y(t) + 3.5, cfg.yFmt(t), { fill: MUTED, "font-size": 10.5, "text-anchor": "end", style: "font-variant-numeric:tabular-nums" }));
+  });
+  if (cfg.ref) {
+    svg.appendChild(s("line", { x1: pad.l, x2: W - pad.r, y1: Y(cfg.ref.v), y2: Y(cfg.ref.v), stroke: AXIS, "stroke-width": 1.5 }));
+    // Anchored left: the right-hand columns are usually the tallest, and an
+    // end-anchored label would sit on top of them.
+    svg.appendChild(st(pad.l + 4, Y(cfg.ref.v) - 6, cfg.ref.label, { fill: INK2, "font-size": 10.5, "font-weight": 700 }));
+  }
+
+  cfg.groups.forEach(function (g, i) {
+    var cx = pad.l + band * i + band / 2;
+    var lines = String(g).split("\n");
+    lines.forEach(function (ln, k) {
+      svg.appendChild(st(cx, H - pad.b + 15 + k * 12, ln, { fill: MUTED, "font-size": 10.5, "text-anchor": "middle" }));
+    });
+
+    if (cfg.stacked) {
+      var acc = 0;
+      cfg.series.forEach(function (se, k) {
+        var v = se.values[i] || 0;
+        var y0 = Y(acc + v), y1 = Y(acc);
+        var hgt = Math.max(0, y1 - y0 - (k > 0 ? GAP : 0));
+        var top = k === ns - 1;
+        svg.appendChild(hoverable(s("path", {
+          d: barPath(cx - barW / 2, y0, barW, hgt, top ? 4 : 0, "up"), fill: se.color
+        }), cfg, i, k));
+        acc += v;
+      });
+      if (cfg.capLabels !== false) {
+        svg.appendChild(st(cx, Y(acc) - 7, cfg.capFmt ? cfg.capFmt(acc, i) : cfg.yFmt(acc), { fill: cssvar("--ink"), "font-size": 10.5, "font-weight": 800, "text-anchor": "middle" }));
+      }
+    } else {
+      var groupW = ns * barW + (ns - 1) * GAP;
+      cfg.series.forEach(function (se, k) {
+        var v = se.values[i] || 0;
+        var x = cx - groupW / 2 + k * (barW + GAP);
+        var col = (se.colorFor ? se.colorFor(i) : se.color);
+        svg.appendChild(hoverable(s("path", { d: barPath(x, Y(v), barW, Y(0) - Y(v), 4, "up"), fill: col }), cfg, i, k));
+      });
+      if (cfg.capLabels === "all" || (cfg.capLabels === "last" && i === ng - 1) || (cfg.capLabels === "single" && ns === 1)) {
+        // On the last group only the first series is labelled — labelling every
+        // series in a grouped pair collides at the cap.
+        (cfg.capLabels === "last" ? cfg.series.slice(0, 1) : cfg.series).forEach(function (se, k) {
+          var v = se.values[i] || 0;
+          var x = cx - groupW / 2 + k * (barW + GAP) + barW / 2;
+          svg.appendChild(st(x, Y(v) - 7, cfg.capFmt ? cfg.capFmt(v, i) : cfg.yFmt(v), { fill: cssvar("--ink"), "font-size": 10.5, "font-weight": 800, "text-anchor": "middle" }));
+        });
+      }
+    }
+  });
+
+  function hoverable(node, cfg, i, k) {
+    node.style.cursor = "default";
+    node.addEventListener("pointerenter", function (ev) {
+      var rows = cfg.series.map(function (se, kk) {
+        return { color: se.colorFor ? se.colorFor(i) : se.color, name: se.name, value: cfg.tipFmt ? cfg.tipFmt(se.values[i], i, kk) : cfg.yFmt(se.values[i] || 0) };
+      });
+      if (cfg.tipExtra) rows = rows.concat(cfg.tipExtra(i));
+      showTip(tipRows(String(cfg.groups[i]).replace(/\n/g, " "), rows), ev);
+    });
+    node.addEventListener("pointermove", moveTip);
+    node.addEventListener("pointerleave", hideTip);
+    return node;
+  }
+  return svg;
+}
+
+/* ---------------------------------------------------- HORIZONTAL BAR CHART */
+function hbarChart(cfg) {
+  var rowH = cfg.rowH || 30, labelW = cfg.labelW || 128, W = cfg.W || WHALF;
+  var padR = cfg.padR || 66, padT = 8, padB = cfg.axis === false ? 6 : 24;
+  var padL = cfg.padL || 0;   // gap between the label column and the plot
+  var H = padT + cfg.rows.length * rowH + padB;
+  var svg = s("svg", { viewBox: "0 0 " + W + " " + H, role: "img", "aria-label": cfg.aria || "bar chart" });
+  var pw = W - labelW - padL - padR;
+  var vals = cfg.rows.map(function (r) { return r.value; });
+  if (cfg.rows.some(function (r) { return r.marker != null; })) vals = vals.concat(cfg.rows.map(function (r) { return r.marker; }));
+  var maxV = Math.max.apply(null, vals.map(Math.abs));
+  var diverging = cfg.diverging || vals.some(function (v) { return v < 0; });
+  var ticks = niceTicks(diverging ? -maxV : 0, maxV, 3);
+  var tLo = diverging ? ticks[0] : 0, tHi = ticks[ticks.length - 1];
+  var X = function (v) { return labelW + padL + (v - tLo) / (tHi - tLo) * pw; };
+  var zero = X(0);
+
+  if (cfg.axis !== false) {
+    ticks.forEach(function (t) {
+      svg.appendChild(s("line", { x1: X(t), x2: X(t), y1: padT, y2: padT + cfg.rows.length * rowH, stroke: t === 0 ? AXIS : GRID, "stroke-width": 1 }));
+      svg.appendChild(st(X(t), H - 6, cfg.xFmt(t), { fill: MUTED, "font-size": 10.5, "text-anchor": "middle", style: "font-variant-numeric:tabular-nums" }));
+    });
+  } else {
+    svg.appendChild(s("line", { x1: zero, x2: zero, y1: padT, y2: padT + cfg.rows.length * rowH, stroke: AXIS, "stroke-width": 1 }));
+  }
+
+  var barH = Math.min(18, rowH - 12);
+  cfg.rows.forEach(function (r, i) {
+    var cy = padT + i * rowH + rowH / 2;
+    svg.appendChild(st(labelW - 10, cy + 4, r.label, { fill: cssvar("--ink"), "font-size": 11.5, "font-weight": 600, "text-anchor": "end" }));
+    var col = r.color || (r.value < 0 ? cssvar("--neg") : cssvar("--pos"));
+    var x0 = r.value < 0 ? X(r.value) : zero, w = Math.abs(X(r.value) - zero);
+    var g = s("path", { d: barPath(x0, cy - barH / 2, w, barH, 4, r.value < 0 ? "left" : "right"), fill: col });
+    svg.appendChild(g);
+    if (r.marker != null) {
+      var mx = X(r.marker);
+      svg.appendChild(s("line", { x1: mx, x2: mx, y1: cy - barH / 2 - 4, y2: cy + barH / 2 + 4, stroke: cssvar("--ink"), "stroke-width": 2, "stroke-linecap": "round" }));
+    }
+    var outer = r.marker != null ? Math.max(x0 + w, X(r.marker)) : x0 + w;
+    var lx = r.value < 0 ? x0 - 7 : outer + 7;
+    svg.appendChild(st(lx, cy + 4, cfg.valFmt ? cfg.valFmt(r) : cfg.xFmt(r.value), {
+      fill: cssvar("--ink"), "font-size": 11.5, "font-weight": 800, "text-anchor": r.value < 0 ? "end" : "start",
+      style: "font-variant-numeric:tabular-nums"
+    }));
+    var hit = s("rect", { x: labelW, y: cy - rowH / 2, width: pw + padL, height: rowH, fill: "transparent" });
+    hit.addEventListener("pointerenter", function (ev) {
+      var rows = [{ color: col, name: cfg.seriesName || "Value", value: cfg.xFmt(r.value) }];
+      if (r.marker != null) rows.push({ name: cfg.markerName || "Budget", value: cfg.xFmt(r.marker) });
+      if (r.note) rows.push({ name: r.noteName || "Detail", value: r.note });
+      showTip(tipRows(r.label, rows), ev);
+    });
+    hit.addEventListener("pointermove", moveTip);
+    hit.addEventListener("pointerleave", hideTip);
+    svg.appendChild(hit);
+  });
+  return svg;
+}
+
+/* ----------------------------------------------------------------- WATERFALL */
+function waterfall(cfg) {
+  var W = cfg.W || 880, H = cfg.H || 300;
+  var pad = { t: 34, r: 14, b: 48, l: 52 };
+  var svg = s("svg", { viewBox: "0 0 " + W + " " + H, role: "img", "aria-label": cfg.aria || "waterfall" });
+  var pw = W - pad.l - pad.r, ph = H - pad.t - pad.b;
+  var run = 0, geo = cfg.steps.map(function (sp) {
+    if (sp.kind === "total") { run = sp.value; return { from: 0, to: sp.value }; }
+    var from = run; run += sp.value; return { from: from, to: run };
+  });
+  var maxV = Math.max.apply(null, geo.map(function (g) { return Math.max(g.from, g.to); }));
+  var ticks = niceTicks(0, maxV, 4), tHi = ticks[ticks.length - 1];
+  var Y = function (v) { return pad.t + ph - v / tHi * ph; };
+  var band = pw / cfg.steps.length;
+  var barW = Math.min(68, band * 0.5);
+
+  ticks.forEach(function (t) {
+    svg.appendChild(s("line", { x1: pad.l, x2: W - pad.r, y1: Y(t), y2: Y(t), stroke: t === 0 ? AXIS : GRID, "stroke-width": 1 }));
+    svg.appendChild(st(pad.l - 8, Y(t) + 3.5, cfg.yFmt(t), { fill: MUTED, "font-size": 10.5, "text-anchor": "end", style: "font-variant-numeric:tabular-nums" }));
+  });
+
+  cfg.steps.forEach(function (sp, i) {
+    var g = geo[i], cx = pad.l + band * i + band / 2;
+    var top = Math.min(Y(g.from), Y(g.to)), hgt = Math.abs(Y(g.from) - Y(g.to));
+    var isTotal = sp.kind === "total";
+    var col = isTotal ? cssvar("--pos") : (sp.value < 0 ? cssvar("--neg") : cssvar("--pos"));
+    var node = s("path", { d: barPath(cx - barW / 2, top, barW, hgt, 4, isTotal ? "up" : (sp.value < 0 ? "down" : "up")), fill: col });
+    svg.appendChild(node);
+
+    // connector to the next step
+    if (i < cfg.steps.length - 1) {
+      var yc = Y(g.to);
+      svg.appendChild(s("line", { x1: cx + barW / 2, x2: pad.l + band * (i + 1) + band / 2 - barW / 2, y1: yc, y2: yc, stroke: AXIS, "stroke-width": 1 }));
+    }
+    // value label above the mark
+    svg.appendChild(st(cx, top - 9, (isTotal ? "" : (sp.value < 0 ? "−" : "+")) + cfg.yFmt(Math.abs(sp.value)), {
+      fill: cssvar("--ink"), "font-size": 12.5, "font-weight": 800, "text-anchor": "middle"
+    }));
+    String(sp.label).split("\n").forEach(function (ln, k) {
+      svg.appendChild(st(cx, H - pad.b + 16 + k * 12, ln, { fill: k === 0 ? cssvar("--ink") : MUTED, "font-size": 10.5, "font-weight": k === 0 ? 700 : 400, "text-anchor": "middle" }));
+    });
+    if (sp.sub) svg.appendChild(st(cx, H - pad.b + 16 + 12 * String(sp.label).split("\n").length, sp.sub, { fill: MUTED, "font-size": 10.5, "text-anchor": "middle" }));
+
+    var hit = s("rect", { x: cx - band / 2, y: pad.t, width: band, height: ph, fill: "transparent" });
+    hit.addEventListener("pointerenter", function (ev) {
+      showTip(tipRows(String(sp.label).replace(/\n/g, " "), [
+        { color: col, name: isTotal ? "Amount" : "Impact", value: (isTotal ? "" : sp.value < 0 ? "−" : "+") + cfg.yFmt(Math.abs(sp.value)) },
+        { name: "Running total", value: cfg.yFmt(g.to) }
+      ].concat(sp.tip || [])), ev);
+    });
+    hit.addEventListener("pointermove", moveTip);
+    hit.addEventListener("pointerleave", hideTip);
+    svg.appendChild(hit);
+  });
+  return svg;
+}
+
+/* --------------------------------------------------------- SCATTER QUADRANT */
+function scatterQuad(cfg) {
+  var W = cfg.W || WFULL, H = cfg.H || 330;
+  var pad = { t: 22, r: 26, b: 44, l: 54 };
+  var svg = s("svg", { viewBox: "0 0 " + W + " " + H, role: "img", "aria-label": cfg.aria || "quadrant scatter" });
+  var pw = W - pad.l - pad.r, ph = H - pad.t - pad.b;
+  var xs = cfg.points.map(function (p) { return p.x; }), ys = cfg.points.map(function (p) { return p.y; });
+  var xt = niceTicks(0, Math.max.apply(null, xs), 4), yt = niceTicks(Math.min.apply(null, ys) - 2, Math.max.apply(null, ys) + 2, 4);
+  var xHi = xt[xt.length - 1], yLo = yt[0], yHi = yt[yt.length - 1];
+  var X = function (v) { return pad.l + v / xHi * pw; };
+  var Y = function (v) { return pad.t + ph - (v - yLo) / (yHi - yLo) * ph; };
+
+  yt.forEach(function (t) {
+    svg.appendChild(s("line", { x1: pad.l, x2: W - pad.r, y1: Y(t), y2: Y(t), stroke: GRID, "stroke-width": 1 }));
+    svg.appendChild(st(pad.l - 8, Y(t) + 3.5, cfg.yFmt(t), { fill: MUTED, "font-size": 10.5, "text-anchor": "end" }));
+  });
+  xt.forEach(function (t) {
+    svg.appendChild(st(X(t), H - pad.b + 16, cfg.xFmt(t), { fill: MUTED, "font-size": 10.5, "text-anchor": "middle" }));
+  });
+  svg.appendChild(s("line", { x1: pad.l, x2: W - pad.r, y1: Y(yLo), y2: Y(yLo), stroke: AXIS, "stroke-width": 1 }));
+
+  // quadrant dividers at the company averages
+  svg.appendChild(s("line", { x1: X(cfg.xMid), x2: X(cfg.xMid), y1: pad.t, y2: pad.t + ph, stroke: AXIS, "stroke-width": 1.5 }));
+  svg.appendChild(s("line", { x1: pad.l, x2: W - pad.r, y1: Y(cfg.yMid), y2: Y(cfg.yMid), stroke: AXIS, "stroke-width": 1.5 }));
+  (cfg.quadLabels || []).forEach(function (q) {
+    svg.appendChild(st(q.x === "l" ? pad.l + 8 : W - pad.r - 8, q.y === "t" ? pad.t + 14 : pad.t + ph - 8, q.text, {
+      fill: MUTED, "font-size": 10, "font-weight": 800, "text-anchor": q.x === "l" ? "start" : "end", "letter-spacing": ".08em"
+    }));
+  });
+
+  svg.appendChild(st(pad.l - 40, pad.t - 8, cfg.yTitle, { fill: INK2, "font-size": 10.5, "font-weight": 700 }));
+  svg.appendChild(st(W - pad.r, H - 6, cfg.xTitle, { fill: INK2, "font-size": 10.5, "font-weight": 700, "text-anchor": "end" }));
+
+  cfg.points.forEach(function (p) {
+    var cx = X(p.x), cy = Y(p.y);
+    var right = p.side ? p.side === "right" : cx < pad.l + pw * 0.7;
+    svg.appendChild(s("circle", { cx: cx, cy: cy, r: 6.5, fill: cssvar("--s1"), stroke: SURFACE, "stroke-width": 2 }));
+    svg.appendChild(st(right ? cx + 11 : cx - 11, cy + 4, p.label, {
+      fill: cssvar("--ink"), "font-size": 11.5, "font-weight": 700, "text-anchor": right ? "start" : "end"
+    }));
+    var hit = s("circle", { cx: cx, cy: cy, r: 14, fill: "transparent" });
+    hit.addEventListener("pointerenter", function (ev) {
+      showTip(tipRows(p.label, [
+        { color: cssvar("--s1"), name: cfg.xName, value: cfg.xFmt(p.x) },
+        { name: cfg.yName, value: cfg.yFmt(p.y) }
+      ].concat(p.tip || [])), ev);
+    });
+    hit.addEventListener("pointermove", moveTip);
+    hit.addEventListener("pointerleave", hideTip);
+    svg.appendChild(hit);
+  });
+  return svg;
+}
+
+/* ----------------------------------------------------------------- SPARKLINE */
+function sparkline(values, opts) {
+  opts = opts || {};
+  var W = 200, H = opts.H || 30, p = 3;
+  var svg = s("svg", { viewBox: "0 0 " + W + " " + H, "aria-hidden": "true", preserveAspectRatio: "none" });
+  var lo = Math.min.apply(null, values), hi = Math.max.apply(null, values);
+  if (hi === lo) { hi += 1; lo -= 1; }
+  var X = function (i) { return p + i * (W - 2 * p) / (values.length - 1); };
+  var Y = function (v) { return p + (H - 2 * p) - (v - lo) / (hi - lo) * (H - 2 * p); };
+  var d = values.map(function (v, i) { return (i ? "L" : "M") + X(i).toFixed(1) + " " + Y(v).toFixed(1); }).join(" ");
+  svg.appendChild(s("path", { d: d + " L" + X(values.length - 1) + " " + H + " L" + X(0) + " " + H + " Z", fill: opts.color || cssvar("--s1"), "fill-opacity": .09 }));
+  svg.appendChild(s("path", { d: d, fill: "none", stroke: opts.color || cssvar("--s1"), "stroke-width": 1.6, "vector-effect": "non-scaling-stroke", "stroke-linejoin": "round" }));
+  svg.appendChild(s("circle", { cx: X(values.length - 1), cy: Y(values[values.length - 1]), r: 2.4, fill: opts.color || cssvar("--s1") }));
+  return svg;
+}
+
+/* ------------------------------------------------------------- TABLE BUILDER */
+function dvTable(spec) {
+  var thead = h("thead", null, [h("tr", null, spec.cols.map(function (c) { return h("th", { text: c, scope: "col" }); }))]);
+  var tbody = h("tbody", null, spec.rows.map(function (r) {
+    return h("tr", { class: r.total ? "total" : null }, (r.cells || r).map(function (c) {
+      if (c && typeof c === "object") return h("td", { text: c.v, class: c.cls || null });
+      return h("td", { text: c });
+    }));
+  }));
+  return h("table", { class: "dv" }, [thead, tbody]);
+}
+
+/* ---------------------------------------------------------------- CHART CARD */
+var SRC_COLOR = {
+  "SYSPRO": "#1d3168", "Salesforce": "#2a78d6", "TELUS Blacksmith": "#57409c",
+  "HighRadius": "#eb6834", "dbt": "#1baf7a", "NIQ": "#a9a7a0"
+};
+function srcTags(list) {
+  return h("div", { style: "display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:8px" },
+    list.map(function (nm) {
+      var key = Object.keys(SRC_COLOR).filter(function (k) { return nm.indexOf(k) === 0; })[0];
+      return h("span", { class: "src-tag mono", style: "--src:" + (SRC_COLOR[key] || "#a9a7a0"), text: nm });
+    }));
+}
+
+function card(cfg) {
+  var body = h("div", { class: "card-body" });
+  var holder = h("div", { class: "chart-holder" }, [cfg.chart]);
+  body.appendChild(holder);
+  var tools = h("div", { class: "card-tools" });
+  if (cfg.table) {
+    var tHolder = h("div", { class: "table-holder", hidden: "" }, [dvTable(cfg.table)]);
+    body.appendChild(tHolder);
+    var btn = h("button", {
+      class: "toolbtn", type: "button", "aria-pressed": "false", text: "Table",
+      onclick: function () {
+        var on = btn.getAttribute("aria-pressed") === "true";
+        btn.setAttribute("aria-pressed", on ? "false" : "true");
+        holder.hidden = !on; tHolder.hidden = on;
+      }
+    });
+    tools.appendChild(btn);
+  }
+  if (cfg.detail) {
+    tools.appendChild(h("button", {
+      class: "toolbtn", type: "button", text: "Detail →",
+      onclick: function () { openDrawer(cfg.detail); }
+    }));
+  }
+  var head = h("div", { class: "card-head" }, [
+    h("div", null, [
+      h("div", { class: "card-title" }, [
+        cfg.id ? h("span", { class: "mono", style: "color:var(--ink-3);font-weight:700;font-size:11px;margin-right:6px", text: cfg.id }) : null,
+        document.createTextNode(cfg.title)
+      ]),
+      cfg.sub ? h("div", { class: "card-sub", text: cfg.sub }) : null
+    ]),
+    tools
+  ]);
+  var el = h("section", { class: "card" + (cfg.span ? " span-all" : "") }, [head]);
+  if (cfg.scope) head.querySelector(".card-tools").insertBefore(h("span", { class: "scope-chip", text: cfg.scope }), tools.firstChild);
+  if (cfg.legend) {
+    el.appendChild(h("div", { class: "legend" }, cfg.legend.map(function (l) {
+      return h("span", { class: "legend-item" }, [
+        h("span", { class: "legend-key" + (l.sq ? " sq" : ""), style: "--k:" + l.color }),
+        document.createTextNode(l.name)
+      ]);
+    })));
+  }
+  el.appendChild(body);
+  if (cfg.note) body.appendChild(h("div", { class: "footnote", style: "padding-left:0;padding-right:0", text: cfg.note }));
+  if (cfg.sources) body.appendChild(srcTags(cfg.sources));
+  return el;
+}
+
+/* =============================================================== SAMPLE DATA
+   Entity split: dollar measures scale by the family factors below (they
+   reproduce the published entity balances). Ratio, day-count and structural
+   measures are consolidated and marked as such.
+   ========================================================================== */
+
+var ENTITY_LABEL = {
+  all: "All companies", hf: "Heartland Foods LLC",
+  pp: "Prairie Provisions", hl: "Heartland Logistics"
+};
+var FACTOR = {
+  cash: { all: 1, hf: .734, pp: .203, hl: .063 },
+  ar: { all: 1, hf: .781, pp: .169, hl: .050 },
+  rev: { all: 1, hf: .726, pp: .214, hl: .060 },
+  inv: { all: 1, hf: .688, pp: .271, hl: .041 },
+  trade: { all: 1, hf: .842, pp: .158, hl: 0 },
+  ded: { all: 1, hf: .869, pp: .131, hl: 0 },
+  ord: { all: 1, hf: .742, pp: .196, hl: .062 },
+  pipe: { all: 1, hf: .810, pp: .190, hl: 0 }
+};
+var entity = "all";
+function F(fam) { return FACTOR[fam][entity]; }
+function sc(fam, v) { return v == null ? null : v * F(fam); }
+function scArr(fam, arr) { var k = F(fam); return arr.map(function (v) { return v == null ? null : v * k; }); }
+function isAll() { return entity === "all"; }
+function noTrade() { return entity === "hl"; }
+
+var GM_BY_ENTITY = { all: 25.9, hf: 26.4, pp: 23.1, hl: null };
+var GMB_BY_ENTITY = { all: 26.4, hf: 26.8, pp: 24.0, hl: null };
+
+var D = {
+  asOf: "Tue Aug 11, 2026 · 6:04 AM CT",
+  sync: [
+    { nm: "SYSPRO ERP (GL, AR, AP, SOR, INV)", tm: "6:04 AM", ok: true },
+    { nm: "HighRadius (cash app, deductions)", tm: "6:01 AM", ok: true },
+    { nm: "Salesforce (pipeline)", tm: "5:52 AM", ok: true },
+    { nm: "TELUS Blacksmith TPM (trade)", tm: "5:38 AM", ok: true },
+    { nm: "dbt marts rebuilt — 148 of 149 tests pass", tm: "6:04 AM", ok: true },
+    { nm: "NIQ syndicated data", tm: "Phase 2 — not connected", ok: false }
+  ],
+
+  /* ---------------- DAILY ---------------- */
+  cash: 8.42, cashPrior: 8.11,
+  cash30: [7.42, 7.88, 8.02, 7.91, 7.74, 7.12, 7.11, 7.11, 7.55, 7.83, 7.96, 7.88, 7.31, 7.30, 7.30,
+    7.71, 8.05, 8.19, 8.02, 6.94, 6.93, 6.93, 7.42, 7.71, 7.94, 8.21, 8.13, 8.12, 8.11, 8.42],
+  cash30Labels: ["Jul 12", "Jul 13", "Jul 14", "Jul 15", "Jul 16", "Jul 17", "Jul 18", "Jul 19", "Jul 20", "Jul 21",
+    "Jul 22", "Jul 23", "Jul 24", "Jul 25", "Jul 26", "Jul 27", "Jul 28", "Jul 29", "Jul 30", "Jul 31",
+    "Aug 1", "Aug 2", "Aug 3", "Aug 4", "Aug 5", "Aug 6", "Aug 7", "Aug 8", "Aug 9", "Aug 10"],
+  cashByEntity: [
+    { nm: "Heartland Foods LLC — operating (BOK)", v: 5.42 },
+    { nm: "Heartland Foods LLC — payroll (BOK)", v: 0.76 },
+    { nm: "Prairie Provisions — operating (Commerce)", v: 1.71 },
+    { nm: "Heartland Logistics — operating (Commerce)", v: 0.53 }
+  ],
+  receipts: 1.240, receiptsAvg: 0.901,
+  receipts14: [0.780, 0.692, 0.915, 1.105, 0.824, 0.736, 0.688, 1.198, 1.018, 0.806, 0.742, 0.694, 0.903, 1.240],
+  receipts14Labels: ["Jul 22", "Jul 23", "Jul 24", "Jul 27", "Jul 28", "Jul 29", "Jul 30", "Jul 31",
+    "Aug 3", "Aug 4", "Aug 5", "Aug 6", "Aug 7", "Aug 10"],
+  invoiced: 0.684, invoicedWeekdayAvg: 0.712, shipments: 47,
+  invoiced10: [0.702, 0.688, 0.741, 0.664, 0.718, 0.696, 0.752, 0.671, 0.709, 0.684],
+  arPastDue: 3.86, arPastDuePrior: 3.756, arTotal: 18.90,
+  arPastDue10: [3.71, 3.68, 3.74, 3.79, 3.72, 3.70, 3.78, 3.74, 3.756, 3.86],
+  arTop5: [
+    { nm: "Costco Wholesale", v: 0.612, mv: 0.048 },
+    { nm: "Kroger", v: 0.488, mv: 0 },
+    { nm: "H-E-B", v: 0.402, mv: 0.031 },
+    { nm: "Albertsons / Safeway", v: 0.311, mv: -0.012 },
+    { nm: "US Foods", v: 0.268, mv: 0.037 }
+  ],
+  dedNew: 0.148, dedNewCount: 23, dedLargest: 0.0482, dedThreshold: 0.025,
+  dedNew10: [0.092, 0.118, 0.076, 0.134, 0.101, 0.088, 0.126, 0.097, 0.113, 0.148],
+  expectedToday: 1.06, expectedCount: 34,
+
+  /* ---------------- WEEKLY ---------------- */
+  wkLabels: ["Jun 20", "Jun 27", "Jul 4", "Jul 11", "Jul 18", "Jul 25", "Aug 1", "Aug 8"],
+  wkActual: [3.52, 3.88, 2.94, 3.66, 3.81, 4.02, 3.58, 3.71],
+  wkBudget: [3.60, 3.75, 3.10, 3.70, 3.78, 3.90, 3.80, 3.85],
+  wkLY: 3.38,
+  orderBook: 9.24, orderBookPrior: 8.83,
+  lateOrders: 38, lateOrderValue: 0.712,
+  shipWeeks: ["Past ship\ndate", "Wk Aug 15", "Wk Aug 22", "Wk Aug 29", "Sep 5+"],
+  shipWeekVals: [0.71, 3.18, 2.44, 1.62, 1.29],
+  dso: 41.2, dsoPrior: 40.8,
+  dso13: [43.8, 43.5, 43.1, 42.8, 42.9, 42.4, 42.0, 41.7, 41.9, 41.5, 41.0, 40.8, 41.2],
+  agingBuckets: ["Current", "1–30 days", "31–60 days", "61–90 days", "Over 90"],
+  agingLevels: [15.04, 2.11, 0.98, 0.44, 0.33],
+  agingMove: [-0.180, 0.064, 0.112, 0.148, 0.062],
+  dedOpen: 2.14, dedOpenCount: 412, dedResolveDays: 34, dedValidPct: 61,
+  dedAgeLabels: ["0–30 days", "31–60 days", "61–90 days", "Over 90"],
+  dedAgeVals: [0.612, 0.548, 0.498, 0.482],
+  dedAgeCounts: [168, 119, 71, 54],
+  tradeWTD: 0.486, tradeAccrualPace: 0.452, promosStarting: 6,
+  tradeClaimed8: [0.441, 0.468, 0.392, 0.455, 0.472, 0.501, 0.463, 0.486],
+  tradeAccrual8: [0.450, 0.452, 0.448, 0.451, 0.455, 0.458, 0.450, 0.452],
+  inventory: 24.10, inventoryPrior: 24.48, slowMoving: 1.42,
+  inv8: [23.4, 23.8, 24.2, 24.0, 24.6, 24.3, 24.48, 24.10],
+  pipelineNew: 2.84, pipelineNewCount: 14, stageMoves: 9,
+
+  /* ---------------- MONTHLY (July 2026, closed Aug 6) ---------------- */
+  pnl: [
+    { nm: "Gross sales", a: 16.42, b: 16.60, ly: 15.08, fam: "rev", strong: false },
+    { nm: "Trade spend", a: -2.03, b: -1.99, ly: -1.82, fam: "trade", sub: true },
+    { nm: "Deductions & allowances", a: -0.61, b: -0.55, ly: -0.48, fam: "ded", sub: true },
+    { nm: "Net revenue", a: 13.78, b: 14.06, ly: 12.78, fam: "rev", strong: true, ruleTop: true },
+    { nm: "Cost of goods sold", a: -10.21, b: -10.35, ly: -9.52, fam: "rev", sub: true },
+    { nm: "Gross profit", a: 3.57, b: 3.71, ly: 3.26, fam: "rev", strong: true, ruleTop: true },
+    { nm: "Operating expense", a: -2.31, b: -2.36, ly: -2.19, fam: "rev", sub: true },
+    { nm: "Operating income", a: 1.26, b: 1.35, ly: 1.07, fam: "rev", strong: true, ruleTop: true }
+  ],
+  netRev: 13.78, netRevBud: 14.06, netRevLY: 12.78,
+  opInc: 1.26, opIncBud: 1.35, opIncLY: 1.07,
+  gross: 16.42, tradeSpend: 2.03, deductions: 0.61,
+  grossBud: 16.60, tradeSpendBud: 1.99, deductionsBud: 0.55,
+  netRev13: [12.78, 12.94, 13.11, 13.02, 13.44, 13.28, 13.51, 13.39, 13.62, 13.55, 13.71, 13.66, 13.78],
+  gmPct13: [25.5, 25.6, 25.8, 25.7, 26.1, 26.0, 26.2, 26.1, 26.3, 26.0, 25.8, 26.0, 25.9],
+  lines: [
+    { nm: "Salsa & Dips", rev: 3.34, gm: 24.3, bud: 26.4 },
+    { nm: "Tortillas & Chips", rev: 2.89, gm: 27.8, bud: 27.2 },
+    { nm: "Frozen Entrées", rev: 2.71, gm: 24.9, bud: 25.4 },
+    { nm: "Soups & Broths", rev: 1.94, gm: 29.4, bud: 28.8 },
+    { nm: "Sauces & Marinades", rev: 1.66, gm: 26.9, bud: 26.5 },
+    { nm: "Snack Bars", rev: 1.24, gm: 21.4, bud: 22.8 }
+  ],
+  custCM: [
+    { nm: "Sprouts", v: 21.4 }, { nm: "Publix", v: 19.8 }, { nm: "Sysco", v: 18.2 },
+    { nm: "Target", v: 17.6 }, { nm: "H-E-B", v: 16.9 },
+    { nm: "US Foods", v: 11.7 }, { nm: "Albertsons / Safeway", v: 10.3 },
+    { nm: "Walmart", v: 9.1 }, { nm: "Kroger", v: 8.4 }, { nm: "Costco Wholesale", v: 6.2 }
+  ],
+  custCMAvg: 13.6,
+  dedMonths: ["Feb", "Mar", "Apr", "May", "Jun", "Jul"],
+  dedTaken: [0.542, 0.566, 0.588, 0.604, 0.592, 0.610],
+  dedRecovered: [0.168, 0.182, 0.201, 0.214, 0.236, 0.258],
+  dedWritten: [0.331, 0.348, 0.352, 0.366, 0.341, 0.338],
+  dedRecoveryRate: [31.0, 32.2, 34.2, 35.4, 39.9, 42.3],
+  dedReasons: [
+    { nm: "Shortage / OS&D", v: 0.148 },
+    { nm: "Unsaleables", v: 0.121 },
+    { nm: "Promo / allowance mismatch", v: 0.109 },
+    { nm: "OTIF fine — late delivery", v: 0.096 },
+    { nm: "Pricing discrepancy", v: 0.078 },
+    { nm: "All other reasons", v: 0.058 }
+  ],
+  accrualTelus: 4.82, accrualGL: 4.61,
+  accrual6Labels: ["Feb", "Mar", "Apr", "May", "Jun", "Jul"],
+  accrual6Telus: [4.41, 4.52, 4.63, 4.71, 4.78, 4.82],
+  accrual6GL: [3.998, 4.152, 4.329, 4.436, 4.542, 4.61],
+  wcLabels: ["Jul 25", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan 26", "Feb", "Mar", "Apr", "May", "Jun", "Jul 26"],
+  dsoM: [44.2, 43.9, 43.6, 43.1, 42.8, 42.6, 42.3, 42.0, 41.8, 41.9, 41.6, 41.4, 41.2],
+  dpoM: [31.2, 31.6, 31.9, 32.2, 32.4, 32.8, 33.0, 33.2, 33.4, 33.5, 33.6, 33.7, 33.8],
+  dioM: [49.1, 49.6, 50.2, 50.8, 51.2, 51.6, 52.0, 52.2, 52.4, 52.8, 52.6, 52.5, 52.6],
+  invCats: [
+    { nm: "Finished goods", v: 12.68 }, { nm: "Raw materials", v: 6.42 },
+    { nm: "Packaging", v: 2.18 }, { nm: "In-transit", v: 1.48 }, { nm: "Work in process", v: 1.34 }
+  ],
+  invTurns: 5.1, expiryExposure: 1.42, expiryReserve: 0.86,
+  closeChecks: [
+    { nm: "Journals posted", v: "214 of 214", sev: "good" },
+    { nm: "AR sub-ledger to GL", v: "Tied — $0", sev: "good" },
+    { nm: "AP sub-ledger to GL", v: "Tied — $0", sev: "good" },
+    { nm: "Bank reconciliations", v: "3 of 3 complete", sev: "good" },
+    { nm: "Intercompany elimination", v: "Tied — $0", sev: "good" },
+    { nm: "Inventory sub-ledger to GL", v: "$18.4K variance", sev: "warning" },
+    { nm: "Trade accrual to TELUS", v: "$210K gap", sev: "serious" },
+    { nm: "dbt data tests", v: "148 of 149 pass", sev: "warning" }
+  ],
+
+  /* ---------------- QUARTERLY ---------------- */
+  qLabels: ["Q3 24", "Q4 24", "Q1 25", "Q2 25", "Q3 25", "Q4 25", "Q1 26", "Q2 26"],
+  qNetRev: [33.6, 34.8, 36.2, 37.9, 38.4, 39.1, 39.8, 41.3],
+  qGM: [24.8, 25.1, 25.4, 25.9, 26.4, 26.2, 25.8, 26.1],
+  qBudget: [33.9, 34.6, 36.0, 37.6, 38.6, 39.4, 40.2, 41.8],
+  fyProj: 164.8, fyBudget: 166.5, fyOI: 15.1, fyOIBudget: 15.9,
+  concTop5: [44.1, 44.8, 45.2, 45.6, 46.1, 46.9, 47.5, 48.2],
+  concNext5: [15.6, 15.7, 15.9, 15.8, 16.0, 15.8, 15.6, 15.5],
+  concRest: [40.3, 39.5, 38.9, 38.6, 37.9, 37.3, 36.9, 36.3],
+  tradeByCust: [
+    { nm: "Costco Wholesale", v: 17.8 }, { nm: "Kroger", v: 14.2 }, { nm: "Walmart", v: 13.6 },
+    { nm: "Albertsons / Safeway", v: 12.9 }, { nm: "H-E-B", v: 11.4 }, { nm: "Publix", v: 9.8 },
+    { nm: "Target", v: 9.1 }, { nm: "Sprouts", v: 7.2 }
+  ],
+  tradeRateCo: 12.4,
+  dedRateCostco: [4.1, 4.4, 4.6, 4.9, 5.2, 5.5, 5.8, 6.1],
+  dedRateKroger: [3.4, 3.5, 3.5, 3.6, 3.7, 3.8, 3.9, 4.0],
+  dedRateWalmart: [2.8, 2.9, 2.9, 3.0, 3.0, 3.1, 3.1, 3.2],
+  dedRateOther: [2.4, 2.4, 2.5, 2.5, 2.6, 2.6, 2.7, 2.7],
+  covenants: [
+    { nm: "Net debt / EBITDA", v: 1.82, limit: 3.00, dir: "max", fmt: function (v) { return v.toFixed(2) + "×"; } },
+    { nm: "Current ratio", v: 2.14, limit: 1.25, dir: "min", fmt: function (v) { return v.toFixed(2) + "×"; } },
+    { nm: "Fixed charge coverage", v: 2.41, limit: 1.20, dir: "min", fmt: function (v) { return v.toFixed(2) + "×"; } }
+  ]
+};
+
+/* --------------------------------------------------------- ATTENTION FEEDS */
+var ATTENTION = {
+  daily: [
+    { sev: "critical", label: "Deduction", text: "Costco short-paid $48.2K with no matching promotion", why: "HighRadius reason “promo / allowance mismatch”, above the $25K single-item threshold. Unmatched for 1 day.", ent: ["all", "hf"], detail: "ded-items" },
+    { sev: "serious", label: "Receivables", text: "AR past due rose $104K overnight", why: "H-E-B $31K and US Foods $37K crossed 30 days; Albertsons paid down $12K.", ent: ["all"], detail: "ar-past-due" },
+    { sev: "warning", label: "Revenue", text: "Invoiced $684K vs $712K Monday average", why: "Three orders worth $96K are sitting on credit hold — release or write them off the week.", ent: ["all"], detail: "late-orders" },
+    { sev: "warning", label: "Cash", text: "Prairie Provisions cash $1.71M — third day below the $2.0M floor", why: "Co-pack entity funds its own payroll Friday; a $400K intercompany sweep covers it.", ent: ["all", "pp"], detail: "cash-accounts" },
+    { sev: "info", label: "Inflow", text: "$1.06M expected in today across 34 promises-to-pay", why: "HighRadius promise-to-pay; 89% of promises have landed on time over the last 90 days.", ent: ["all"] }
+  ],
+  weekly: [
+    { sev: "critical", label: "Receivables", text: "AR over 60 days up $210K week-over-week", why: "Kroger $148K (disputed OTIF fines) and Albertsons $62K. Both are in HighRadius dispute, neither has an owner.", ent: ["all"], detail: "ar-past-due" },
+    { sev: "serious", label: "Margin", text: "Salsa & Dips margin 2.1 pts below budget", why: "Avocado and tomato input costs; the line is 24% of net revenue, so this alone is 0.5 pts of company margin.", ent: ["all", "hf"], detail: "salsa-margin" },
+    { sev: "serious", label: "Orders", text: "38 orders / $712K past their ship date", why: "71% short-shipped out of Warehouse 02. Order book is up $410K on the week, so this is capacity, not demand.", ent: ["all"], detail: "late-orders" },
+    { sev: "warning", label: "Trade", text: "Trade claims $486K WTD vs $452K accrual pace", why: "Six promotions started Monday; if the pace holds, July's accrual is $135K light by month-end.", ent: ["all"] },
+    { sev: "warning", label: "Inventory", text: "Near-expiry inventory $1.42M, of which $412K inside 45 days", why: "Concentrated in Frozen Entrées. Markdown decision needed this week or it becomes a write-off.", ent: ["all"] }
+  ],
+  monthly: [
+    { sev: "critical", label: "Deductions", text: "Deductions 3.7% of gross sales vs 3.3% budget — fourth month rising", why: "$61K unfavourable in July alone. At this rate the FY lands $0.7M over plan.", ent: ["all"], detail: "ded-items" },
+    { sev: "serious", label: "Trade", text: "TELUS trade accrual sits $210K above the GL liability", why: "Unreconciled at close. Gap is narrowing (from $412K in February) but it is still an audit finding waiting to happen.", ent: ["all"] },
+    { sev: "serious", label: "Customer", text: "Costco contribution margin 6.2% vs 13.6% company average", why: "Trade at 17.8% of gross plus a 6.1% deduction rate. The largest customer is the least profitable one.", ent: ["all", "hf"], detail: "cust-pnl" },
+    { sev: "warning", label: "Margin", text: "Operating income $1.26M, 6.7% under budget", why: "Entirely explained by net revenue (−$0.28M); COGS and opex both came in favourable.", ent: ["all"] },
+    { sev: "warning", label: "Inventory", text: "Reserve covers 61% of the $1.42M expiry exposure", why: "$556K uncovered. Either the reserve goes up at August close or the exposure comes down.", ent: ["all"] }
+  ],
+  quarterly: [
+    { sev: "critical", label: "Concentration", text: "Top 5 customers are 48.2% of revenue, up 2.6 pts year-over-year", why: "The board risk metric. Growth is coming from the accounts that already dominate the mix.", ent: ["all"] },
+    { sev: "serious", label: "Deductions", text: "Costco deduction rate 6.1% of gross, up from 4.1% eight quarters ago", why: "A structural change in how one retailer pays, not a run of bad months. This belongs in the next trade negotiation.", ent: ["all", "hf"] },
+    { sev: "serious", label: "Outlook", text: "FY26 projects $164.8M vs $166.5M budget; operating income $15.1M vs $15.9M", why: "Revenue misses by 1.0% but income by 5.0% — the gap is trade and deduction rate, not volume.", ent: ["all"] },
+    { sev: "warning", label: "Portfolio", text: "Snack Bars: 9% of revenue at 21.4% margin, lowest quadrant", why: "Smallest line, worst margin, no volume growth. Grow it deliberately, fix the cost base, or exit.", ent: ["all", "hf"] },
+    { sev: "info", label: "Phase 2", text: "Trade ROI and market share stay dark until the NIQ feed lands", why: "Trade spend as % of gross is answerable today; spend against incremental volume is not.", ent: ["all", "hf", "pp", "hl"] }
+  ]
+};
+
+/* --------------------------------------------------------------- DRILL-DOWNS */
+var DETAILS = {
+  "ar-past-due": {
+    eyebrow: "D4 · Drill-down", title: "AR past due by customer",
+    desc: "Open invoices beyond terms, largest first. Movement is against yesterday. Source: SYSPRO ArInvoice, dispute status from HighRadius.",
+    cols: ["Customer", "Past due", "1–30", "31–60", "60+", "Move vs yest.", "Status"],
+    rows: [
+      ["Costco Wholesale", "$612K", "$298K", "$186K", "$128K", { v: "+$48K", cls: "neg" }, "In dispute"],
+      ["Kroger", "$488K", "$164K", "$176K", "$148K", { v: "$0", cls: "" }, "In dispute"],
+      ["H-E-B", "$402K", "$286K", "$116K", "—", { v: "+$31K", cls: "neg" }, "Collector assigned"],
+      ["Albertsons / Safeway", "$311K", "$149K", "$100K", "$62K", { v: "−$12K", cls: "pos" }, "Promise to pay"],
+      ["US Foods", "$268K", "$231K", "$37K", "—", { v: "+$37K", cls: "neg" }, "Collector assigned"],
+      ["Walmart", "$254K", "$254K", "—", "—", { v: "$0", cls: "" }, "Within grace"],
+      ["Publix", "$196K", "$142K", "$54K", "—", { v: "+$4K", cls: "neg" }, "Collector assigned"],
+      ["Sysco", "$188K", "$188K", "—", "—", { v: "−$6K", cls: "pos" }, "Promise to pay"],
+      ["Target", "$171K", "$126K", "$45K", "—", { v: "$0", cls: "" }, "Within grace"],
+      ["Ahold Delhaize", "$142K", "$98K", "$44K", "—", { v: "+$2K", cls: "neg" }, "Within grace"],
+      ["Sprouts", "$118K", "$118K", "—", "—", { v: "$0", cls: "" }, "Within grace"],
+      ["All other customers", "$706K", "$456K", "$204K", "$46K", { v: "+$0K", cls: "" }, "—"],
+      { total: true, cells: ["Total past due", "$3,856K", "$2,510K", "$962K", "$384K", { v: "+$104K", cls: "neg" }, ""] }
+    ],
+    foot: "One more click in the real build opens the invoice list for a customer, with the deduction and dispute history attached."
+  },
+  "ded-items": {
+    eyebrow: "D5 / M6 · Drill-down", title: "New deductions taken yesterday",
+    desc: "Short-pays posted Aug 10, largest first. Reason codes come from HighRadius; the invoice and promotion links come from SYSPRO and TELUS.",
+    cols: ["Customer", "Amount", "Reason code", "Invoice", "Promo match", "Age"],
+    rows: [
+      ["Costco Wholesale", "$48.2K", "Promo / allowance mismatch", "IN-441802", "None found", "1 day"],
+      ["Kroger", "$21.4K", "OTIF fine — late delivery", "IN-441744", "n/a", "1 day"],
+      ["Walmart", "$16.8K", "Shortage / OS&D", "IN-441791", "n/a", "1 day"],
+      ["Albertsons / Safeway", "$12.1K", "Unsaleables", "IN-441688", "Matched — PR-2261", "1 day"],
+      ["H-E-B", "$9.6K", "Pricing discrepancy", "IN-441812", "Matched — PR-2274", "1 day"],
+      ["US Foods", "$8.4K", "Shortage / OS&D", "IN-441755", "n/a", "1 day"],
+      ["Publix", "$7.2K", "Promo / allowance mismatch", "IN-441729", "Matched — PR-2248", "1 day"],
+      ["Sysco", "$5.9K", "Unsaleables", "IN-441766", "n/a", "1 day"],
+      ["All other (15 items)", "$18.4K", "Mixed", "—", "—", "1 day"],
+      { total: true, cells: ["23 items", "$148.0K", "", "", "", ""] }
+    ],
+    foot: "The threshold that flagged the Costco item ($25K single deduction) is editable by the controller — it is a config row, not code."
+  },
+  "late-orders": {
+    eyebrow: "W2 · Drill-down", title: "Orders past their ship date",
+    desc: "Booked, confirmed, and still unshipped past the promised date. Source: SYSPRO SorMaster / SorDetail.",
+    cols: ["Order", "Customer", "Value", "Promised", "Days late", "Warehouse", "Reason"],
+    rows: [
+      ["SO-118422", "Kroger", "$96.4K", "Aug 5", "5", "WH-02", "Credit hold"],
+      ["SO-118391", "Costco Wholesale", "$88.2K", "Aug 6", "4", "WH-02", "Short — Salsa 16oz"],
+      ["SO-118447", "Walmart", "$74.1K", "Aug 6", "4", "WH-02", "Short — Frozen entrée"],
+      ["SO-118408", "US Foods", "$61.8K", "Aug 7", "3", "WH-01", "Carrier no-show"],
+      ["SO-118466", "H-E-B", "$52.4K", "Aug 7", "3", "WH-02", "Short — Chips 12ct"],
+      ["SO-118455", "Publix", "$44.6K", "Aug 7", "3", "WH-03", "Short — Soup 24ct"],
+      ["SO-118479", "Sysco", "$38.2K", "Aug 8", "2", "WH-01", "Carrier no-show"],
+      ["All other (31 orders)", "—", "$256.3K", "—", "1–4", "Mixed", "Mixed"],
+      { total: true, cells: ["38 orders", "", "$712.0K", "", "", "", ""] }
+    ],
+    foot: "71% of the value is short-shipped out of WH-02 — an availability problem, not a demand one."
+  },
+  "cash-accounts": {
+    eyebrow: "D1 · Drill-down", title: "Cash by bank account",
+    desc: "Cleared balances from the SYSPRO GL cash accounts, reconciled to the bank feed at 6:04 AM.",
+    cols: ["Account", "Entity", "Balance", "vs yesterday", "Floor"],
+    rows: [
+      ["BOK — operating 4412", "Heartland Foods LLC", "$5.42M", { v: "+$0.29M", cls: "pos" }, "$3.00M"],
+      ["BOK — payroll 4419", "Heartland Foods LLC", "$0.76M", { v: "+$0.01M", cls: "pos" }, "$0.60M"],
+      ["Commerce — operating 8830", "Prairie Provisions", "$1.71M", { v: "+$0.02M", cls: "pos" }, "$2.00M"],
+      ["Commerce — operating 8841", "Heartland Logistics", "$0.53M", { v: "−$0.01M", cls: "neg" }, "$0.40M"],
+      { total: true, cells: ["Total cash", "", "$8.42M", { v: "+$0.31M", cls: "pos" }, ""] }
+    ],
+    foot: "Prairie Provisions is $0.29M under its operating floor for the third day; a $400K intercompany sweep clears it before Friday payroll."
+  },
+  "salsa-margin": {
+    eyebrow: "M3 · Drill-down", title: "Salsa & Dips — margin by SKU",
+    desc: "July actuals against budget. Ranked by margin points lost, weighted by revenue. Source: SYSPRO ArTrnDetail plus standard costs.",
+    cols: ["SKU", "Net revenue", "GM %", "Budget GM %", "Variance", "Driver"],
+    rows: [
+      ["Roasted Salsa 16oz", "$0.92M", "22.1%", "26.8%", { v: "−4.7 pts", cls: "neg" }, "Tomato paste +18%"],
+      ["Guacamole Dip 12oz", "$0.68M", "19.4%", "24.2%", { v: "−4.8 pts", cls: "neg" }, "Avocado +31%"],
+      ["Verde Salsa 16oz", "$0.54M", "25.8%", "26.9%", { v: "−1.1 pts", cls: "neg" }, "Tomatillo +6%"],
+      ["Queso Dip 15oz", "$0.47M", "27.9%", "27.1%", { v: "+0.8 pts", cls: "pos" }, "Yield gain"],
+      ["Pico de Gallo 14oz", "$0.41M", "26.4%", "26.6%", { v: "−0.2 pts", cls: "neg" }, "—"],
+      ["Black Bean Dip 12oz", "$0.32M", "28.8%", "27.4%", { v: "+1.4 pts", cls: "pos" }, "Mix"],
+      { total: true, cells: ["Salsa & Dips total", "$3.34M", "24.3%", "26.4%", { v: "−2.1 pts", cls: "neg" }, ""] }
+    ],
+    foot: "Two SKUs carry 81% of the shortfall. A price move on Roasted Salsa 16oz recovers roughly 1.2 pts of line margin."
+  },
+  "cust-pnl": {
+    eyebrow: "M4 · Drill-down", title: "P&L per customer — July",
+    desc: "Gross sales down to contribution margin, after trade spend and deductions. Source: SYSPRO plus TELUS Blacksmith plus HighRadius.",
+    cols: ["Customer", "Gross sales", "Trade", "Deductions", "Net revenue", "COGS", "Contribution", "CM %"],
+    rows: [
+      ["Costco Wholesale", "$3.28M", "−$0.58M", "−$0.20M", "$2.50M", "−$2.34M", "$0.16M", { v: "6.2%", cls: "neg" }],
+      ["Kroger", "$2.41M", "−$0.34M", "−$0.11M", "$1.96M", "−$1.79M", "$0.16M", { v: "8.4%", cls: "neg" }],
+      ["Walmart", "$2.12M", "−$0.29M", "−$0.08M", "$1.75M", "−$1.59M", "$0.16M", { v: "9.1%", cls: "neg" }],
+      ["Albertsons / Safeway", "$1.36M", "−$0.18M", "−$0.05M", "$1.13M", "−$1.01M", "$0.12M", { v: "10.3%", cls: "neg" }],
+      ["H-E-B", "$1.18M", "−$0.13M", "−$0.04M", "$1.01M", "−$0.84M", "$0.17M", { v: "16.9%", cls: "pos" }],
+      ["Publix", "$0.94M", "−$0.09M", "−$0.03M", "$0.82M", "−$0.66M", "$0.16M", { v: "19.8%", cls: "pos" }],
+      ["US Foods", "$0.86M", "−$0.10M", "−$0.03M", "$0.73M", "−$0.64M", "$0.09M", { v: "11.7%", cls: "" }],
+      ["Sysco", "$0.78M", "−$0.07M", "−$0.02M", "$0.69M", "−$0.56M", "$0.13M", { v: "18.2%", cls: "pos" }],
+      ["Target", "$0.64M", "−$0.06M", "−$0.02M", "$0.56M", "−$0.46M", "$0.10M", { v: "17.6%", cls: "pos" }],
+      ["Sprouts", "$0.42M", "−$0.03M", "−$0.01M", "$0.38M", "−$0.30M", "$0.08M", { v: "21.4%", cls: "pos" }],
+      ["All other customers", "$2.43M", "−$0.16M", "−$0.02M", "$2.25M", "−$0.02M", "—", { v: "—", cls: "" }],
+      { total: true, cells: ["Total", "$16.42M", "−$2.03M", "−$0.61M", "$13.78M", "−$10.21M", "$1.87M", { v: "13.6%", cls: "" }] }
+    ],
+    foot: "The four largest customers each contribute roughly the same dollars on very different revenue — that is the whole argument for trade-term renegotiation."
+  }
+};
+
+/* ======================================================================= UI */
+
+var SEV_GLYPH = { critical: "▲", serious: "◆", warning: "●", info: "○", good: "●" };
+var SEV_LABEL = { critical: "Critical", serious: "Serious", warning: "Watch", info: "Info", good: "OK" };
+
+function sevColor(sev) { return cssvar("--" + (sev === "info" ? "s1" : sev)); }
+
+function attentionFeed(kind) {
+  var rows = ATTENTION[kind].filter(function (r) { return !r.ent || r.ent.indexOf(entity) > -1; });
+  var box = h("div", { class: "attention" });
+  if (!rows.length) {
+    box.appendChild(h("div", { class: "att-empty", text: "Nothing over threshold for " + ENTITY_LABEL[entity] + " in this period." }));
+    return box;
+  }
+  rows.slice(0, 5).forEach(function (r) {
+    var attrs = { class: "att-row", style: "--sev:" + sevColor(r.sev), type: "button" };
+    if (r.detail) attrs.onclick = function () { openDrawer(r.detail); };
+    box.appendChild(h("button", attrs, [
+      h("span", { class: "stripe", "aria-hidden": "true" }),
+      h("span", { class: "badge" }, [
+        h("span", { class: "glyph", "aria-hidden": "true", text: SEV_GLYPH[r.sev] }),
+        document.createTextNode(SEV_LABEL[r.sev])
+      ]),
+      h("span", { class: "body" }, [
+        h("strong", { text: r.label + " — " }),
+        document.createTextNode(r.text),
+        h("span", { class: "why", text: r.why })
+      ]),
+      h("span", { class: "go", text: r.detail ? "Open detail →" : "" })
+    ]));
+  });
+  return box;
+}
+
+function sectionHead(title, note) {
+  return h("div", { class: "section-head" }, [
+    h("h2", { text: title }),
+    h("span", { class: "rule" }),
+    note ? h("span", { class: "count", text: note }) : null
+  ]);
+}
+
+/* Tile builder. `dom` is the finance-domain code shown as the top rule. */
+function tile(cfg) {
+  var kids = [
+    h("div", { class: "tile-head" }, [
+      cfg.id ? h("span", { class: "tile-id mono", text: cfg.id }) : null,
+      h("span", { class: "tile-label", text: cfg.label })
+    ]),
+    h("div", { class: "tile-value", html: cfg.value })
+  ];
+  if (cfg.delta) {
+    // Glyph = direction of travel (read off the sign in the text); colour class
+    // = whether that direction is good. An unsigned value gets no arrow at all.
+    var glyph = /^[\u2212-]/.test(cfg.delta.text) ? "\u2193" : /^\+/.test(cfg.delta.text) ? "\u2191" : null;
+    kids.push(h("div", { class: "tile-delta" }, [
+      h("span", { class: "delta " + cfg.delta.dir }, [
+        glyph ? h("span", { "aria-hidden": "true", text: glyph }) : null,
+        document.createTextNode(cfg.delta.text)
+      ]),
+      h("span", { class: "delta-vs", text: cfg.delta.vs })
+    ]));
+  }
+  if (cfg.second) kids.push(h("div", { class: "tile-second", html: cfg.second }));
+  if (cfg.spark) kids.push(h("div", { class: "tile-spark" }, [sparkline(cfg.spark, { color: cfg.sparkColor })]));
+  var attrs = { class: "tile", style: "--dom:" + cfg.dom };
+  if (cfg.detail) { attrs.type = "button"; attrs.onclick = function () { openDrawer(cfg.detail); }; return h("button", attrs, kids); }
+  return h("div", attrs, kids);
+}
+
+/* Direction helper: which way is good. */
+function dir(delta, goodWhen) {
+  if (Math.abs(delta) < 1e-9) return "flat";
+  var up = delta > 0;
+  if (goodWhen === "down") return up ? "down" : "up";
+  return up ? "up" : "down";
+}
+
+/* Tile rows pick their own column count so the last row is never a lone
+   stretched tile: up to six across, otherwise split into two even rows. */
+function tilesRow(list) {
+  var items = list.filter(Boolean);
+  var cols = items.length <= 6 ? items.length : Math.ceil(items.length / 2);
+  return h("div", { class: "tiles", style: "--tile-cols:" + cols }, items);
+}
+
+function viewIntro(question, note) {
+  return h("div", { class: "view-intro" }, [
+    h("div", { class: "view-q", text: question }),
+    h("div", { class: "view-note", text: note })
+  ]);
+}
+
+var DOM = { cash: "var(--dom-cash)", rev: "var(--dom-rev)", ar: "var(--dom-ar)", trade: "var(--dom-trade)", inv: "var(--dom-inv)" };
+
+/* ------------------------------------------------------------- DAILY VIEW */
+function renderDaily(root) {
+  root.appendChild(viewIntro("Is cash okay, and did anything break overnight?",
+    "Five tiles plus one optional. Built to be read on a phone before the first meeting."));
+
+  var cash = sc("cash", D.cash), cashPrior = sc("cash", D.cashPrior);
+  var recv = sc("ar", D.receipts), recvAvg = sc("ar", D.receiptsAvg);
+  var inv = sc("rev", D.invoiced), invAvg = sc("rev", D.invoicedWeekdayAvg);
+  var pd = sc("ar", D.arPastDue), pdPrior = sc("ar", D.arPastDuePrior);
+  var ded = noTrade() ? null : sc("ded", D.dedNew);
+
+  root.appendChild(sectionHead("Overnight position", "Top rule colour = finance domain: cash, revenue, receivables, trade, inventory"));
+  root.appendChild(tilesRow([
+    tile({
+      id: "D1", dom: DOM.cash, label: "Cash position", value: usd(cash),
+      delta: { dir: dir(cash - cashPrior, "up"), text: signedUsd(cash - cashPrior), vs: "vs yesterday" },
+      second: isAll() ? "Across <b>4 accounts</b>, 2 entities under floor watch" : "Entity view — " + ENTITY_LABEL[entity],
+      spark: scArr("cash", D.cash30), sparkColor: "var(--dom-cash)", detail: "cash-accounts"
+    }),
+    tile({
+      id: "D2", dom: DOM.cash, label: "Cash received yesterday", value: usd(recv),
+      delta: { dir: dir(recv - recvAvg, "up"), text: signedPct((recv / recvAvg - 1) * 100), vs: "vs daily avg this month" },
+      second: "Applied by HighRadius; <b>" + usdK(recvAvg) + "</b> daily average MTD",
+      spark: scArr("ar", D.receipts14), sparkColor: "var(--dom-cash)"
+    }),
+    tile({
+      id: "D3", dom: DOM.rev, label: "Invoiced yesterday", value: usd(inv),
+      delta: { dir: dir(inv - invAvg, "up"), text: signedPct((inv / invAvg - 1) * 100), vs: "vs same-weekday avg" },
+      second: "<b>" + num(D.shipments * F("ord")) + "</b> shipments · 3 orders on credit hold",
+      spark: scArr("rev", D.invoiced10), sparkColor: "var(--dom-rev)", detail: "late-orders"
+    }),
+    tile({
+      id: "D4", dom: DOM.ar, label: "AR past due", value: usd(pd),
+      delta: { dir: dir(pd - pdPrior, "down"), text: signedUsd(pd - pdPrior), vs: "vs yesterday" },
+      second: "<b>" + pct(pd / sc("ar", D.arTotal) * 100) + "</b> of " + usd(sc("ar", D.arTotal)) + " open AR",
+      spark: scArr("ar", D.arPastDue10), sparkColor: "var(--dom-ar)", detail: "ar-past-due"
+    }),
+    tile({
+      id: "D5", dom: DOM.trade, label: "New deductions", value: ded == null ? "—" : usd(ded),
+      delta: ded == null ? null : { dir: "down", text: num(D.dedNewCount * F("ded")) + " items", vs: "taken yesterday" },
+      second: ded == null ? "No trade deductions in this entity" :
+        "Largest <b>" + usdK(D.dedLargest) + "</b> (Costco) — over the " + usdK(D.dedThreshold) + " flag",
+      spark: ded == null ? null : scArr("ded", D.dedNew10), sparkColor: "var(--dom-trade)",
+      detail: ded == null ? null : "ded-items"
+    }),
+    tile({
+      id: "D6", dom: DOM.cash, label: "Expected in today", value: usd(sc("ar", D.expectedToday)),
+      delta: { dir: "flat", text: num(D.expectedCount * F("ar")) + " promises", vs: "HighRadius promise-to-pay" },
+      second: "Optional sixth tile — turn on once the promise data earns trust"
+    })
+  ]));
+
+  root.appendChild(sectionHead("Needs attention", "Ranked, max 5 — thresholds are controller-editable"));
+  root.appendChild(attentionFeed("daily"));
+
+  root.appendChild(sectionHead("The one trend that matters today"));
+  root.appendChild(h("div", { class: "grid two" }, [
+    card({
+      id: "D1", title: "Cash position — last 30 days", span: true,
+      sub: "Total cleared cash across all bank accounts. Dips are the Friday AP runs and month-end payroll.",
+      chart: lineChart({
+        labels: D.cash30Labels, tickEvery: 5, area: true, endLabel: true, W: WFULL,
+        yFmt: function (v) { return "$" + v.toFixed(1) + "M"; },
+        series: [{ name: "Cash", color: cssvar("--dom-cash"), values: scArr("cash", D.cash30) }]
+      }),
+      table: {
+        cols: ["Date", "Cash", "Change"],
+        rows: scArr("cash", D.cash30).map(function (v, i, a) {
+          return [D.cash30Labels[i], usd(v), i ? { v: signedUsd(v - a[i - 1]), cls: v >= a[i - 1] ? "pos" : "neg" } : "—"];
+        })
+      },
+      sources: ["SYSPRO GL — GenHistory / GenTransaction, cash accounts"],
+      detail: "cash-accounts"
+    }),
+    card({
+      id: "D2", title: "Cash received — last 14 business days", span: true,
+      sub: "Payments applied by HighRadius. The rule is the month-to-date daily average.",
+      chart: columnChart({
+        groups: D.receipts14Labels, capLabels: "last", H: 240, W: WFULL,
+        yFmt: function (v) { return "$" + (v * 1000).toFixed(0) + "K"; },
+        ref: { v: sc("ar", D.receiptsAvg), label: "MTD daily average " + usdK(sc("ar", D.receiptsAvg)) },
+        series: [{ name: "Cash applied", color: cssvar("--s1"), values: scArr("ar", D.receipts14) }]
+      }),
+      table: {
+        cols: ["Date", "Cash applied"],
+        rows: scArr("ar", D.receipts14).map(function (v, i) { return [D.receipts14Labels[i], usdK(v)]; })
+      },
+      sources: ["HighRadius — cash application postings", "SYSPRO AR"]
+    })
+  ]));
+}
+
+/* ------------------------------------------------------------ WEEKLY VIEW */
+function renderWeekly(root) {
+  root.appendChild(viewIntro("Are we tracking to the month, and where is the friction?",
+    "Monday-morning view. Order momentum, working-capital movement, and the trade pace."));
+
+  var wkA = sc("rev", D.wkActual[7]), wkB = sc("rev", D.wkBudget[7]), wkLY = sc("rev", D.wkLY);
+  var ob = sc("ord", D.orderBook), obP = sc("ord", D.orderBookPrior);
+  var dOpen = noTrade() ? null : sc("ded", D.dedOpen);
+  var trd = noTrade() ? null : sc("trade", D.tradeWTD);
+  var invNow = sc("inv", D.inventory), invPrior = sc("inv", D.inventoryPrior);
+
+  root.appendChild(sectionHead("Week in seven numbers"));
+  root.appendChild(tilesRow([
+    tile({
+      id: "W1", dom: DOM.rev, label: "Last week invoiced", value: usd(wkA),
+      delta: { dir: dir(wkA - wkB, "up"), text: signedPct((wkA / wkB - 1) * 100), vs: "vs budget phasing" },
+      second: "<b>" + signedPct((wkA / wkLY - 1) * 100) + "</b> vs same week last year",
+      spark: scArr("rev", D.wkActual), sparkColor: "var(--dom-rev)"
+    }),
+    tile({
+      id: "W2", dom: DOM.rev, label: "Open order book", value: usd(ob),
+      delta: { dir: dir(ob - obP, "up"), text: signedUsd(ob - obP), vs: "vs last week" },
+      second: "<b>" + num(D.lateOrders * F("ord")) + " orders / " + usdK(sc("ord", D.lateOrderValue)) + "</b> past ship date",
+      spark: [8.12, 8.34, 8.21, 8.58, 8.66, 8.74, 8.83, 9.24].map(function (v) { return v * F("ord"); }),
+      sparkColor: "var(--dom-rev)", detail: "late-orders"
+    }),
+    tile({
+      id: "W3", dom: DOM.ar, label: "DSO", value: days(D.dso) + '<span class="unit">days</span>',
+      delta: { dir: dir(D.dso - D.dsoPrior, "down"), text: (D.dso > D.dsoPrior ? "+" : "−") + Math.abs(D.dso - D.dsoPrior).toFixed(1) + " days", vs: "vs last week" },
+      second: "Over-60 bucket <b>+" + usdK(sc("ar", 0.210)) + "</b> on the week",
+      spark: D.dso13, sparkColor: "var(--dom-ar)", detail: "ar-past-due"
+    }),
+    tile({
+      id: "W4", dom: DOM.trade, label: "Open deductions", value: dOpen == null ? "—" : usd(dOpen),
+      delta: dOpen == null ? null : { dir: "flat", text: num(D.dedOpenCount * F("ded")) + " items", vs: "avg " + D.dedResolveDays + " days to resolve" },
+      second: dOpen == null ? "No trade deductions in this entity" :
+        "<b>" + D.dedValidPct + "%</b> of this week's closures found valid",
+      spark: dOpen == null ? null : [2.31, 2.28, 2.24, 2.26, 2.21, 2.18, 2.16, 2.14].map(function (v) { return v * F("ded"); }),
+      sparkColor: "var(--dom-trade)", detail: dOpen == null ? null : "ded-items"
+    }),
+    tile({
+      id: "W5", dom: DOM.trade, label: "Trade claimed WTD", value: trd == null ? "—" : usd(trd),
+      delta: trd == null ? null : { dir: dir(trd - sc("trade", D.tradeAccrualPace), "down"), text: signedPct((trd / sc("trade", D.tradeAccrualPace) - 1) * 100), vs: "vs accrual pace" },
+      second: trd == null ? "No trade programmes in this entity" :
+        "<b>" + D.promosStarting + " promotions</b> start this week",
+      spark: trd == null ? null : scArr("trade", D.tradeClaimed8), sparkColor: "var(--dom-trade)"
+    }),
+    tile({
+      id: "W6", dom: DOM.inv, label: "Inventory position", value: usd(invNow),
+      delta: { dir: dir(invNow - invPrior, "down"), text: signedUsd(invNow - invPrior), vs: "vs last week" },
+      second: "Slow-moving / near-expiry <b>" + usd(sc("inv", D.slowMoving)) + "</b> (" + pct(D.slowMoving / D.inventory * 100) + ")",
+      spark: scArr("inv", D.inv8), sparkColor: "var(--dom-inv)"
+    }),
+    tile({
+      id: "W7", dom: DOM.rev, label: "New pipeline (secondary)",
+      value: F("pipe") ? usd(sc("pipe", D.pipelineNew)) : "—",
+      delta: F("pipe") ? { dir: "flat", text: num(D.pipelineNewCount * F("pipe")) + " opportunities", vs: "created this week" } : null,
+      second: F("pipe") ? "<b>" + D.stageMoves + " stage moves</b>, 3 into Commit"
+        : "No Salesforce pipeline against this entity"
+    })
+  ]));
+
+  root.appendChild(sectionHead("Needs attention", "Ranked, max 5"));
+  root.appendChild(attentionFeed("weekly"));
+
+  root.appendChild(sectionHead("Sales pace, and where the friction is"));
+  root.appendChild(h("div", { class: "grid two" }, [
+    card({
+      id: "W1", title: "Invoiced sales vs budget phasing — 8 weeks", span: true,
+      sub: "Week-ending dates. Budget is phased weekly, so the comparison is like-for-like.",
+      legend: [{ name: "Actual", color: cssvar("--s1"), sq: true }, { name: "Budget phasing", color: cssvar("--s2"), sq: true }],
+      chart: columnChart({
+        groups: D.wkLabels, capLabels: "last", H: 250, W: WFULL,
+        yFmt: function (v) { return "$" + v.toFixed(1) + "M"; },
+        series: [
+          { name: "Actual", color: cssvar("--s1"), values: scArr("rev", D.wkActual) },
+          { name: "Budget", color: cssvar("--s2"), values: scArr("rev", D.wkBudget) }
+        ],
+        tipExtra: function (i) {
+          var v = D.wkActual[i] - D.wkBudget[i];
+          return [{ name: "Variance", value: signedUsd(sc("rev", v)) }];
+        }
+      }),
+      table: {
+        cols: ["Week ending", "Actual", "Budget", "Variance"],
+        rows: D.wkLabels.map(function (l, i) {
+          var v = sc("rev", D.wkActual[i] - D.wkBudget[i]);
+          return [l, usd(sc("rev", D.wkActual[i])), usd(sc("rev", D.wkBudget[i])), { v: signedUsd(v), cls: v >= 0 ? "pos" : "neg" }];
+        })
+      },
+      sources: ["SYSPRO ArTrnDetail", "SYSPRO GenBudgets"]
+    }),
+    card({
+      id: "W3", title: "AR aging — movement, not levels", span: false,
+      sub: "Change against last week. Right is deterioration, left is collection.",
+      legend: [{ name: "Aged further out (bad)", color: cssvar("--neg"), sq: true }, { name: "Collected (good)", color: cssvar("--pos"), sq: true }],
+      chart: hbarChart({
+        rows: D.agingBuckets.map(function (b, i) {
+          var mv = sc("ar", D.agingMove[i]);
+          return { label: b, value: mv, color: mv > 0 ? cssvar("--neg") : cssvar("--pos"), note: usd(sc("ar", D.agingLevels[i])), noteName: "Balance" };
+        }),
+        labelW: 84, padR: 56, padL: 52, rowH: 34, diverging: true,
+        xFmt: function (v) { return (v > 0 ? "+" : v < 0 ? "−" : "") + "$" + Math.round(Math.abs(v) * 1000) + "K"; }
+      }),
+      table: {
+        cols: ["Bucket", "Balance", "Move vs last week"],
+        rows: D.agingBuckets.map(function (b, i) {
+          var mv = sc("ar", D.agingMove[i]);
+          return [b, usd(sc("ar", D.agingLevels[i])), { v: signedUsd(mv), cls: mv > 0 ? "neg" : "pos" }];
+        })
+      },
+      note: "Over-60 rose $210K on the week — two accounts, both in dispute.",
+      sources: ["SYSPRO ArInvoice", "HighRadius dispute status"],
+      detail: "ar-past-due"
+    }),
+    card({
+      id: "W3", title: "DSO — 13 weeks", scope: "Consolidated",
+      sub: "Days sales outstanding, rolling. The 2.6-day improvement since May is real; this week gave 0.4 back.",
+      chart: lineChart({
+        labels: ["−12", "−11", "−10", "−9", "−8", "−7", "−6", "−5", "−4", "−3", "−2", "−1", "Now"],
+        labelPrefix: "Week", tickEvery: 2, area: true, endLabel: true, H: 220,
+        yFmt: function (v) { return v.toFixed(1); },
+        series: [{ name: "DSO (days)", color: cssvar("--dom-ar"), values: D.dso13 }]
+      }),
+      table: { cols: ["Week", "DSO (days)"], rows: D.dso13.map(function (v, i) { return [i === 12 ? "Now" : "−" + (12 - i), v.toFixed(1)]; }) },
+      sources: ["SYSPRO AR"]
+    }),
+    card({
+      id: "W2", title: "Open order book by ship week",
+      sub: "Booked and not yet shipped. The first bar is already late.",
+      legend: [{ name: "Past ship date", color: cssvar("--critical"), sq: true }, { name: "Scheduled", color: cssvar("--s1"), sq: true }],
+      chart: columnChart({
+        groups: D.shipWeeks, capLabels: "all", H: 230, twoLineLabels: true,
+        yFmt: function (v) { return "$" + v.toFixed(1) + "M"; },
+        series: [{
+          name: "Order value", color: cssvar("--s1"), values: scArr("ord", D.shipWeekVals),
+          colorFor: function (i) { return i === 0 ? cssvar("--critical") : cssvar("--s1"); }
+        }]
+      }),
+      table: {
+        cols: ["Ship week", "Order value"],
+        rows: D.shipWeeks.map(function (l, i) { return [l.replace("\n", " "), usd(sc("ord", D.shipWeekVals[i]))]; })
+      },
+      note: "38 orders / $712K are past their promised date — 71% short-shipped from Warehouse 02.",
+      sources: ["SYSPRO SorMaster / SorDetail"],
+      detail: "late-orders"
+    }),
+    card({
+      id: "W4", title: "Open deductions by age", scope: noTrade() ? "Not applicable" : null,
+      sub: noTrade() ? "Heartland Logistics carries no trade deductions." : "Ordered buckets, so the ramp is one hue getting darker with age.",
+      chart: noTrade() ? h("div", { class: "footnote", style: "padding:22px 0", text: "No deduction activity in this entity." }) :
+        columnChart({
+          groups: D.dedAgeLabels, capLabels: "all", H: 230,
+          yFmt: function (v) { return "$" + Math.round(v * 1000) + "K"; },
+          series: [{
+            name: "Open deductions", color: cssvar("--ord3"), values: scArr("ded", D.dedAgeVals),
+            colorFor: function (i) { return cssvar("--ord" + (i + 1)); }
+          }],
+          tipExtra: function (i) { return [{ name: "Items", value: num(D.dedAgeCounts[i] * F("ded")) }]; }
+        }),
+      table: noTrade() ? null : {
+        cols: ["Age", "Open value", "Items"],
+        rows: D.dedAgeLabels.map(function (l, i) { return [l, usdK(sc("ded", D.dedAgeVals[i])), num(D.dedAgeCounts[i] * F("ded"))]; })
+      },
+      note: noTrade() ? null : "$482K has been open over 90 days — past the point where retailers will reverse it.",
+      sources: ["HighRadius", "SYSPRO AR"],
+      detail: noTrade() ? null : "ded-items"
+    }),
+    card({
+      id: "W5", title: "Trade claimed vs accrual pace — 8 weeks", scope: noTrade() ? "Not applicable" : null,
+      sub: noTrade() ? "No trade programmes in this entity." : "If claims keep running ahead of the accrual, the month-end true-up gets bigger.",
+      legend: noTrade() ? null : [{ name: "Claimed / committed", color: cssvar("--s1"), sq: true }, { name: "Accrual pace", color: cssvar("--s2"), sq: true }],
+      chart: noTrade() ? h("div", { class: "footnote", style: "padding:22px 0", text: "No trade activity in this entity." }) :
+        columnChart({
+          groups: D.wkLabels, capLabels: "last", H: 230,
+          yFmt: function (v) { return "$" + Math.round(v * 1000) + "K"; },
+          series: [
+            { name: "Claimed", color: cssvar("--s1"), values: scArr("trade", D.tradeClaimed8) },
+            { name: "Accrual pace", color: cssvar("--s2"), values: scArr("trade", D.tradeAccrual8) }
+          ]
+        }),
+      table: noTrade() ? null : {
+        cols: ["Week ending", "Claimed", "Accrual pace", "Gap"],
+        rows: D.wkLabels.map(function (l, i) {
+          var g = sc("trade", D.tradeClaimed8[i] - D.tradeAccrual8[i]);
+          return [l, usdK(sc("trade", D.tradeClaimed8[i])), usdK(sc("trade", D.tradeAccrual8[i])), { v: signedUsd(g), cls: g > 0 ? "neg" : "pos" }];
+        })
+      },
+      sources: ["TELUS Blacksmith TPM extracts", "SYSPRO GL trade liability"]
+    })
+  ]));
+}
+
+/* ----------------------------------------------------------- MONTHLY VIEW */
+function renderMonthly(root) {
+  root.appendChild(viewIntro("The real P&L — did we make money, and is the balance sheet clean?",
+    "July 2026, closed Aug 6. This view replaces the Excel package."));
+
+  var nr = sc("rev", D.netRev), nrB = sc("rev", D.netRevBud), nrLY = sc("rev", D.netRevLY);
+  var oi = sc("rev", D.opInc), oiB = sc("rev", D.opIncBud);
+  var gm = GM_BY_ENTITY[entity], gmB = GMB_BY_ENTITY[entity];
+  var dedRate = noTrade() ? null : D.deductions / D.gross * 100;
+  var tradeRate = noTrade() ? null : D.tradeSpend / D.gross * 100;
+  var ccc = D.dso + D.dioM[12] - D.dpoM[12];
+
+  root.appendChild(sectionHead("July close, in six numbers"));
+  root.appendChild(tilesRow([
+    tile({
+      id: "M1", dom: DOM.rev, label: "Net revenue", value: usd(nr),
+      delta: { dir: dir(nr - nrB, "up"), text: signedPct((nr / nrB - 1) * 100), vs: "vs budget" },
+      second: "<b>" + signedPct((nr / nrLY - 1) * 100) + "</b> vs July last year",
+      spark: scArr("rev", D.netRev13), sparkColor: "var(--dom-rev)"
+    }),
+    tile({
+      id: "M1", dom: DOM.rev, label: "Gross margin", value: gm == null ? "—" : pct(gm),
+      delta: gm == null ? null : { dir: dir(gm - gmB, "up"), text: pts(gm - gmB), vs: "vs budget" },
+      second: gm == null ? "Logistics entity carries no product margin" : "<b>" + pts(gm - 25.5) + "</b> vs July last year",
+      spark: gm == null ? null : D.gmPct13, sparkColor: "var(--dom-rev)"
+    }),
+    tile({
+      id: "M1", dom: DOM.rev, label: "Operating income", value: usd(oi),
+      delta: { dir: dir(oi - oiB, "up"), text: signedPct((oi / oiB - 1) * 100), vs: "vs budget" },
+      second: "<b>" + pct(oi / nr * 100) + "</b> of net revenue",
+      spark: [0.98, 1.02, 1.08, 1.04, 1.16, 1.11, 1.19, 1.14, 1.24, 1.21, 1.29, 1.23, 1.26].map(function (v) { return v * F("rev"); }),
+      sparkColor: "var(--dom-rev)"
+    }),
+    tile({
+      id: "M6", dom: DOM.trade, label: "Deduction rate", value: dedRate == null ? "—" : pct(dedRate),
+      delta: dedRate == null ? null : { dir: "down", text: pts(dedRate - D.deductionsBud / D.grossBud * 100), vs: "vs budget rate" },
+      second: dedRate == null ? "No deductions in this entity" : "<b>" + usd(sc("ded", D.deductions)) + "</b> taken, 4th month rising",
+      spark: dedRate == null ? null : [3.1, 3.2, 3.2, 3.3, 3.4, 3.4, 3.5, 3.5, 3.6, 3.6, 3.6, 3.7, 3.7],
+      sparkColor: "var(--dom-trade)", detail: dedRate == null ? null : "ded-items"
+    }),
+    tile({
+      id: "M2", dom: DOM.trade, label: "Trade spend rate", value: tradeRate == null ? "—" : pct(tradeRate),
+      delta: tradeRate == null ? null : { dir: "down", text: pts(tradeRate - D.tradeSpendBud / D.grossBud * 100), vs: "vs budget rate" },
+      second: tradeRate == null ? "No trade programmes in this entity" : "<b>" + usd(sc("trade", D.tradeSpend)) + "</b> of gross sales",
+      spark: tradeRate == null ? null : [11.8, 11.9, 12.0, 12.0, 12.1, 12.1, 12.2, 12.2, 12.3, 12.3, 12.4, 12.3, 12.4],
+      sparkColor: "var(--dom-trade)"
+    }),
+    tile({
+      id: "M7", dom: DOM.inv, label: "Cash conversion cycle", value: days(ccc) + '<span class="unit">days</span>',
+      delta: { dir: "up", text: "−2.1 days", vs: "vs July last year" },
+      second: "DSO <b>" + days(D.dso) + "</b> + DIO <b>" + days(D.dioM[12]) + "</b> − DPO <b>" + days(D.dpoM[12]) + "</b>",
+      spark: D.dsoM.map(function (v, i) { return v + D.dioM[i] - D.dpoM[i]; }), sparkColor: "var(--dom-inv)"
+    })
+  ]));
+
+  root.appendChild(sectionHead("Needs attention", "Ranked, max 5"));
+  root.appendChild(attentionFeed("monthly"));
+
+  root.appendChild(sectionHead("The chart a food-company CFO lives in"));
+  root.appendChild(card({
+    id: "M2", title: "Net revenue bridge — July", span: true,
+    sub: "Gross sales less trade spend less deductions. The two subtractions are where a CPG P&L is won or lost.",
+    legend: [{ name: "Revenue total", color: cssvar("--pos"), sq: true }, { name: "Deduction from revenue", color: cssvar("--neg"), sq: true }],
+    chart: waterfall({
+      H: 330, yFmt: function (v) { return "$" + v.toFixed(2) + "M"; },
+      steps: [
+        { label: "Gross sales", kind: "total", value: sc("rev", D.gross), sub: "budget " + usd(sc("rev", D.grossBud)) },
+        { label: "Trade spend", kind: "delta", value: -sc("trade", D.tradeSpend), sub: "12.4% of gross · budget 12.0%", tip: [{ name: "Rate on gross", value: "12.4%" }] },
+        { label: "Deductions", kind: "delta", value: -sc("ded", D.deductions), sub: "3.7% of gross · budget 3.3%", tip: [{ name: "Rate on gross", value: "3.7%" }] },
+        { label: "Net revenue", kind: "total", value: sc("rev", D.netRev), sub: "budget " + usd(sc("rev", D.netRevBud)) }
+      ]
+    }),
+    table: {
+      cols: ["Step", "July actual", "Budget", "Rate on gross", "Budget rate"],
+      rows: [
+        ["Gross sales", usd(sc("rev", D.gross)), usd(sc("rev", D.grossBud)), "—", "—"],
+        ["Less trade spend", "−" + usd(sc("trade", D.tradeSpend)), "−" + usd(sc("trade", D.tradeSpendBud)), "12.4%", "12.0%"],
+        ["Less deductions & allowances", "−" + usd(sc("ded", D.deductions)), "−" + usd(sc("ded", D.deductionsBud)), "3.7%", "3.3%"],
+        { total: true, cells: ["Net revenue", usd(sc("rev", D.netRev)), usd(sc("rev", D.netRevBud)), "83.9%", "84.7%"] }
+      ]
+    },
+    note: "Both subtractions came in heavier than plan: 0.4 pts on trade and 0.4 pts on deductions is $0.13M of the $0.28M revenue miss.",
+    sources: ["SYSPRO ArTrnDetail", "TELUS Blacksmith TPM", "HighRadius reason codes"]
+  }));
+
+  root.appendChild(sectionHead("P&L, margin, and the customers behind them"));
+  var pnlRows = D.pnl.map(function (r) {
+    var a = sc(r.fam, r.a), b = sc(r.fam, r.b), ly = sc(r.fam, r.ly);
+    var vb = a - b, vly = a - ly;
+    var favB = r.a < 0 ? vb > 0 : vb > 0;
+    return h("tr", { class: (r.strong ? "strong " : "") + (r.sub ? "sub " : "") + (r.ruleTop ? "rule-top" : "") }, [
+      h("td", { text: r.nm }),
+      h("td", { text: usd(a) }),
+      h("td", { text: usd(b) }),
+      h("td", { class: favB ? "v-good" : "v-bad", text: signedUsd(vb) }),
+      h("td", { text: usd(ly) }),
+      h("td", { class: (r.a < 0 ? vly > 0 : vly > 0) ? "v-good" : "v-bad", text: signedUsd(vly) })
+    ]);
+  });
+  var pnlTable = h("table", { class: "pnl" }, [
+    h("thead", null, [h("tr", null, ["", "Actual", "Budget", "vs Bud", "LY", "vs LY"].map(function (c) { return h("th", { text: c, scope: "col" }); }))]),
+    h("tbody", null, pnlRows)
+  ]);
+
+  root.appendChild(h("div", { class: "grid two" }, [
+    card({
+      id: "M1", title: "P&L summary — July", sub: "Actual against budget and last July. Negative lines are shown as they hit income.",
+      chart: h("div", { style: "overflow-x:auto" }, [pnlTable]),
+      note: "Gross margin 25.9% (budget 26.4%, LY 25.5%). Operating margin 9.1% (budget 9.6%, LY 8.4%).",
+      sources: ["SYSPRO GL", "SYSPRO GenBudgets"]
+    }),
+    card({
+      id: "M3", title: "Gross margin by product line", scope: "Consolidated",
+      sub: "July actual margin, with the budget marked. Bar length is margin; the tick is plan.",
+      legend: [
+        { name: "At or above budget", color: cssvar("--pos"), sq: true },
+        { name: "Below budget", color: cssvar("--neg"), sq: true },
+        { name: "Budget (tick)", color: cssvar("--ink"), sq: true }
+      ],
+      chart: hbarChart({
+        rows: D.lines.map(function (l) {
+          return {
+            label: l.nm, value: l.gm, marker: l.bud,
+            color: l.gm < l.bud ? cssvar("--neg") : cssvar("--s1"),
+            note: usd(l.rev), noteName: "Net revenue"
+          };
+        }),
+        labelW: 142, padR: 58, rowH: 32,
+        xFmt: function (v) { return v.toFixed(0) + "%"; },
+        valFmt: function (r) { return r.value.toFixed(1) + "%"; },
+        seriesName: "Actual GM %", markerName: "Budget GM %"
+      }),
+      table: {
+        cols: ["Product line", "Net revenue", "GM %", "Budget", "Variance"],
+        rows: D.lines.map(function (l) {
+          return [l.nm, usd(l.rev), pct(l.gm), pct(l.bud), { v: pts(l.gm - l.bud), cls: l.gm >= l.bud ? "pos" : "neg" }];
+        })
+      },
+      note: "Salsa & Dips is the story: 2.1 pts down on the largest line, which is 0.5 pts of company margin.",
+      sources: ["SYSPRO ArTrnDetail + standard costs"],
+      detail: "salsa-margin"
+    }),
+    card({
+      id: "M4", title: "Customer contribution margin — top and bottom 5", scope: "Consolidated",
+      sub: "After trade spend and deductions. The company average is the rule.",
+      legend: [{ name: "Above company average", color: cssvar("--pos"), sq: true }, { name: "Below average", color: cssvar("--neg"), sq: true }],
+      chart: hbarChart({
+        rows: D.custCM.map(function (c) {
+          return { label: c.nm, value: c.v, color: c.v >= D.custCMAvg ? cssvar("--pos") : cssvar("--neg") };
+        }),
+        labelW: 150, padR: 52, rowH: 27,
+        xFmt: function (v) { return v.toFixed(0) + "%"; },
+        valFmt: function (r) { return r.value.toFixed(1) + "%"; },
+        seriesName: "Contribution margin"
+      }),
+      table: {
+        cols: ["Customer", "Contribution margin %", "vs company average"],
+        rows: D.custCM.map(function (c) {
+          return [c.nm, pct(c.v), { v: pts(c.v - D.custCMAvg), cls: c.v >= D.custCMAvg ? "pos" : "neg" }];
+        })
+      },
+      note: "Company average 13.6%. The three largest customers by revenue are all below it.",
+      sources: ["SYSPRO", "TELUS Blacksmith TPM", "HighRadius"],
+      detail: "cust-pnl"
+    }),
+    card({
+      id: "M6", title: "Deduction economics — 6 months", scope: noTrade() ? "Not applicable" : null,
+      sub: noTrade() ? "No deductions in this entity." : "Taken against recovered and written off. Recovery is climbing, but so is the intake.",
+      legend: noTrade() ? null : [
+        { name: "Taken", color: cssvar("--s1"), sq: true },
+        { name: "Recovered", color: cssvar("--s2"), sq: true },
+        { name: "Written off", color: cssvar("--s3"), sq: true }
+      ],
+      chart: noTrade() ? h("div", { class: "footnote", style: "padding:22px 0", text: "No deduction activity in this entity." }) :
+        columnChart({
+          groups: D.dedMonths, capLabels: false, H: 240,
+          yFmt: function (v) { return "$" + Math.round(v * 1000) + "K"; },
+          series: [
+            { name: "Taken", color: cssvar("--s1"), values: scArr("ded", D.dedTaken) },
+            { name: "Recovered", color: cssvar("--s2"), values: scArr("ded", D.dedRecovered) },
+            { name: "Written off", color: cssvar("--s3"), values: scArr("ded", D.dedWritten) }
+          ],
+          tipExtra: function (i) { return [{ name: "Recovery rate", value: pct(D.dedRecoveryRate[i]) }]; }
+        }),
+      table: noTrade() ? null : {
+        cols: ["Month", "Taken", "Recovered", "Written off", "Recovery rate"],
+        rows: D.dedMonths.map(function (m, i) {
+          return [m, usdK(sc("ded", D.dedTaken[i])), usdK(sc("ded", D.dedRecovered[i])), usdK(sc("ded", D.dedWritten[i])), pct(D.dedRecoveryRate[i])];
+        })
+      },
+      note: noTrade() ? null : "Recovery rate 31.0% → 42.3% over six months. Good progress on a bill that keeps growing.",
+      sources: ["HighRadius", "SYSPRO AR"],
+      detail: noTrade() ? null : "ded-items"
+    }),
+    card({
+      id: "M6", title: "Deductions by reason code — July", scope: noTrade() ? "Not applicable" : null,
+      sub: noTrade() ? "No deductions in this entity." : "Where the money actually goes. Two codes are operational, not commercial.",
+      chart: noTrade() ? h("div", { class: "footnote", style: "padding:22px 0", text: "No deduction activity in this entity." }) :
+        hbarChart({
+          rows: D.dedReasons.map(function (r) { return { label: r.nm, value: sc("ded", r.v), color: cssvar("--s1") }; }),
+          labelW: 168, padR: 56, rowH: 30, axis: true,
+          xFmt: function (v) { return "$" + Math.round(v * 1000) + "K"; },
+          valFmt: function (r) { return usdK(r.value); },
+          seriesName: "Deductions taken"
+        }),
+      table: noTrade() ? null : {
+        cols: ["Reason code", "July", "% of deductions"],
+        rows: D.dedReasons.map(function (r) { return [r.nm, usdK(sc("ded", r.v)), pct(r.v / D.deductions * 100) ]; })
+      },
+      note: noTrade() ? null : "Shortage/OS&D and OTIF fines are $244K — a warehouse and carrier problem showing up as a finance number.",
+      sources: ["HighRadius reason codes"]
+    }),
+    card({
+      id: "M5", title: "Trade accrual true-up", scope: noTrade() ? "Not applicable" : null,
+      sub: noTrade() ? "No trade programmes in this entity." : "TELUS accrual balance against the GL trade liability. Both in dollars, so one axis.",
+      legend: noTrade() ? null : [{ name: "TELUS accrual balance", color: cssvar("--s1") }, { name: "GL trade liability", color: cssvar("--s2") }],
+      chart: noTrade() ? h("div", { class: "footnote", style: "padding:22px 0", text: "No trade activity in this entity." }) :
+        lineChart({
+          labels: D.accrual6Labels, H: 230, yTicks: 4,
+          yFmt: function (v) { return "$" + v.toFixed(1) + "M"; },
+          series: [
+            { name: "TELUS accrual", color: cssvar("--s1"), values: scArr("trade", D.accrual6Telus) },
+            { name: "GL liability", color: cssvar("--s2"), values: scArr("trade", D.accrual6GL) }
+          ]
+        }),
+      table: noTrade() ? null : {
+        cols: ["Month", "TELUS accrual", "GL liability", "Unreconciled gap"],
+        rows: D.accrual6Labels.map(function (m, i) {
+          return [m, usd(sc("trade", D.accrual6Telus[i])), usd(sc("trade", D.accrual6GL[i])),
+          { v: usd(sc("trade", D.accrual6Telus[i] - D.accrual6GL[i])), cls: "neg" }];
+        })
+      },
+      note: noTrade() ? null : "Gap $210K at July close, down from $412K in February. Narrowing, not closed.",
+      sources: ["TELUS Blacksmith TPM — report 1069", "SYSPRO GL trade liability"]
+    }),
+    card({
+      id: "M7", title: "Working capital — 13 months", scope: "Consolidated",
+      sub: "All three measures are day counts, so they share one axis. Cash conversion cycle is the gap between them.",
+      legend: [
+        { name: "DSO — receivables", color: cssvar("--s1") },
+        { name: "DIO — inventory", color: cssvar("--s2") },
+        { name: "DPO — payables", color: cssvar("--s3") }
+      ],
+      chart: lineChart({
+        labels: D.wcLabels, H: 250, tickEvery: 2, yTicks: 4,
+        yFmt: function (v) { return v.toFixed(0); },
+        series: [
+          { name: "DSO", color: cssvar("--s1"), values: D.dsoM },
+          { name: "DIO", color: cssvar("--s2"), values: D.dioM },
+          { name: "DPO", color: cssvar("--s3"), values: D.dpoM }
+        ]
+      }),
+      table: {
+        cols: ["Month", "DSO", "DIO", "DPO", "Cash conversion cycle"],
+        rows: D.wcLabels.map(function (m, i) {
+          return [m, days(D.dsoM[i]), days(D.dioM[i]), days(D.dpoM[i]), days(D.dsoM[i] + D.dioM[i] - D.dpoM[i])];
+        })
+      },
+      note: "Cycle 62.1 → 60.0 days over the year: receivables 3.0 days better, payables 2.6 days longer, inventory 3.5 days worse.",
+      sources: ["SYSPRO AR / AP / Inventory"]
+    }),
+    card({
+      id: "M8", title: "Inventory health",
+      sub: "Value by category. Turns " + D.invTurns.toFixed(1) + "×; expiry exposure is the number that bites a food company.",
+      chart: hbarChart({
+        rows: D.invCats.map(function (c) { return { label: c.nm, value: sc("inv", c.v), color: cssvar("--s1") }; }),
+        labelW: 132, padR: 62, rowH: 30,
+        xFmt: function (v) { return "$" + v.toFixed(0) + "M"; },
+        valFmt: function (r) { return usd(r.value); },
+        seriesName: "Inventory value"
+      }),
+      table: {
+        cols: ["Category", "Value", "% of total"],
+        rows: D.invCats.map(function (c) { return [c.nm, usd(sc("inv", c.v)), pct(c.v / D.inventory * 100)]; })
+      },
+      note: "Obsolescence / expiry exposure " + usd(D.expiryExposure) + ", reserve " + usd(D.expiryReserve) + " — 61% covered, $556K uncovered.",
+      sources: ["SYSPRO InvWarehouse / InvMovements"]
+    }),
+    card({
+      id: "M9", title: "Close status", scope: "Consolidated",
+      sub: "Published only when close completes. Until then this view shows the checklist instead of the numbers.",
+      chart: h("div", { style: "display:grid;gap:0" }, D.closeChecks.map(function (c) {
+        return h("div", {
+          style: "display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--rule)"
+        }, [
+          h("span", { class: "pill", style: "--sev:" + sevColor(c.sev) }, [
+            h("span", { class: "glyph", "aria-hidden": "true", text: SEV_GLYPH[c.sev] }),
+            document.createTextNode(SEV_LABEL[c.sev])
+          ]),
+          h("span", { style: "font-size:13px;font-weight:600", text: c.nm }),
+          h("span", { style: "margin-left:auto;font-size:12.5px;color:var(--ink-2);font-variant-numeric:tabular-nums", text: c.v })
+        ]);
+      })),
+      note: "Two open items at July close: an $18.4K inventory sub-ledger variance and the $210K trade accrual gap.",
+      sources: ["dbt tests on SYSPRO data"]
+    })
+  ]));
+}
+
+/* --------------------------------------------------------- QUARTERLY VIEW */
+function renderQuarterly(root) {
+  root.appendChild(viewIntro("Trajectory, structure, and the board deck.",
+    "Q2 2026 closed. Mostly the monthly measures at eight-quarter depth, plus the structural questions."));
+
+  var q = 7;
+  var qNow = sc("rev", D.qNetRev[q]), qPrev = sc("rev", D.qNetRev[q - 1]), qBud = sc("rev", D.qBudget[q]);
+
+  root.appendChild(sectionHead("Quarter and full-year picture"));
+  root.appendChild(tilesRow([
+    tile({
+      id: "Q1", dom: DOM.rev, label: "Q2 net revenue", value: usd(qNow),
+      delta: { dir: dir(qNow - qBud, "up"), text: signedPct((qNow / qBud - 1) * 100), vs: "vs budget" },
+      second: "<b>" + signedPct((D.qNetRev[q] / D.qNetRev[3] - 1) * 100) + "</b> vs Q2 last year",
+      spark: scArr("rev", D.qNetRev), sparkColor: "var(--dom-rev)"
+    }),
+    tile({
+      id: "Q1", dom: DOM.rev, label: "Q2 gross margin", value: pct(D.qGM[q]),
+      delta: { dir: dir(D.qGM[q] - D.qGM[q - 1], "up"), text: pts(D.qGM[q] - D.qGM[q - 1]), vs: "vs Q1" },
+      second: "Eight-quarter range <b>24.8% – 26.4%</b>",
+      spark: D.qGM, sparkColor: "var(--dom-rev)"
+    }),
+    tile({
+      id: "Q1", dom: DOM.rev, label: "FY26 projection", value: usd(sc("rev", D.fyProj), 1),
+      delta: { dir: "down", text: signedPct((D.fyProj / D.fyBudget - 1) * 100), vs: "vs budget " + usd(sc("rev", D.fyBudget), 1) },
+      second: "Operating income <b>" + usd(sc("rev", D.fyOI), 1) + "</b> vs " + usd(sc("rev", D.fyOIBudget), 1) + " plan",
+      spark: [151.2, 154.8, 157.1, 159.4, 161.2, 162.8, 163.9, 164.8].map(function (v) { return v * F("rev"); }),
+      sparkColor: "var(--dom-rev)"
+    }),
+    tile({
+      id: "Q2", dom: DOM.ar, label: "Top 5 concentration", value: pct(D.concTop5[q]),
+      delta: { dir: "down", text: pts(D.concTop5[q] - D.concTop5[3]), vs: "vs Q2 last year" },
+      second: "Top 10 <b>" + pct(D.concTop5[q] + D.concNext5[q]) + "</b> — the board's risk metric",
+      spark: D.concTop5, sparkColor: "var(--dom-ar)"
+    }),
+    tile({
+      id: "Q5", dom: DOM.trade, label: "Deduction rate", value: pct(3.7),
+      delta: { dir: "down", text: pts(3.7 - 2.9), vs: "vs eight quarters ago" },
+      second: "Costco alone at <b>" + pct(D.dedRateCostco[q]) + "</b>, up from " + pct(D.dedRateCostco[0]),
+      spark: [2.9, 3.0, 3.1, 3.2, 3.3, 3.5, 3.6, 3.7], sparkColor: "var(--dom-trade)"
+    }),
+    tile({
+      id: "Q6", dom: DOM.cash, label: "Net debt / EBITDA", value: "1.82<span class=\"unit\">×</span>",
+      delta: { dir: "up", text: "−0.14×", vs: "vs Q1" },
+      second: "Covenant ceiling <b>3.00×</b> — 1.18× of headroom",
+      spark: [2.41, 2.34, 2.26, 2.18, 2.09, 2.01, 1.96, 1.82], sparkColor: "var(--dom-cash)"
+    })
+  ]));
+
+  root.appendChild(sectionHead("Needs attention", "Ranked, max 5"));
+  root.appendChild(attentionFeed("quarterly"));
+
+  root.appendChild(sectionHead("Trajectory — two measures, two charts, one axis each"));
+  root.appendChild(h("div", { class: "grid two" }, [
+    card({
+      id: "Q1", title: "Net revenue — 8 quarters",
+      sub: "Actual against budget. The gap opened in Q3 last year and has not closed.",
+      legend: [{ name: "Actual", color: cssvar("--s1"), sq: true }, { name: "Budget", color: cssvar("--s2"), sq: true }],
+      chart: columnChart({
+        groups: D.qLabels, capLabels: "last", H: 250,
+        yFmt: function (v) { return "$" + v.toFixed(0) + "M"; },
+        series: [
+          { name: "Actual", color: cssvar("--s1"), values: scArr("rev", D.qNetRev) },
+          { name: "Budget", color: cssvar("--s2"), values: scArr("rev", D.qBudget) }
+        ],
+        tipExtra: function (i) { return [{ name: "Variance", value: signedUsd(sc("rev", D.qNetRev[i] - D.qBudget[i])) }]; }
+      }),
+      table: {
+        cols: ["Quarter", "Actual", "Budget", "Variance"],
+        rows: D.qLabels.map(function (l, i) {
+          var v = sc("rev", D.qNetRev[i] - D.qBudget[i]);
+          return [l, usd(sc("rev", D.qNetRev[i]), 1), usd(sc("rev", D.qBudget[i]), 1), { v: signedUsd(v), cls: v >= 0 ? "pos" : "neg" }];
+        })
+      },
+      sources: ["SYSPRO GL", "SYSPRO GenBudgets"]
+    }),
+    card({
+      id: "Q1", title: "Gross margin % — 8 quarters", scope: "Consolidated",
+      sub: "Deliberately its own chart: revenue in dollars and margin in points do not belong on one plot.",
+      chart: lineChart({
+        labels: D.qLabels, H: 250, area: true, endLabel: true, yTicks: 4,
+        yFmt: function (v) { return v.toFixed(1) + "%"; },
+        series: [{ name: "Gross margin %", color: cssvar("--s1"), values: D.qGM }]
+      }),
+      table: { cols: ["Quarter", "Gross margin %"], rows: D.qLabels.map(function (l, i) { return [l, pct(D.qGM[i])]; }) },
+      note: "Peaked at 26.4% in Q3 last year; the two soft quarters since are input cost, not price.",
+      sources: ["SYSPRO GL"]
+    }),
+    card({
+      id: "Q2", title: "Customer concentration — 8 quarters", scope: "Consolidated", span: true,
+      sub: "Share of revenue. Top 5 has gained 4.1 points in two years; everything below the top 10 is shrinking.",
+      legend: [
+        { name: "Top 5 customers", color: cssvar("--s1"), sq: true },
+        { name: "Next 5", color: cssvar("--s2"), sq: true },
+        { name: "All other customers", color: cssvar("--s-neutral"), sq: true }
+      ],
+      chart: columnChart({
+        groups: D.qLabels, stacked: true, capLabels: false, H: 270, W: WFULL,
+        yFmt: function (v) { return v.toFixed(0) + "%"; },
+        series: [
+          { name: "Top 5", color: cssvar("--s1"), values: D.concTop5 },
+          { name: "Next 5", color: cssvar("--s2"), values: D.concNext5 },
+          { name: "All others", color: cssvar("--s-neutral"), values: D.concRest }
+        ],
+        tipFmt: function (v) { return pct(v); }
+      }),
+      table: {
+        cols: ["Quarter", "Top 5", "Next 5", "All others", "Top 10"],
+        rows: D.qLabels.map(function (l, i) {
+          return [l, pct(D.concTop5[i]), pct(D.concNext5[i]), pct(D.concRest[i]), pct(D.concTop5[i] + D.concNext5[i])];
+        })
+      },
+      note: "48.2% in five customers is the number the board will ask about — and the reason customer-level profitability sits on the monthly tab.",
+      sources: ["SYSPRO ArTrnDetail"]
+    }),
+    card({
+      id: "Q4", title: "Product portfolio — volume against margin", scope: "Consolidated", span: true,
+      sub: "Quadrants split at the company average revenue per line and the company gross margin. Grow, fix, or exit.",
+      chart: scatterQuad({
+        H: 330,
+        points: D.lines.map(function (l) {
+          return {
+            label: l.nm, x: l.rev / D.netRev * D.qNetRev[7], y: l.gm,
+            // Frozen Entrées and Salsa & Dips sit close on both axes; pushing
+            // one label left keeps the pair readable.
+            side: l.nm === "Frozen Entrées" ? "left" : null,
+            tip: [{ name: "vs budget", value: pts(l.gm - l.bud) }]
+          };
+        }),
+        xMid: D.qNetRev[7] / D.lines.length, yMid: D.qGM[7],
+        xName: "Q2 net revenue", yName: "Gross margin %",
+        xTitle: "Q2 net revenue ($M) →", yTitle: "Gross margin % ↑",
+        xFmt: function (v) { return "$" + v.toFixed(0) + "M"; },
+        yFmt: function (v) { return v.toFixed(0) + "%"; },
+        quadLabels: [
+          { x: "l", y: "t", text: "SMALL & PROFITABLE — GROW" },
+          { x: "r", y: "t", text: "CORE — PROTECT" },
+          { x: "l", y: "b", text: "SMALL & THIN — FIX OR EXIT" },
+          { x: "r", y: "b", text: "BIG & THIN — FIX THE COST BASE" }
+        ]
+      }),
+      table: {
+        cols: ["Product line", "Q2 net revenue", "Gross margin %", "vs budget", "Quadrant"],
+        rows: D.lines.map(function (l) {
+          var x = l.rev / D.netRev * D.qNetRev[7];
+          var big = x >= D.qNetRev[7] / D.lines.length, thick = l.gm >= D.qGM[7];
+          return [l.nm, usd(x, 1), pct(l.gm), { v: pts(l.gm - l.bud), cls: l.gm >= l.bud ? "pos" : "neg" },
+            big ? (thick ? "Core — protect" : "Big & thin — fix cost base") : (thick ? "Small & profitable — grow" : "Small & thin — fix or exit")];
+        })
+      },
+      note: "Salsa & Dips is the biggest line at below-average margin; Snack Bars is the smallest at the worst margin. Those are two different decisions.",
+      sources: ["SYSPRO ArTrnDetail + standard costs"]
+    }),
+    card({
+      id: "Q5", title: "Deduction rate by customer — 8 quarters", scope: "Consolidated", span: true,
+      sub: "Deductions as a percentage of that customer's gross sales. The question this answers: is a retailer getting worse?",
+      legend: [
+        { name: "Costco Wholesale", color: cssvar("--s1") },
+        { name: "Kroger", color: cssvar("--s2") },
+        { name: "Walmart", color: cssvar("--s3") },
+        { name: "All other customers", color: cssvar("--s-neutral") }
+      ],
+      chart: lineChart({
+        labels: D.qLabels, H: 260, yTicks: 4, yMin: 0, W: WFULL,
+        yFmt: function (v) { return v.toFixed(1) + "%"; },
+        series: [
+          { name: "Costco", color: cssvar("--s1"), values: D.dedRateCostco },
+          { name: "Kroger", color: cssvar("--s2"), values: D.dedRateKroger },
+          { name: "Walmart", color: cssvar("--s3"), values: D.dedRateWalmart },
+          { name: "All others", color: cssvar("--s-neutral"), values: D.dedRateOther }
+        ]
+      }),
+      table: {
+        cols: ["Quarter", "Costco", "Kroger", "Walmart", "All others"],
+        rows: D.qLabels.map(function (l, i) {
+          return [l, pct(D.dedRateCostco[i]), pct(D.dedRateKroger[i]), pct(D.dedRateWalmart[i]), pct(D.dedRateOther[i])];
+        })
+      },
+      note: "Costco has gone 4.1% → 6.1% in two years while everyone else moved 0.3–0.6 points. That is a structural change, and it belongs in the next negotiation.",
+      sources: ["HighRadius reason codes", "SYSPRO ArTrnDetail"]
+    }),
+    card({
+      id: "Q3", title: "Trade spend as % of gross sales, by customer", scope: "Consolidated",
+      sub: "Answerable today from TELUS. What it cannot yet tell you is what the spend bought.",
+      legend: [
+        { name: "Above the company rate (12.4%)", color: cssvar("--neg"), sq: true },
+        { name: "At or below", color: cssvar("--s1"), sq: true }
+      ],
+      chart: hbarChart({
+        rows: D.tradeByCust.map(function (c) {
+          return { label: c.nm, value: c.v, color: c.v >= D.tradeRateCo ? cssvar("--neg") : cssvar("--s1") };
+        }),
+        labelW: 152, padR: 52, rowH: 28,
+        xFmt: function (v) { return v.toFixed(0) + "%"; },
+        valFmt: function (r) { return r.value.toFixed(1) + "%"; },
+        seriesName: "Trade % of gross"
+      }),
+      table: {
+        cols: ["Customer", "Trade % of gross", "vs company 12.4%"],
+        rows: D.tradeByCust.map(function (c) { return [c.nm, pct(c.v), { v: pts(c.v - D.tradeRateCo), cls: c.v <= D.tradeRateCo ? "pos" : "neg" }]; })
+      },
+      note: "Company rate 12.4%. Five customers are above it, and the two heaviest are also the two worst on deductions.",
+      sources: ["TELUS Blacksmith TPM extracts", "SYSPRO ArTrnDetail"]
+    }),
+    card({
+      id: "Q6", title: "Covenant headroom", scope: "Consolidated",
+      sub: "Where each ratio sits against its limit. The track is the full covenant range.",
+      chart: h("div", { style: "display:grid;gap:16px;padding-top:6px" }, D.covenants.map(function (c) {
+        var span = c.dir === "max" ? c.limit * 1.25 : c.limit * 2.4;
+        var fillPct = Math.max(4, Math.min(100, c.v / span * 100));
+        var head = c.dir === "max" ? (c.v / c.limit < .7 ? "good" : c.v / c.limit < .9 ? "warning" : "critical")
+          : (c.v / c.limit > 1.5 ? "good" : c.v / c.limit > 1.15 ? "warning" : "critical");
+        return h("div", { class: "meter" }, [
+          h("div", { style: "display:flex;align-items:baseline;gap:8px" }, [
+            h("span", { style: "font-size:12.5px;font-weight:700", text: c.nm }),
+            h("span", { class: "pill", style: "--sev:" + sevColor(head) + ";margin-left:auto" }, [
+              h("span", { class: "glyph", "aria-hidden": "true", text: SEV_GLYPH[head] }),
+              document.createTextNode(head === "good" ? "Ample headroom" : head === "warning" ? "Watch" : "Tight")
+            ]),
+            h("span", { style: "font-size:13px;font-weight:800;font-variant-numeric:tabular-nums", text: c.fmt(c.v) })
+          ]),
+          h("div", {
+            class: "meter-track",
+            style: "background:color-mix(in oklab, " + sevColor(head) + " 20%, var(--panel))"
+          }, [
+            h("div", { class: "meter-fill", style: "width:" + fillPct + "%;--sev:" + sevColor(head) }),
+            h("div", { class: "meter-limit", style: "left:" + (c.limit / span * 100) + "%", title: "Covenant limit" })
+          ]),
+          h("div", { class: "meter-scale" }, [
+            h("span", { text: "0" }),
+            h("span", { text: (c.dir === "max" ? "ceiling " : "floor ") + c.fmt(c.limit) + " (marked)" })
+          ])
+        ]);
+      })),
+      note: "AR over 90 days is 1.7% of receivables; the inventory reserve covers 61% of expiry exposure. Both are the quality questions behind the ratios.",
+      sources: ["SYSPRO GL", "SYSPRO AR / Inventory"]
+    })
+  ]));
+
+  root.appendChild(sectionHead("Phase 2 — wired when the NIQ feed lands", "Deliberately dashed, not hidden"));
+  root.appendChild(h("div", { class: "grid two" }, [
+    h("div", { class: "locked" }, [
+      h("span", { class: "pill", style: "--sev:" + cssvar("--s1") }, [
+        h("span", { class: "glyph", "aria-hidden": "true", text: "○" }), document.createTextNode("Q3 · Phase 2")
+      ]),
+      h("h3", { style: "margin-top:8px", text: "Trade spend ROI — spend against incremental volume" }),
+      h("p", { text: "Trade as a percentage of gross sales is on this page today. Return needs a baseline: what would have sold without the promotion. That baseline is NIQ lift data, so this panel stays dashed until Phase 2 — and it is the single highest-value chart on the roadmap." })
+    ]),
+    h("div", { class: "locked" }, [
+      h("span", { class: "pill", style: "--sev:" + cssvar("--s1") }, [
+        h("span", { class: "glyph", "aria-hidden": "true", text: "○" }), document.createTextNode("Q7 · Phase 2")
+      ]),
+      h("h3", { style: "margin-top:8px", text: "Market share and distribution" }),
+      h("p", { text: "Share of category, %ACV distribution, and velocity against the category, by retailer. Nothing in SYSPRO, Salesforce, TELUS or HighRadius can produce it — it needs syndicated data, and it arrives with the NIQ feed." })
+    ])
+  ]));
+}
+
+/* ------------------------------------------------------------------- FORMULAS */
+var FORMULAS = [
+  { nm: "Net revenue", body: "Gross sales − Trade spend − Deductions &amp; allowances", src: "SYSPRO ArTrnDetail · TELUS Blacksmith · HighRadius" },
+  { nm: "Gross margin %", body: '<span class="frac"><span class="n">Net revenue − COGS</span><span class="d">Net revenue</span></span> × 100', src: "SYSPRO GL + standard costs" },
+  { nm: "Contribution margin % (customer)", body: '<span class="frac"><span class="n">Net revenue − COGS − Trade − Deductions</span><span class="d">Net revenue</span></span> × 100', src: "SYSPRO · TELUS Blacksmith · HighRadius" },
+  { nm: "DSO", body: '<span class="frac"><span class="n">Accounts receivable</span><span class="d">Net revenue</span></span> × days in period', src: "SYSPRO ArInvoice" },
+  { nm: "DIO", body: '<span class="frac"><span class="n">Average inventory</span><span class="d">COGS</span></span> × days in period', src: "SYSPRO InvWarehouse" },
+  { nm: "DPO", body: '<span class="frac"><span class="n">Accounts payable</span><span class="d">COGS</span></span> × days in period', src: "SYSPRO AP" },
+  { nm: "Cash conversion cycle", body: "DSO + DIO − DPO", src: "SYSPRO AR / AP / Inventory" },
+  { nm: "Deduction rate %", body: '<span class="frac"><span class="n">Deductions taken</span><span class="d">Gross sales</span></span> × 100', src: "HighRadius · SYSPRO ArTrnDetail" },
+  { nm: "Deduction recovery rate %", body: '<span class="frac"><span class="n">Deductions recovered</span><span class="d">Deductions taken</span></span> × 100', src: "HighRadius" },
+  { nm: "Trade spend rate %", body: '<span class="frac"><span class="n">Trade spend</span><span class="d">Gross sales</span></span> × 100', src: "TELUS Blacksmith TPM" },
+  { nm: "Trade accrual gap", body: "TELUS accrual balance − GL trade liability", src: "TELUS Blacksmith report 1069 · SYSPRO GL" },
+  { nm: "Customer concentration %", body: '<span class="frac"><span class="n">Top-N customer revenue</span><span class="d">Total revenue</span></span> × 100', src: "SYSPRO ArTrnDetail" }
+];
+
+function renderFormulas() {
+  var g = document.getElementById("formula-grid");
+  FORMULAS.forEach(function (f, i) {
+    g.appendChild(h("div", { class: "formula" }, [
+      h("div", { class: "num", text: String(i + 1) }),
+      h("div", null, [
+        h("div", { class: "fname", text: f.nm }),
+        h("div", { class: "fbody", html: "= " + f.body }),
+        h("div", { class: "fsrc mono", text: f.src })
+      ])
+    ]));
+  });
+}
+
+/* Two bands: the systems the data comes from, then the pipeline it travels
+   through. Splitting them keeps the row readable instead of one long strip. */
+var LINEAGE_SOURCES = [
+  { nm: "SYSPRO ERP", role: "GL · AR · AP · orders · inventory" },
+  { nm: "Salesforce", role: "Pipeline" },
+  { nm: "TELUS Blacksmith", role: "Trade promotion" },
+  { nm: "HighRadius", role: "Cash app · deductions" },
+  { nm: "NIQ syndicated", role: "Phase 2", phase2: true }
+];
+var LINEAGE_PIPE = [
+  { nm: "Warehouse", role: "Raw → staged → tested" },
+  { arrow: true },
+  { nm: "dbt marts", role: "One mart per cadence" },
+  { arrow: true },
+  { nm: "This screen", role: "Pre-computed · nothing to run" }
+];
+
+function stageEl(st2) {
+  if (st2.arrow) return h("span", { class: "arrow", "aria-hidden": "true", text: "→" });
+  return h("div", { class: "stage" + (st2.phase2 ? " phase2" : "") }, [
+    h("span", { class: "sname", text: st2.nm }),
+    h("span", { class: "srole", text: st2.role })
+  ]);
+}
+
+function renderLineage() {
+  var w = document.getElementById("lineage");
+  [
+    { cap: "Four source systems (plus one in Phase 2)", list: LINEAGE_SOURCES },
+    { cap: "↓  then one pipeline, rebuilt every morning", list: LINEAGE_PIPE }
+  ].forEach(function (band) {
+    w.appendChild(h("div", null, [
+      h("div", { class: "lineage-cap", text: band.cap }),
+      h("div", { class: "lineage-band" }, band.list.map(stageEl))
+    ]));
+  });
+}
+
+function renderSync() {
+  var w = document.getElementById("sync-list");
+  D.sync.forEach(function (r) {
+    w.appendChild(h("div", { class: "sync-row" }, [
+      h("span", { style: "width:8px;height:8px;border-radius:50%;flex:none;background:" + (r.ok ? cssvar("--good") : cssvar("--s-neutral")) }),
+      h("span", { class: "nm", text: r.nm }),
+      h("span", { class: "tm", text: r.tm })
+    ]));
+  });
+}
+
+/* ---------------------------------------------------------------- DRAWER */
+var drawer = document.getElementById("drawer");
+var scrim = document.getElementById("scrim");
+var lastFocus = null;
+
+function openDrawer(key) {
+  var d = DETAILS[key];
+  if (!d) return;
+  lastFocus = document.activeElement;
+  document.getElementById("drawer-eyebrow").textContent = d.eyebrow;
+  document.getElementById("drawer-title").textContent = d.title;
+  document.getElementById("drawer-desc").textContent = d.desc;
+  var body = document.getElementById("drawer-body");
+  body.innerHTML = "";
+  body.appendChild(h("div", { class: "drawer-scroll" }, [dvTable({ cols: d.cols, rows: d.rows })]));
+  document.getElementById("drawer-foot").textContent = d.foot || "";
+  drawer.classList.add("open"); scrim.classList.add("open");
+  drawer.setAttribute("aria-hidden", "false");
+  document.getElementById("drawer-close").focus();
+}
+function closeDrawer() {
+  drawer.classList.remove("open"); scrim.classList.remove("open");
+  drawer.setAttribute("aria-hidden", "true");
+  if (lastFocus && lastFocus.focus) lastFocus.focus();
+}
+document.getElementById("drawer-close").addEventListener("click", closeDrawer);
+scrim.addEventListener("click", closeDrawer);
+document.addEventListener("keydown", function (e) {
+  if (e.key === "Escape") { closeDrawer(); closeFresh(); }
+});
+
+/* ------------------------------------------------------------- FRESHNESS POP */
+var freshBtn = document.getElementById("fresh-btn");
+var freshPop = document.getElementById("fresh-pop");
+function closeFresh() { freshPop.hidden = true; freshBtn.setAttribute("aria-expanded", "false"); }
+freshBtn.addEventListener("click", function (e) {
+  e.stopPropagation();
+  var open = !freshPop.hidden;
+  freshPop.hidden = open;
+  freshBtn.setAttribute("aria-expanded", open ? "false" : "true");
+});
+document.addEventListener("click", function (e) {
+  if (!freshPop.hidden && !freshPop.contains(e.target) && e.target !== freshBtn) closeFresh();
+});
+
+/* --------------------------------------------------------------------- BOOT */
+var RENDER = { daily: renderDaily, weekly: renderWeekly, monthly: renderMonthly, quarterly: renderQuarterly };
+var activeTab = "daily";
+
+function renderViews() {
+  refreshChartInk();
+  Object.keys(RENDER).forEach(function (k) {
+    var root = document.getElementById("view-" + k);
+    root.innerHTML = "";
+    RENDER[k](root);
+  });
+}
+
+document.querySelectorAll(".tab").forEach(function (btn) {
+  btn.addEventListener("click", function () {
+    activeTab = btn.dataset.tab;
+    document.querySelectorAll(".tab").forEach(function (b) {
+      b.setAttribute("aria-selected", b === btn ? "true" : "false");
+    });
+    Object.keys(RENDER).forEach(function (k) {
+      document.getElementById("view-" + k).hidden = k !== activeTab;
+    });
+    hideTip();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+});
+
+document.getElementById("entity").addEventListener("change", function (e) {
+  entity = e.target.value;
+  hideTip();
+  renderViews();
+});
+
+// Re-render on theme flip so chart ink and series colours follow the tokens.
+if (window.matchMedia) {
+  var mq = window.matchMedia("(prefers-color-scheme: dark)");
+  if (mq.addEventListener) mq.addEventListener("change", renderViews);
+}
+new MutationObserver(renderViews).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+
+renderSync();
+renderFormulas();
+renderLineage();
+renderViews();
+</script>
