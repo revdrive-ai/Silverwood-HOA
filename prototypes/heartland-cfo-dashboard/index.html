@@ -955,7 +955,12 @@ function lineChart(cfg) {
       svg.appendChild(s("path", { d: d + "L" + X(se.values.length - 1) + " " + Y(tLo) + " L" + X(0) + " " + Y(tLo) + " Z", fill: se.color, "fill-opacity": .1 }));
     }
     svg.appendChild(s("path", { d: d, fill: "none", stroke: se.color, "stroke-width": 2, "stroke-linejoin": "round", "stroke-linecap": "round" }));
+    // The end marker belongs on the last point that exists, not the last slot: a
+    // series that stops part-way through the axis (month to date against a full
+    // month of pace) has trailing nulls.
     var li = se.values.length - 1;
+    while (li > 0 && se.values[li] == null) li--;
+    if (se.values[li] == null) return;
     svg.appendChild(s("circle", { cx: X(li), cy: Y(se.values[li]), r: 4.5, fill: se.color, stroke: SURFACE, "stroke-width": 2 }));
     if (cfg.endLabel) {
       svg.appendChild(st(X(li) + 9, Y(se.values[li]) + 4, cfg.yFmt(se.values[li]) + (se.endSuffix || ""), { fill: cssvar("--ink"), "font-size": 11.5, "font-weight": 800 }));
@@ -1516,13 +1521,13 @@ var D = {
   qGM: [24.8, 25.1, 25.4, 25.9, 26.4, 26.2, 25.8, 26.1],
   qBudget: [33.9, 34.6, 36.0, 37.6, 38.6, 39.4, 40.2, 41.8],
   fyProj: 164.8, fyBudget: 166.5, fyOI: 15.1, fyOIBudget: 15.9,
-  concTop5: [44.1, 44.8, 45.2, 45.6, 46.1, 46.9, 47.5, 48.2],
-  concNext5: [15.6, 15.7, 15.9, 15.8, 16.0, 15.8, 15.6, 15.5],
-  concRest: [40.3, 39.5, 38.9, 38.6, 37.9, 37.3, 36.9, 36.3],
+  concTop5: [58.9, 59.6, 60.1, 60.4, 61.0, 61.8, 62.4, 63.0],
+  concNext5: [23.4, 23.3, 23.1, 23.0, 22.8, 22.6, 22.4, 22.2],
+  concRest: [17.7, 17.1, 16.8, 16.6, 16.2, 15.6, 15.2, 14.8],
   tradeByCust: [
-    { nm: "Costco Wholesale", v: 17.8 }, { nm: "Kroger", v: 14.2 }, { nm: "Walmart", v: 13.6 },
-    { nm: "Albertsons / Safeway", v: 12.9 }, { nm: "H-E-B", v: 11.4 }, { nm: "Publix", v: 9.8 },
-    { nm: "Target", v: 9.1 }, { nm: "Sprouts", v: 7.2 }
+    { nm: "Costco Wholesale", v: 17.7 }, { nm: "Kroger", v: 14.1 }, { nm: "Walmart", v: 13.7 },
+    { nm: "Albertsons / Safeway", v: 13.2 }, { nm: "H-E-B", v: 11.0 }, { nm: "Publix", v: 9.6 },
+    { nm: "Target", v: 9.4 }, { nm: "Sprouts", v: 7.1 }
   ],
   tradeRateCo: 12.4,
   dedRateCostco: [4.1, 4.4, 4.6, 4.9, 5.2, 5.5, 5.8, 6.1],
@@ -1555,12 +1560,12 @@ var ATTENTION = {
   monthly: [
     { sev: "critical", label: "Deductions", text: "Deductions 3.7% of gross sales vs 3.3% budget — fourth month rising", why: "$61K unfavourable in July alone. At this rate the FY lands $0.7M over plan.", ent: ["all"], detail: "ded-items" },
     { sev: "serious", label: "Trade", text: "TELUS trade accrual sits $210K above the GL liability", why: "Unreconciled at close. Gap is narrowing (from $412K in February) but it is still an audit finding waiting to happen.", ent: ["all"] },
-    { sev: "serious", label: "Customer", text: "Costco contribution margin 6.2% vs 13.6% company average", why: "Trade at 17.8% of gross plus a 6.1% deduction rate. The largest customer is the least profitable one.", ent: ["all", "hf"], detail: "cust-pnl" },
+    { sev: "serious", label: "Customer", text: "Costco contribution margin 6.2% vs 13.6% company average", why: "Trade at 17.7% of gross plus a 6.1% deduction rate. The largest customer is the least profitable one.", ent: ["all", "hf"], detail: "cust-pnl" },
     { sev: "warning", label: "Margin", text: "Operating income $1.26M, 6.7% under budget", why: "Entirely explained by net revenue (−$0.28M); COGS and opex both came in favourable.", ent: ["all"] },
     { sev: "warning", label: "Inventory", text: "Reserve covers 61% of the $1.42M expiry exposure", why: "$556K uncovered. Either the reserve goes up at August close or the exposure comes down.", ent: ["all"] }
   ],
   quarterly: [
-    { sev: "critical", label: "Concentration", text: "Top 5 customers are 48.2% of revenue, up 2.6 pts year-over-year", why: "The board risk metric. Growth is coming from the accounts that already dominate the mix.", ent: ["all"] },
+    { sev: "critical", label: "Concentration", text: "Top 5 customers are 63.0% of revenue, up 2.6 pts year-over-year", why: "The board risk metric. Growth is coming from the accounts that already dominate the mix.", ent: ["all"] },
     { sev: "serious", label: "Deductions", text: "Costco deduction rate 6.1% of gross, up from 4.1% eight quarters ago", why: "A structural change in how one retailer pays, not a run of bad months. This belongs in the next trade negotiation.", ent: ["all", "hf"] },
     { sev: "serious", label: "Outlook", text: "FY26 projects $164.8M vs $166.5M budget; operating income $15.1M vs $15.9M", why: "Revenue misses by 1.0% but income by 5.0% — the gap is trade and deduction rate, not volume.", ent: ["all"] },
     { sev: "warning", label: "Portfolio", text: "Snack Bars: 9% of revenue at 21.4% margin, lowest quadrant", why: "Smallest line, worst margin, no volume growth. Grow it deliberately, fix the cost base, or exit.", ent: ["all", "hf"] },
@@ -2445,7 +2450,7 @@ function renderQuarterly(root) {
     }),
     card({
       id: "Q2", title: "Customer concentration — 8 quarters", scope: "Consolidated", span: true,
-      sub: "Share of revenue. Top 5 has gained 4.1 points in two years; everything below the top 10 is shrinking.",
+      sub: "Share of revenue. Top 5 has gained 4.1 points in two years; everything below the top 10 keeps giving ground.",
       legend: [
         { name: "Top 5 customers", color: cssvar("--s1"), sq: true },
         { name: "Next 5", color: cssvar("--s2"), sq: true },
@@ -2467,7 +2472,7 @@ function renderQuarterly(root) {
           return [l, pct(D.concTop5[i]), pct(D.concNext5[i]), pct(D.concRest[i]), pct(D.concTop5[i] + D.concNext5[i])];
         })
       },
-      note: "48.2% in five customers is the number the board will ask about — and the reason customer-level profitability sits on the monthly tab.",
+      note: "63.0% in five customers is the number the board will ask about — and the reason customer-level profitability sits on the monthly tab.",
       sources: ["SYSPRO ArTrnDetail"]
     }),
     card({
@@ -2556,7 +2561,7 @@ function renderQuarterly(root) {
         cols: ["Customer", "Trade % of gross", "vs company 12.4%"],
         rows: D.tradeByCust.map(function (c) { return [c.nm, pct(c.v), { v: pts(c.v - D.tradeRateCo), cls: c.v <= D.tradeRateCo ? "pos" : "neg" }]; })
       },
-      note: "Company rate 12.4%. Five customers are above it, and the two heaviest are also the two worst on deductions.",
+      note: "Company rate 12.4%. Four customers are above it, and the two heaviest are also the two worst on deductions.",
       sources: ["TELUS Blacksmith TPM extracts", "SYSPRO ArTrnDetail"]
     }),
     card({

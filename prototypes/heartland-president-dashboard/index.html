@@ -985,7 +985,12 @@ function lineChart(cfg) {
       svg.appendChild(s("path", { d: d + "L" + X(se.values.length - 1) + " " + Y(tLo) + " L" + X(0) + " " + Y(tLo) + " Z", fill: se.color, "fill-opacity": .1 }));
     }
     svg.appendChild(s("path", { d: d, fill: "none", stroke: se.color, "stroke-width": 2, "stroke-linejoin": "round", "stroke-linecap": "round" }));
+    // The end marker belongs on the last point that exists, not the last slot: a
+    // series that stops part-way through the axis (month to date against a full
+    // month of pace) has trailing nulls.
     var li = se.values.length - 1;
+    while (li > 0 && se.values[li] == null) li--;
+    if (se.values[li] == null) return;
     svg.appendChild(s("circle", { cx: X(li), cy: Y(se.values[li]), r: 4.5, fill: se.color, stroke: SURFACE, "stroke-width": 2 }));
     if (cfg.endLabel) {
       svg.appendChild(st(X(li) + 9, Y(se.values[li]) + 4, cfg.yFmt(se.values[li]) + (se.endSuffix || ""), { fill: cssvar("--ink"), "font-size": 11.5, "font-weight": 800 }));
@@ -1471,7 +1476,7 @@ var FACTOR = {
   rev:   { all: 1, grocery: .479, club: .200, mass: .168, fs: .124, ecom: .029 },
   vol:   { all: 1, grocery: .502, club: .173, mass: .181, fs: .118, ecom: .026 },
   ord:   { all: 1, grocery: .486, club: .196, mass: .171, fs: .121, ecom: .026 },
-  trade: { all: 1, grocery: .468, club: .243, mass: .214, fs: .045, ecom: .030 },
+  trade: { all: 1, grocery: .437, club: .243, mass: .196, fs: .094, ecom: .030 },
   brand: { all: 1, grocery: .512, club: .112, mass: .208, fs: .048, ecom: .120 },
   svc:   { all: 1, grocery: .441, club: .238, mass: .201, fs: .098, ecom: .022 },
   pipe:  { all: 1, grocery: .28, club: .11, mass: .15, fs: .38, ecom: .08 },
@@ -1636,7 +1641,7 @@ var D = {
     { nm: "Albertsons / Safeway", rev: 1.13, g: 3.1 },
     { nm: "US Foods", rev: 0.73, g: 2.4 },
     { nm: "Sysco", rev: 0.69, g: -1.8 },
-    { nm: "All other customers", rev: 2.25, g: -4.2 }
+    { nm: "All other customers", rev: 2.25, g: 0.5 }
   ],
   lines: [
     { nm: "Salsa & Dips", rev: 3.34, ly: 3.19, gm: 24.3, bud: 26.4 },
@@ -1666,9 +1671,9 @@ var D = {
   qGrowLabels: ["Q2 25", "Q3 25", "Q4 25", "Q1 26", "Q2 26"],
   qVolGrow: [5.1, 6.2, 4.8, 3.9, 3.4],
   qPriceGrow: [3.5, 8.1, 7.6, 6.0, 5.6],
-  concTop5: [44.1, 44.8, 45.2, 45.6, 46.1, 46.9, 47.5, 48.2],
-  concNext5: [15.6, 15.7, 15.9, 15.8, 16.0, 15.8, 15.6, 15.5],
-  concRest: [40.3, 39.5, 38.9, 38.6, 37.9, 37.3, 36.9, 36.3],
+  concTop5: [58.9, 59.6, 60.1, 60.4, 61.0, 61.8, 62.4, 63.0],
+  concNext5: [23.4, 23.3, 23.1, 23.0, 22.8, 22.6, 22.4, 22.2],
+  concRest: [17.7, 17.1, 16.8, 16.6, 16.2, 15.6, 15.2, 14.8],
   qCustSku: [1284, 1312, 1358, 1402, 1431, 1448, 1441, 1436],
   qInnov: [6.1, 6.8, 7.4, 8.2, 8.8, 9.1, 9.4, 9.7],
   qTrade: [11.8, 11.9, 12.0, 12.1, 12.2, 12.3, 12.3, 12.4],
@@ -1711,7 +1716,7 @@ var ATTENTION = {
   ],
   quarterly: [
     { sev: "critical", label: "Growth quality", text: "Volume growth 5.1% → 3.4% over five quarters while price carried 5.6 pts", why: "The board question is whether we are growing the business or repricing it. In dollars the two look identical.", ch: ["all", "grocery", "club", "mass"] },
-    { sev: "serious", label: "Concentration", text: "Top 5 customers are 48.2% of revenue, up 2.6 pts year-over-year", why: "Growth is concentrating in the accounts with the highest trade rates and the strictest service requirements. Both risks compound.", ch: ["all"] },
+    { sev: "serious", label: "Concentration", text: "Top 5 customers are 63.0% of revenue, up 2.6 pts year-over-year", why: "Growth is concentrating in the accounts with the highest trade rates and the strictest service requirements. Both risks compound.", ch: ["all"] },
     { sev: "serious", label: "Portfolio", text: "Snack Bars growing 12.7% at 21.4% margin — the thinnest line in the portfolio", why: "Deliberate growth in the worst-margin line is a decision. Price, cost base, or exit — but it should be chosen, not inherited.", ch: ["all", "grocery", "mass"], detail: "line-growth" },
     { sev: "warning", label: "Investment", text: "Total marketing investment 14.9% of gross sales, and 83% of it is trade", why: "Trade has taken 0.6 pts over eight quarters; brand has given up 0.4. The mix moved without anyone deciding to move it.", ch: ["all", "grocery", "club", "mass"] },
     { sev: "info", label: "Phase 2", text: "Share, %ACV and true promotion lift stay dark until NIQ and the retailer POS feeds land", why: "Everything on this page is what we shipped and what we spent. None of it is what the shopper did.", ch: ["all", "grocery", "club", "mass", "fs", "ecom"] }
@@ -1795,17 +1800,17 @@ var DETAILS = {
     desc: "Net revenue against last July, with the commercial cost of each account beside it. Trade and deduction rates are the same figures as the CFO dashboard.",
     cols: ["Customer", "Net revenue", "vs LY", "Growth %", "Trade % gross", "Deduction % gross", "Case fill %"],
     rows: [
-      ["Costco Wholesale", "$2.50M", "+$0.31M", { v: "+14.2%", cls: "pos" }, "17.8%", "6.1%", "93.4%"],
-      ["Kroger", "$1.96M", "+$0.18M", { v: "+9.8%", cls: "pos" }, "14.2%", "4.0%", "94.8%"],
-      ["Walmart", "$1.75M", "+$0.18M", { v: "+11.4%", cls: "pos" }, "13.6%", "3.2%", "92.1%"],
-      ["Albertsons / Safeway", "$1.13M", "+$0.03M", { v: "+3.1%", cls: "" }, "12.9%", "2.8%", "95.6%"],
-      ["H-E-B", "$1.01M", "+$0.08M", { v: "+8.6%", cls: "pos" }, "11.4%", "2.6%", "96.2%"],
-      ["Publix", "$0.82M", "+$0.05M", { v: "+6.2%", cls: "pos" }, "9.8%", "2.4%", "97.1%"],
-      ["US Foods", "$0.73M", "+$0.02M", { v: "+2.4%", cls: "" }, "4.6%", "1.9%", "96.8%"],
-      ["Sysco", "$0.69M", "−$0.01M", { v: "−1.8%", cls: "neg" }, "4.1%", "1.7%", "97.4%"],
-      ["Target", "$0.56M", "+$0.09M", { v: "+18.6%", cls: "pos" }, "9.1%", "2.9%", "93.8%"],
-      ["Sprouts", "$0.38M", "+$0.07M", { v: "+22.4%", cls: "pos" }, "7.2%", "1.4%", "97.1%"],
-      ["All other customers", "$2.25M", "−$0.10M", { v: "−4.2%", cls: "neg" }, "6.8%", "1.2%", "95.8%"],
+      ["Costco Wholesale", "$2.50M", "+$0.31M", { v: "+14.2%", cls: "pos" }, "17.7%", "6.1%", "93.4%"],
+      ["Kroger", "$1.96M", "+$0.18M", { v: "+9.8%", cls: "pos" }, "14.1%", "4.0%", "94.8%"],
+      ["Walmart", "$1.75M", "+$0.18M", { v: "+11.4%", cls: "pos" }, "13.7%", "3.2%", "92.1%"],
+      ["Albertsons / Safeway", "$1.13M", "+$0.03M", { v: "+3.1%", cls: "" }, "13.2%", "2.8%", "95.6%"],
+      ["H-E-B", "$1.01M", "+$0.08M", { v: "+8.6%", cls: "pos" }, "11.0%", "2.6%", "96.2%"],
+      ["Publix", "$0.82M", "+$0.05M", { v: "+6.2%", cls: "pos" }, "9.6%", "2.4%", "97.1%"],
+      ["US Foods", "$0.73M", "+$0.02M", { v: "+2.4%", cls: "" }, "11.6%", "1.9%", "96.8%"],
+      ["Sysco", "$0.69M", "−$0.01M", { v: "−1.8%", cls: "neg" }, "9.0%", "1.7%", "97.4%"],
+      ["Target", "$0.56M", "+$0.09M", { v: "+18.6%", cls: "pos" }, "9.4%", "2.9%", "93.8%"],
+      ["Sprouts", "$0.38M", "+$0.07M", { v: "+22.4%", cls: "pos" }, "7.1%", "1.4%", "97.1%"],
+      ["All other customers", "$2.25M", "+$0.01M", { v: "+0.5%", cls: "" }, "6.6%", "1.2%", "95.8%"],
       { total: true, cells: ["Total", "$13.78M", "+$1.00M", { v: "+7.8%", cls: "pos" }, "12.4%", "3.7%", "94.2%"] }
     ],
     foot: "The four fastest-growing accounts are also four of the five most expensive to serve. Growth and cost-to-serve are moving together, which is the argument for taking trade terms into the next negotiation."
@@ -2395,7 +2400,7 @@ function renderMonthly(root) {
           return [c.nm, usd(c.rev), { v: signedPct(c.g), cls: c.g >= 0 ? "pos" : "neg" }];
         })
       },
-      note: "The three biggest accounts are all growing double digits or close to it, which is why concentration keeps rising. Everything outside the top ten is shrinking 4.2%.",
+      note: "The three biggest accounts are all growing double digits or close to it, which is why concentration keeps rising. Everything outside the top ten grew 0.5% — flat, while the top five grew 11%.",
       sources: ["SYSPRO ArTrnDetail"],
       detail: "cust-growth"
     }),
@@ -2765,7 +2770,7 @@ function renderQuarterly(root) {
     }),
     card({
       id: "PQ3", title: "Customer concentration — 8 quarters", scope: "Consolidated", span: true,
-      sub: "Share of revenue. The top 5 have gained 4.1 points in two years, and everything outside the top 10 has given up 4.0.",
+      sub: "Share of revenue. The top 5 have gained 4.1 points in two years, and everything outside the top 10 has given up 2.9.",
       legend: [
         { name: "Top 5 customers", color: cssvar("--s1"), sq: true },
         { name: "Next 5", color: cssvar("--s2"), sq: true },
@@ -2787,7 +2792,7 @@ function renderQuarterly(root) {
           return [l, pct(D.concTop5[i]), pct(D.concNext5[i]), pct(D.concRest[i]), pct(D.concTop5[i] + D.concNext5[i])];
         })
       },
-      note: "This is the same 48.2% the CFO dashboard reports as a board risk metric. On this page it is also a commercial fact: the accounts driving growth are the ones with the highest trade rates and the strictest service scorecards.",
+      note: "This is the same 63.0% the CFO dashboard reports as a board risk metric. On this page it is also a commercial fact: the accounts driving growth are the ones with the highest trade rates and the strictest service scorecards.",
       sources: ["SYSPRO ArTrnDetail"],
       detail: "cust-growth"
     }),
