@@ -1,0 +1,3045 @@
+<title>Heartland Foods — President &amp; Marketing Dashboard (Draft 1)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  /* ============================================================
+     TOKENS — light is the base; dark redefines tokens only.
+     Chart surfaces are the exact surfaces the palette was
+     validated against (#fcfcfb light / #1a1a19 dark).
+     ============================================================ */
+  :root {
+    color-scheme: light;
+
+    --ground:      #f4f3ee;
+    --panel:       #fcfcfb;
+    --panel-2:     #edece6;
+    --panel-3:     #f8f7f3;
+
+    --ink:         #0b0b0b;
+    --ink-2:       #52514e;
+    --ink-3:       #85837d;
+
+    --rule:        #e1e0d9;
+    --axis:        #c3c2b7;
+    --ring:        rgba(11, 11, 11, .10);
+
+    --navy:        #12224d;
+    --navy-2:      #1d3168;
+    --navy-3:      #2b4483;
+    --on-navy:     #ffffff;
+    --on-navy-2:   #b9c5e4;
+    --amber:       #e8a33d;
+    --amber-deep:  #b97b1d;
+    --forest:      #14452f;
+
+    /* categorical series — validated slots 1..3 (all-pairs) */
+    --s1:          #2a78d6;
+    --s2:          #eb6834;
+    --s3:          #1baf7a;
+    --s-neutral:   #a9a7a0;
+
+    /* ordinal blue ramp (validated --ordinal) */
+    --ord1:        #86b6ef;
+    --ord2:        #5598e7;
+    --ord3:        #2a78d6;
+    --ord4:        #184f95;
+
+    /* diverging poles */
+    --pos:         #2a78d6;
+    --neg:         #e34948;
+
+    /* status — fixed, never themed */
+    --good:        #0ca30c;
+    --warning:     #fab219;
+    --serious:     #ec835a;
+    --critical:    #d03b3b;
+
+    /* delta ink */
+    --up-good:     #006300;
+    --down-bad:    #a32b2b;
+
+    /* commercial-domain codes (chrome, not data) */
+    --dom-svc:    #0f6f66;
+    --dom-growth:     #1d3168;
+    --dom-innov:      #a15c07;
+    --dom-promo:   #57409c;
+    --dom-dist:     #8f3413;
+
+    --shadow:      0 1px 2px rgba(18, 34, 77, .06), 0 6px 18px rgba(18, 34, 77, .05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --ground:    #0e0e0d;
+      --panel:     #1a1a19;
+      --panel-2:   #232322;
+      --panel-3:   #151514;
+      --ink:       #ffffff;
+      --ink-2:     #c3c2b7;
+      --ink-3:     #918f88;
+      --rule:      #2c2c2a;
+      --axis:      #383835;
+      --ring:      rgba(255, 255, 255, .10);
+      --navy:      #0d1730;
+      --navy-2:    #16234a;
+      --navy-3:    #33477f;
+      --on-navy:   #ffffff;
+      --on-navy-2: #9fb0d8;
+      --amber:     #e8a33d;
+      --amber-deep:#f0be71;
+      --forest:    #0e2e20;
+      --s1:        #3987e5;
+      --s2:        #d95926;
+      --s3:        #199e70;
+      --s-neutral: #7e7c76;
+      --ord1:      #cde2fb;
+      --ord2:      #86b6ef;
+      --ord3:      #3987e5;
+      --ord4:      #184f95;
+      --pos:       #3987e5;
+      --neg:       #e66767;
+      --up-good:   #0ca30c;
+      --down-bad:  #f08e8b;
+      --dom-svc:  #3fb3a4;
+      --dom-growth:   #7f9ae0;
+      --dom-innov:    #dda032;
+      --dom-promo: #a695ee;
+      --dom-dist:   #e08256;
+      --shadow:    0 1px 2px rgba(0, 0, 0, .5), 0 6px 18px rgba(0, 0, 0, .35);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --ground:    #0e0e0d;
+    --panel:     #1a1a19;
+    --panel-2:   #232322;
+    --panel-3:   #151514;
+    --ink:       #ffffff;
+    --ink-2:     #c3c2b7;
+    --ink-3:     #918f88;
+    --rule:      #2c2c2a;
+    --axis:      #383835;
+    --ring:      rgba(255, 255, 255, .10);
+    --navy:      #0d1730;
+    --navy-2:    #16234a;
+    --navy-3:    #33477f;
+    --on-navy:   #ffffff;
+    --on-navy-2: #9fb0d8;
+    --amber:     #e8a33d;
+    --amber-deep:#f0be71;
+    --forest:    #0e2e20;
+    --s1:        #3987e5;
+    --s2:        #d95926;
+    --s3:        #199e70;
+    --s-neutral: #7e7c76;
+    --ord1:      #cde2fb;
+    --ord2:      #86b6ef;
+    --ord3:      #3987e5;
+    --ord4:      #184f95;
+    --pos:       #3987e5;
+    --neg:       #e66767;
+    --up-good:   #0ca30c;
+    --down-bad:  #f08e8b;
+    --dom-svc:  #3fb3a4;
+    --dom-growth:   #7f9ae0;
+    --dom-innov:    #dda032;
+    --dom-promo: #a695ee;
+    --dom-dist:   #e08256;
+    --shadow:    0 1px 2px rgba(0, 0, 0, .5), 0 6px 18px rgba(0, 0, 0, .35);
+  }
+
+  /* ============================================================ TYPE + BASE */
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .mono { font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
+
+  .wrap { max-width: 1260px; margin: 0 auto; padding: 0 18px; }
+
+  h1, h2, h3 { margin: 0; text-wrap: balance; }
+
+  .eyebrow {
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+
+  a { color: inherit; }
+
+  :where(button, [tabindex]):focus-visible {
+    outline: 2px solid var(--amber);
+    outline-offset: 2px;
+    border-radius: 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+  }
+
+  /* ============================================================ MASTHEAD */
+  .masthead { background: var(--navy); color: var(--on-navy); border-bottom: 3px solid var(--amber); }
+
+  .masthead-in {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 16px 24px;
+    padding: 18px 0 16px;
+  }
+
+  .brand-mark {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .brand-glyph {
+    width: 42px; height: 42px;
+    flex: none;
+    border: 2px solid var(--amber);
+    border-radius: 3px;
+    display: grid; place-items: center;
+    font-weight: 800; font-size: 17px;
+    letter-spacing: -.03em;
+    color: var(--amber);
+  }
+
+  .brand-name {
+    font-size: clamp(21px, 3.4vw, 30px);
+    font-weight: 800;
+    letter-spacing: -.015em;
+    line-height: 1.05;
+    text-transform: uppercase;
+  }
+
+  .brand-sub {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-top: 3px;
+  }
+
+  .masthead-right { margin-left: auto; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+
+  .sample-chip {
+    display: inline-flex; align-items: center; gap: 7px;
+    background: var(--amber); color: #21160a;
+    font-size: 10.5px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase;
+    padding: 5px 10px; border-radius: 3px;
+  }
+
+  .kicker-strip {
+    background: var(--navy-2);
+    color: var(--on-navy-2);
+    font-size: 10.5px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase;
+    padding: 7px 0;
+  }
+  .kicker-strip .wrap { display: flex; flex-wrap: wrap; gap: 6px 18px; }
+  .kicker-strip b { color: var(--on-navy); font-weight: 800; }
+
+  /* ============================================================ CONTROL BAR */
+  .controlbar {
+    position: sticky; top: 0; z-index: 40;
+    background: var(--panel);
+    border-bottom: 1px solid var(--rule);
+    box-shadow: var(--shadow);
+  }
+  .controlbar-in {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px;
+    padding: 9px 0;
+  }
+
+  .tabs { display: flex; gap: 4px; background: var(--panel-2); padding: 3px; border-radius: 4px; }
+  .tab {
+    appearance: none; border: 0; cursor: pointer;
+    background: transparent; color: var(--ink-2);
+    font: inherit; font-size: 12px; font-weight: 800;
+    letter-spacing: .09em; text-transform: uppercase;
+    padding: 7px 13px; border-radius: 3px;
+    transition: background .12s, color .12s;
+  }
+  .tab:hover { background: var(--panel-3); color: var(--ink); }
+  .tab[aria-selected="true"] { background: var(--navy); color: #fff; }
+  .tab small { display: block; font-size: 9.5px; font-weight: 600; letter-spacing: .06em; opacity: .72; text-transform: none; }
+
+  .ctl { display: inline-flex; align-items: center; gap: 7px; }
+  .ctl-label { font-size: 10.5px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); }
+
+  select.picker {
+    appearance: none;
+    font: inherit; font-size: 12.5px; font-weight: 700;
+    color: var(--ink); background: var(--panel-3);
+    border: 1px solid var(--rule); border-radius: 3px;
+    padding: 6px 26px 6px 9px;
+    background-image: linear-gradient(45deg, transparent 50%, var(--ink-3) 50%), linear-gradient(135deg, var(--ink-3) 50%, transparent 50%);
+    background-position: calc(100% - 14px) 52%, calc(100% - 9px) 52%;
+    background-size: 5px 5px, 5px 5px;
+    background-repeat: no-repeat;
+    cursor: pointer;
+  }
+
+  .freshness {
+    margin-left: auto;
+    display: inline-flex; align-items: center; gap: 8px;
+    position: relative;
+  }
+  .freshness-btn {
+    appearance: none; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 7px;
+    background: var(--panel-3); border: 1px solid var(--rule); border-radius: 3px;
+    font: inherit; font-size: 11.5px; font-weight: 700; color: var(--ink-2);
+    padding: 6px 10px;
+  }
+  .freshness-btn:hover { border-color: var(--axis); color: var(--ink); }
+  .dot-ok { width: 8px; height: 8px; border-radius: 50%; background: var(--good); flex: none; }
+
+  .popover {
+    position: absolute; top: calc(100% + 8px); right: 0; z-index: 60;
+    width: min(340px, calc(100vw - 36px));
+    background: var(--panel); border: 1px solid var(--rule); border-radius: 4px;
+    box-shadow: var(--shadow); padding: 12px 13px;
+  }
+  .popover[hidden] { display: none; }
+  .popover h4 { font-size: 11px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 8px; }
+  .sync-row { display: flex; align-items: baseline; gap: 8px; padding: 5px 0; border-top: 1px solid var(--rule); font-size: 12.5px; }
+  .sync-row:first-of-type { border-top: 0; }
+  .sync-row .nm { font-weight: 700; }
+  .sync-row .tm { margin-left: auto; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+
+  /* ============================================================ SECTIONS */
+  .view { padding: 20px 0 8px; }
+  .view[hidden] { display: none; }
+
+  .view-intro {
+    display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 14px;
+    padding-bottom: 12px;
+  }
+  .view-q {
+    font-size: clamp(17px, 2.3vw, 22px); font-weight: 800; letter-spacing: -.01em;
+    color: var(--ink);
+  }
+  .view-note { font-size: 12.5px; color: var(--ink-2); }
+
+  .section-head {
+    display: flex; align-items: center; gap: 10px;
+    margin: 22px 0 10px;
+  }
+  .section-head h2 {
+    font-size: 12px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--ink);
+  }
+  .section-head .rule { flex: 1; height: 2px; background: var(--rule); }
+  .section-head .count { font-size: 11px; font-weight: 700; color: var(--ink-3); }
+
+  /* ============================================================ KPI TILES */
+  /* Column count is set per view from the tile count, so a row never leaves
+     a single orphan tile stretched across the grid. */
+  .tiles { display: grid; gap: 12px; grid-template-columns: repeat(var(--tile-cols, 5), 1fr); }
+  @media (max-width: 1180px) { .tiles { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 720px)  { .tiles { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 430px)  { .tiles { grid-template-columns: 1fr; } }
+
+  .tile {
+    position: relative;
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 13px 13px 11px;
+    display: flex; flex-direction: column; gap: 7px;
+    box-shadow: var(--shadow);
+    text-align: left;
+  }
+  .tile::before {
+    content: ""; position: absolute; inset: 0 0 auto 0; height: 4px;
+    border-radius: 4px 4px 0 0;
+    background: var(--dom, var(--navy-2));
+  }
+  button.tile { appearance: none; font: inherit; color: inherit; cursor: pointer; transition: border-color .12s, transform .12s; }
+  button.tile:hover { border-color: var(--axis); transform: translateY(-1px); }
+  button.tile::after {
+    content: "Detail →";
+    position: absolute; right: 11px; bottom: 9px;
+    font-size: 10px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase;
+    color: var(--ink-3); opacity: 0; transition: opacity .12s;
+  }
+  button.tile:hover::after, button.tile:focus-visible::after { opacity: 1; }
+
+  .tile-head { display: flex; align-items: center; gap: 6px; margin-top: 2px; }
+  .tile-id {
+    font-size: 9.5px; font-weight: 800; letter-spacing: .06em;
+    color: var(--dom, var(--navy-2));
+    border: 1px solid currentColor; border-radius: 2px;
+    padding: 0 3px; flex: none;
+  }
+  .tile-label { font-size: 11px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-2); }
+
+  .tile-value {
+    font-size: clamp(25px, 3.2vw, 31px); font-weight: 800; letter-spacing: -.025em;
+    line-height: 1; color: var(--ink);
+  }
+  .tile-value .unit { font-size: .58em; font-weight: 700; letter-spacing: 0; color: var(--ink-2); margin-left: 2px; }
+
+  .tile-delta { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 7px; font-size: 12px; }
+  .delta { font-weight: 800; display: inline-flex; align-items: center; gap: 3px; font-variant-numeric: tabular-nums; }
+  .delta.up { color: var(--up-good); }
+  .delta.down { color: var(--down-bad); }
+  .delta.flat { color: var(--ink-2); }
+  .delta-vs { color: var(--ink-3); font-size: 11.5px; }
+
+  .tile-second { font-size: 12px; color: var(--ink-2); }
+  .tile-second b { color: var(--ink); font-weight: 700; }
+
+  .tile-spark { margin-top: auto; padding-top: 4px; }
+  .tile-spark svg { display: block; width: 100%; height: auto; }
+
+  .scope-chip {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 9.5px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--ink-3); border: 1px solid var(--rule); border-radius: 2px; padding: 1px 4px;
+  }
+
+  /* ============================================================ ATTENTION FEED */
+  .attention { background: var(--panel); border: 1px solid var(--rule); border-radius: 4px; box-shadow: var(--shadow); overflow: hidden; }
+
+  .att-row {
+    display: grid;
+    grid-template-columns: 5px 96px 1fr auto;
+    align-items: center; gap: 0 12px;
+    width: 100%;
+    appearance: none; border: 0; border-top: 1px solid var(--rule);
+    background: transparent; color: inherit; font: inherit;
+    text-align: left; padding: 0; cursor: pointer;
+    transition: background .12s;
+  }
+  .att-row:first-child { border-top: 0; }
+  .att-row:hover { background: var(--panel-3); }
+  .att-row .stripe { align-self: stretch; background: var(--sev); }
+  .att-row .badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 9.5px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--ink-2); padding: 12px 0;
+  }
+  .att-row .badge .glyph { color: var(--sev); font-size: 11px; line-height: 1; }
+  .att-row .body { padding: 11px 0; font-size: 13.5px; }
+  .att-row .body strong { font-weight: 800; }
+  .att-row .body .why { display: block; color: var(--ink-2); font-size: 12px; margin-top: 1px; }
+  .att-row .go { padding: 11px 13px 11px 0; font-size: 10.5px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; color: var(--ink-3); white-space: nowrap; }
+  .att-row:hover .go { color: var(--ink); }
+
+  .att-empty { padding: 22px 14px; font-size: 13px; color: var(--ink-2); }
+
+  /* ============================================================ CARDS + CHARTS */
+  .grid { display: grid; gap: 12px; }
+  /* Two columns at most: a chart's viewBox is sized for this column width, so
+     narrower columns would shrink every label with it. */
+  /* min() keeps the track from forcing a 440px floor on a narrow phone. */
+  .grid.two { grid-template-columns: repeat(auto-fit, minmax(min(440px, 100%), 1fr)); }
+  .span-all { grid-column: 1 / -1; }
+
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    box-shadow: var(--shadow);
+    display: flex; flex-direction: column;
+    min-width: 0;
+  }
+
+  .card-head { display: flex; align-items: flex-start; gap: 10px; padding: 12px 13px 0; }
+  .card-title { font-size: 13.5px; font-weight: 800; letter-spacing: -.005em; }
+  .card-sub { font-size: 11.5px; color: var(--ink-2); margin-top: 2px; }
+  .card-tools { margin-left: auto; display: flex; gap: 5px; flex: none; }
+
+  .toolbtn {
+    appearance: none; cursor: pointer;
+    font: inherit; font-size: 10px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--ink-3); background: transparent;
+    border: 1px solid var(--rule); border-radius: 2px; padding: 3px 6px;
+  }
+  .toolbtn:hover { color: var(--ink); border-color: var(--axis); }
+  .toolbtn[aria-pressed="true"] { background: var(--navy); border-color: var(--navy); color: #fff; }
+
+  .card-body { padding: 8px 13px 13px; }
+
+  .legend { display: flex; flex-wrap: wrap; gap: 4px 14px; padding: 6px 13px 0; }
+  .legend-item { display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; color: var(--ink-2); }
+  .legend-key { width: 12px; height: 3px; border-radius: 2px; background: var(--k); flex: none; }
+  .legend-key.sq { width: 10px; height: 10px; border-radius: 2px; }
+
+  .chart-holder svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .chart-holder[hidden], .table-holder[hidden] { display: none; }
+
+  .table-holder { overflow-x: auto; }
+  table.dv { border-collapse: collapse; width: 100%; font-size: 12.5px; }
+  table.dv th, table.dv td { text-align: right; padding: 6px 8px; border-bottom: 1px solid var(--rule); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  table.dv th:first-child, table.dv td:first-child { text-align: left; font-variant-numeric: normal; }
+  table.dv thead th { font-size: 10.5px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); border-bottom: 2px solid var(--rule); }
+  table.dv tbody tr:hover { background: var(--panel-3); }
+  table.dv tr.total td { font-weight: 800; border-top: 2px solid var(--axis); }
+  table.dv td.pos { color: var(--up-good); }
+  table.dv td.neg { color: var(--down-bad); }
+
+  .footnote { font-size: 11.5px; color: var(--ink-3); padding: 8px 13px 0; }
+  .src-tag {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 10px; font-weight: 700; letter-spacing: .05em;
+    color: var(--ink-3);
+  }
+  .src-tag::before { content: ""; width: 6px; height: 6px; border-radius: 1px; background: var(--src, var(--s-neutral)); }
+
+  /* status pill */
+  .pill {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 10.5px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase;
+    padding: 2px 7px; border-radius: 999px;
+    border: 1px solid var(--rule); color: var(--ink-2);
+  }
+  .pill .glyph { color: var(--sev); }
+
+  /* meter */
+  .meter { display: grid; gap: 5px; }
+  .meter-track { position: relative; height: 10px; border-radius: 2px; background: var(--ord1); overflow: hidden; }
+  .meter-fill { height: 100%; background: var(--sev, var(--s1)); border-radius: 2px 0 0 2px; }
+  .meter-limit { position: absolute; top: -3px; bottom: -3px; width: 2px; background: var(--ink); }
+  .meter-scale { display: flex; justify-content: space-between; font-size: 10.5px; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+
+  /* phase-2 locked panel */
+  .locked {
+    border: 1px dashed var(--axis); border-radius: 4px;
+    background: repeating-linear-gradient(135deg, transparent 0 9px, var(--panel-3) 9px 18px);
+    padding: 16px 14px;
+  }
+  .locked h3 { font-size: 13.5px; font-weight: 800; }
+  .locked p { margin: 6px 0 0; font-size: 12.5px; color: var(--ink-2); max-width: 62ch; }
+  .locked .pill { background: var(--panel); }
+
+  /* ============================================================ P&L TABLE */
+  .pnl { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .pnl th, .pnl td { padding: 6px 6px; border-bottom: 1px solid var(--rule); text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .pnl th:first-child, .pnl td:first-child { text-align: left; font-variant-numeric: normal; }
+  .pnl thead th { font-size: 10px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3); border-bottom: 2px solid var(--axis); }
+  .pnl tr.rule-top td { border-top: 2px solid var(--axis); }
+  .pnl tr.strong td { font-weight: 800; }
+  .pnl tr.sub td:first-child { padding-left: 20px; color: var(--ink-2); }
+  .pnl td.v-good { color: var(--up-good); font-weight: 700; }
+  .pnl td.v-bad { color: var(--down-bad); font-weight: 700; }
+  .pnl tbody tr:hover { background: var(--panel-3); }
+
+  /* ============================================================ FORMULA RIBBON */
+  .ribbon {
+    background: var(--navy); color: var(--on-navy);
+    margin-top: 34px; padding: 26px 0 30px;
+    border-top: 3px solid var(--amber);
+  }
+  .ribbon-title {
+    text-align: center;
+    font-size: clamp(15px, 2.4vw, 20px); font-weight: 800;
+    letter-spacing: .1em; text-transform: uppercase;
+  }
+  .ribbon-sub { text-align: center; font-size: 12px; color: var(--on-navy-2); margin-top: 5px; max-width: 74ch; margin-inline: auto; }
+
+  .formula-grid { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); margin-top: 20px; }
+  .formula {
+    display: grid; grid-template-columns: 26px 1fr; gap: 11px;
+    background: rgba(255, 255, 255, .06);
+    border: 1px solid rgba(255, 255, 255, .12);
+    border-radius: 4px; padding: 11px 12px;
+  }
+  .formula .num {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: var(--amber); color: #21160a;
+    display: grid; place-items: center;
+    font-size: 12px; font-weight: 800;
+  }
+  .formula .fname { font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--amber); }
+  .formula .fbody { font-size: 13px; font-weight: 600; margin-top: 4px; line-height: 1.5; }
+  .formula .fbody .frac { display: inline-grid; vertical-align: middle; text-align: center; margin: 0 3px; }
+  .formula .fbody .frac .n { border-bottom: 1.5px solid currentColor; padding: 0 5px 1px; }
+  .formula .fbody .frac .d { padding: 1px 5px 0; }
+  .formula .fsrc { font-size: 10.5px; color: var(--on-navy-2); margin-top: 6px; letter-spacing: .03em; }
+
+  /* ============================================================ LINEAGE */
+  .lineage { background: var(--navy-2); color: var(--on-navy); padding: 18px 0; }
+  .lineage-in { display: grid; gap: 14px; }
+  .lineage-band { display: flex; flex-wrap: wrap; align-items: stretch; gap: 8px; justify-content: center; }
+  .lineage-cap {
+    text-align: center; font-size: 10px; font-weight: 800; letter-spacing: .16em;
+    text-transform: uppercase; color: var(--on-navy-2); margin-bottom: 7px;
+  }
+  .stage {
+    display: grid; gap: 2px;
+    background: rgba(255, 255, 255, .07);
+    border: 1px solid rgba(255, 255, 255, .14);
+    border-radius: 3px; padding: 8px 10px; min-width: 122px; flex: none;
+  }
+  .stage .sname { font-size: 11.5px; font-weight: 800; }
+  .stage .srole { font-size: 10px; letter-spacing: .07em; text-transform: uppercase; color: var(--on-navy-2); }
+  .stage.phase2 { border-style: dashed; opacity: .68; }
+  .arrow { color: var(--amber); font-weight: 800; font-size: 15px; align-self: center; flex: none; }
+
+  .contract {
+    background: var(--forest); color: #fff;
+    padding: 13px 0;
+    font-size: clamp(11px, 1.7vw, 13px); font-weight: 800;
+    letter-spacing: .1em; text-transform: uppercase;
+    text-align: center;
+  }
+  .contract .sep { color: var(--amber); margin: 0 8px; }
+
+  .closing { padding: 26px 0 44px; }
+  .closing h3 { font-size: 12px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); }
+  .closing ul { margin: 10px 0 0; padding-left: 20px; max-width: 84ch; }
+  .closing li { font-size: 13.5px; color: var(--ink-2); margin: 6px 0; }
+  .closing li b { color: var(--ink); }
+
+  /* ============================================================ DRAWER */
+  .scrim {
+    position: fixed; inset: 0; z-index: 90;
+    background: rgba(11, 18, 38, .5);
+    opacity: 0; pointer-events: none; transition: opacity .16s;
+  }
+  .scrim.open { opacity: 1; pointer-events: auto; }
+
+  .drawer {
+    position: fixed; top: 0; right: 0; bottom: 0; z-index: 91;
+    width: min(780px, 100vw);
+    background: var(--panel);
+    border-left: 1px solid var(--rule);
+    box-shadow: -14px 0 40px rgba(11, 18, 38, .22);
+    transform: translateX(102%); transition: transform .2s ease;
+    display: flex; flex-direction: column;
+  }
+  .drawer.open { transform: none; }
+  .drawer-head { padding: 15px 16px 12px; border-bottom: 1px solid var(--rule); }
+  .drawer-head .eyebrow { color: var(--ink-3); }
+  .drawer-head h3 { font-size: 17px; font-weight: 800; letter-spacing: -.01em; margin-top: 4px; }
+  .drawer-head p { margin: 5px 0 0; font-size: 12.5px; color: var(--ink-2); }
+  .drawer-close {
+    position: absolute; top: 12px; right: 13px;
+    appearance: none; cursor: pointer;
+    width: 28px; height: 28px; border-radius: 3px;
+    border: 1px solid var(--rule); background: var(--panel-3); color: var(--ink-2);
+    font-size: 15px; line-height: 1;
+  }
+  .drawer-close:hover { color: var(--ink); border-color: var(--axis); }
+  .drawer-body { padding: 12px 16px 26px; overflow: auto; }
+  .drawer-scroll { overflow-x: auto; }
+  .drawer-foot { font-size: 11.5px; color: var(--ink-3); padding: 10px 16px 16px; border-top: 1px solid var(--rule); }
+
+  /* ============================================================ TOOLTIP */
+  .tip {
+    position: fixed; z-index: 95; pointer-events: none;
+    background: var(--panel); color: var(--ink);
+    border: 1px solid var(--axis); border-radius: 3px;
+    box-shadow: var(--shadow);
+    padding: 7px 9px; font-size: 12px; min-width: 128px;
+    opacity: 0; transition: opacity .1s;
+  }
+  .tip.on { opacity: 1; }
+  .tip .t-title { font-weight: 800; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 4px; }
+  .tip .t-row { display: flex; align-items: center; gap: 7px; }
+  .tip .t-row + .t-row { margin-top: 2px; }
+  .tip .t-key { width: 9px; height: 9px; border-radius: 2px; background: var(--k); flex: none; }
+  .tip .t-name { color: var(--ink-2); }
+  .tip .t-val { margin-left: auto; font-weight: 800; font-variant-numeric: tabular-nums; }
+
+  @media (max-width: 620px) {
+    .att-row { grid-template-columns: 5px 1fr; gap: 0 10px; }
+    .att-row .badge { grid-column: 2; padding: 10px 0 0; }
+    .att-row .body { grid-column: 2; padding: 3px 0 11px; }
+    .att-row .go { display: none; }
+  }
+
+  /* ============================================================ ADDITIONS
+     Three-up grid for the Phase 2 panels, and a dashed legend key for
+     "planned but not confirmed" promotions. */
+  .grid.three { grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); }
+  .legend-key.hollow { background: transparent; border: 1.5px dashed var(--k); height: 10px; width: 12px; border-radius: 2px; }
+
+  /* Two-column definition list used by the launch tracker in the drawer. */
+  .kv { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; font-size: 12.5px; }
+  .kv dt { color: var(--ink-3); font-weight: 700; }
+  .kv dd { margin: 0; font-variant-numeric: tabular-nums; }
+</style>
+
+<header class="masthead">
+  <div class="wrap masthead-in">
+    <div class="brand-mark">
+      <div class="brand-glyph" aria-hidden="true">HF</div>
+      <div>
+        <h1 class="brand-name">Heartland Foods</h1>
+        <div class="brand-sub">Office of the President &amp; Marketing</div>
+      </div>
+    </div>
+    <div class="masthead-right">
+      <span class="sample-chip">Draft 1 · illustrative sample data</span>
+    </div>
+  </div>
+</header>
+
+<div class="kicker-strip">
+  <div class="wrap">
+    <span><b>Growth</b> &nbsp;·&nbsp; <b>Service</b> &nbsp;·&nbsp; <b>Promotion</b> &nbsp;·&nbsp; <b>Innovation</b> &nbsp;·&nbsp; <b>Distribution</b></span>
+    <span style="margin-left:auto">Where growth came from &nbsp;→&nbsp; what it cost to buy &nbsp;→&nbsp; what it cost to serve</span>
+  </div>
+</div>
+
+<div class="controlbar">
+  <div class="wrap controlbar-in">
+    <div class="tabs" role="tablist" aria-label="Reporting cadence">
+      <button class="tab" role="tab" id="tab-daily" aria-controls="view-daily" aria-selected="true" data-tab="daily">Today<small>Tue Aug 11</small></button>
+      <button class="tab" role="tab" id="tab-weekly" aria-controls="view-weekly" aria-selected="false" data-tab="weekly">This week<small>Wk of Aug 10</small></button>
+      <button class="tab" role="tab" id="tab-monthly" aria-controls="view-monthly" aria-selected="false" data-tab="monthly">This month<small>Jul closed</small></button>
+      <button class="tab" role="tab" id="tab-quarterly" aria-controls="view-quarterly" aria-selected="false" data-tab="quarterly">This quarter<small>Q2 closed</small></button>
+    </div>
+
+    <div class="ctl">
+      <label class="ctl-label" for="channel">Channel</label>
+      <select class="picker" id="channel">
+        <option value="all">All channels</option>
+        <option value="grocery">Grocery</option>
+        <option value="club">Club</option>
+        <option value="mass">Mass</option>
+        <option value="fs">Foodservice</option>
+        <option value="ecom">E-commerce</option>
+      </select>
+    </div>
+
+    <div class="freshness">
+      <button class="freshness-btn" id="fresh-btn" aria-expanded="false" aria-controls="fresh-pop">
+        <span class="dot-ok" aria-hidden="true"></span>
+        Data as of 6:04 AM CT
+      </button>
+      <div class="popover" id="fresh-pop" hidden>
+        <h4>Last successful sync</h4>
+        <div id="sync-list"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<main class="wrap">
+  <section class="view" id="view-daily" role="tabpanel" aria-labelledby="tab-daily"></section>
+  <section class="view" id="view-weekly" role="tabpanel" aria-labelledby="tab-weekly" hidden></section>
+  <section class="view" id="view-monthly" role="tabpanel" aria-labelledby="tab-monthly" hidden></section>
+  <section class="view" id="view-quarterly" role="tabpanel" aria-labelledby="tab-quarterly" hidden></section>
+</main>
+
+<section class="ribbon">
+  <div class="wrap">
+    <div class="ribbon-title">How every number is calculated</div>
+    <p class="ribbon-sub">One definition per KPI. Where a measure also appears on the CFO dashboard it is the same definition and the same number — net revenue is one figure in this company, not two.</p>
+    <div class="formula-grid" id="formula-grid"></div>
+  </div>
+</section>
+
+<section class="lineage">
+  <div class="wrap">
+    <div class="eyebrow" style="color:var(--on-navy-2); text-align:center; margin-bottom:12px">Where the numbers come from</div>
+    <div class="lineage-in" id="lineage"></div>
+  </div>
+</section>
+
+<div class="contract">
+  What we shipped <span class="sep">+</span> what we spent <span class="sep">+</span> what it cost to serve <span class="sep">=</span> one commercial conversation
+</div>
+
+<section class="wrap closing">
+  <h3>What this draft is asking you to react to</h3>
+  <ul>
+    <li><b>One dashboard for two chairs.</b> The President's question is "is the growth real and can we serve it"; marketing's is "did the money work". They share the same numbers, so they share a page. Tell us if that holds or if marketing needs its own view.</li>
+    <li><b>Channel is the only global control.</b> Not entity, not brand. Dollar measures rescale per channel; product-line and portfolio measures stay consolidated and say so. Measures that do not exist in a channel — retailer OTIF fines in Foodservice, promotion mechanics in Foodservice — say that instead of showing a zero.</li>
+    <li><b>The growth decomposition is the centrepiece.</b> Volume, price, mix, new items, lost distribution. Everything else on the Month tab exists to explain one of those five bars.</li>
+    <li><b>Phase 1 can tell you what we shipped and what we spent. It cannot tell you what the shopper did.</b> Share, %ACV, true promotion lift and brand health are dashed panels until NIQ and the retailer POS portals land. We would rather show the gap than fill it with a proxy.</li>
+    <li><b>Numbers are illustrative</b> and tie to the CFO draft wherever the two overlap. The shapes, definitions and drill paths are the proposal.</li>
+    <li><b>Open question for kickoff:</b> what is the service number you promise your top five customers, and who owns it? Fill rate and OTIF are on three of the four tabs here because nothing else on this page survives a supply failure — but the target and the owner are yours to name.</li>
+  </ul>
+</section>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title" aria-hidden="true">
+  <div class="drawer-head">
+    <button class="drawer-close" id="drawer-close" aria-label="Close detail">✕</button>
+    <div class="eyebrow" id="drawer-eyebrow">Drill-down</div>
+    <h3 id="drawer-title">Detail</h3>
+    <p id="drawer-desc"></p>
+  </div>
+  <div class="drawer-body" id="drawer-body"></div>
+  <div class="drawer-foot" id="drawer-foot"></div>
+</aside>
+
+<div class="tip" id="tip" role="status" aria-live="polite"></div>
+<script>
+"use strict";
+
+/* ============================================================================
+   Heartland Foods — President & Marketing dashboard, draft 1.
+   Everything on screen is illustrative sample data. The shapes, definitions,
+   comparisons and drill paths are the proposal; the values are placeholders
+   until the marts are pointed at SYSPRO.
+
+   Where a measure also appears on the CFO dashboard (net revenue, gross sales,
+   trade spend, deduction and OTIF fine dollars, product-line margin, customer
+   concentration) the values here are the same values, deliberately. Two
+   dashboards disagreeing on net revenue is the failure mode this whole project
+   exists to remove.
+   ========================================================================== */
+
+/* ---------------------------------------------------------------- FORMATTING */
+
+// Money is carried in $ millions everywhere and formatted down to K when small.
+function usd(m, dp) {
+  if (m == null) return "—";
+  var neg = m < 0, a = Math.abs(m), out;
+  if (a >= 1) out = "$" + a.toFixed(dp == null ? 2 : dp) + "M";
+  else out = "$" + Math.round(a * 1000).toLocaleString("en-US") + "K";
+  return (neg ? "−" : "") + out;
+}
+function usdK(m) {
+  if (m == null) return "—";
+  var neg = m < 0;
+  return (neg ? "−" : "") + "$" + Math.round(Math.abs(m) * 1000).toLocaleString("en-US") + "K";
+}
+function pct(v, dp) { return v == null ? "—" : v.toFixed(dp == null ? 1 : dp) + "%"; }
+function pts(v) { return (v > 0 ? "+" : v < 0 ? "−" : "") + Math.abs(v).toFixed(1) + " pts"; }
+function num(v) { return v == null ? "—" : Math.round(v).toLocaleString("en-US"); }
+function days(v) { return v == null ? "—" : v.toFixed(1); }
+function signedPct(v, dp) { return (v > 0 ? "+" : v < 0 ? "−" : "") + Math.abs(v).toFixed(dp == null ? 1 : dp) + "%"; }
+function signedUsd(m) { return (m > 0 ? "+" : m < 0 ? "−" : "") + usd(Math.abs(m)); }
+
+// Volume is carried in millions of equivalent cases.
+function cases(v, dp) { return v == null ? "—" : v.toFixed(dp == null ? 2 : dp) + "M"; }
+// Net price per case is carried in whole dollars, not millions.
+function dollars(v, dp) { return v == null ? "—" : "$" + v.toFixed(dp == null ? 2 : dp); }
+function mult(v) { return v == null ? "—" : v.toFixed(1) + "×"; }
+// Signed whole numbers use the typographic minus, like every other delta.
+function plural(n, one, many) { return num(n) + " " + (Math.round(n) === 1 ? one : many); }
+function signedPlural(v, one, many) { return signedNum(v) + " " + (Math.abs(Math.round(v)) === 1 ? one : many); }
+function signedNum(v) { return (v > 0 ? "+" : v < 0 ? "−" : "") + Math.abs(Math.round(v)).toLocaleString("en-US"); }
+
+/* ------------------------------------------------------------- DOM UTILITIES */
+
+function h(tag, attrs, kids) {
+  var n = document.createElement(tag);
+  if (attrs) for (var k in attrs) {
+    if (attrs[k] == null) continue;
+    if (k === "class") n.className = attrs[k];
+    else if (k === "html") n.innerHTML = attrs[k];
+    else if (k === "text") n.textContent = attrs[k];
+    else if (k === "style") n.setAttribute("style", attrs[k]);
+    else if (k.slice(0, 2) === "on") n.addEventListener(k.slice(2), attrs[k]);
+    else n.setAttribute(k, attrs[k]);
+  }
+  (kids || []).forEach(function (c) { if (c) n.appendChild(c); });
+  return n;
+}
+
+var NS = "http://www.w3.org/2000/svg";
+function s(tag, attrs) {
+  var n = document.createElementNS(NS, tag);
+  if (attrs) for (var k in attrs) { if (attrs[k] != null) n.setAttribute(k, attrs[k]); }
+  return n;
+}
+function st(x, y, str, attrs) {
+  var t = s("text", Object.assign({ x: x, y: y }, attrs || {}));
+  t.textContent = str;
+  return t;
+}
+function cssvar(name) {
+  return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+}
+
+/* Axis ticks rounded to clean numbers. */
+function niceTicks(min, max, count) {
+  count = count || 4;
+  if (min === max) { min = Math.min(0, min); max = max || 1; }
+  var span = max - min;
+  var raw = span / count;
+  var mag = Math.pow(10, Math.floor(Math.log10(raw)));
+  var norm = raw / mag;
+  var step = (norm <= 1 ? 1 : norm <= 2 ? 2 : norm <= 2.5 ? 2.5 : norm <= 5 ? 5 : 10) * mag;
+  var lo = Math.floor(min / step) * step, hi = Math.ceil(max / step) * step;
+  var out = [];
+  for (var v = lo; v <= hi + step * 1e-6; v += step) out.push(Math.abs(v) < step * 1e-6 ? 0 : v);
+  return out;
+}
+
+/* ------------------------------------------------------------------ TOOLTIP */
+
+var tipEl = document.getElementById("tip");
+function tipRows(title, rows) {
+  var html = '<div class="t-title">' + esc(title) + "</div>";
+  rows.forEach(function (r) {
+    html += '<div class="t-row">' +
+      (r.color ? '<span class="t-key" style="--k:' + r.color + '"></span>' : "") +
+      '<span class="t-name">' + esc(r.name) + "</span>" +
+      '<span class="t-val">' + esc(r.value) + "</span></div>";
+  });
+  return html;
+}
+function esc(v) { return String(v).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+function showTip(html, ev) { tipEl.innerHTML = html; tipEl.classList.add("on"); moveTip(ev); }
+function moveTip(ev) {
+  var r = tipEl.getBoundingClientRect();
+  var x = ev.clientX + 14, y = ev.clientY - 12;
+  if (x + r.width > window.innerWidth - 8) x = ev.clientX - r.width - 14;
+  if (y + r.height > window.innerHeight - 8) y = window.innerHeight - r.height - 8;
+  if (y < 8) y = 8;
+  tipEl.style.left = x + "px"; tipEl.style.top = y + "px";
+}
+function hideTip() { tipEl.classList.remove("on"); }
+
+/* =========================================================== CHART PRIMITIVES
+   Shared specs: bars capped at 24px, 4px rounded data-ends, 2px lines, >=8px
+   markers, 2px surface gaps between touching fills, hairline solid grid.
+   ========================================================================== */
+
+/* Chart viewBox widths match the card widths they render into, so one SVG unit
+   is about one CSS pixel and label sizes stay honest. WFULL = a full-width
+   card, WHALF = one column of the two-column grid. */
+var WFULL = 1180, WHALF = 580;
+
+var GRID, AXIS, MUTED, SURFACE, INK2;
+function refreshChartInk() {
+  GRID = cssvar("--rule"); AXIS = cssvar("--axis"); MUTED = cssvar("--ink-3");
+  SURFACE = cssvar("--panel"); INK2 = cssvar("--ink-2");
+}
+
+/* Rounded-top rectangle path: square at the baseline, 4px rounded data-end. */
+function barPath(x, y, w, hgt, r, dir) {
+  r = Math.min(r, w / 2, Math.abs(hgt));
+  if (hgt <= 0.4) return "M" + x + " " + y + "h" + w;
+  if (dir === "up") {
+    return "M" + x + " " + (y + hgt) + "V" + (y + r) + "a" + r + " " + r + " 0 0 1 " + r + " " + -r +
+      "h" + (w - 2 * r) + "a" + r + " " + r + " 0 0 1 " + r + " " + r + "V" + (y + hgt) + "Z";
+  }
+  if (dir === "down") {
+    return "M" + x + " " + y + "V" + (y + hgt - r) + "a" + r + " " + r + " 0 0 0 " + r + " " + r +
+      "h" + (w - 2 * r) + "a" + r + " " + r + " 0 0 0 " + r + " " + -r + "V" + y + "Z";
+  }
+  if (dir === "right") {
+    return "M" + x + " " + y + "h" + (w - r) + "a" + r + " " + r + " 0 0 1 " + r + " " + r +
+      "v" + (hgt - 2 * r) + "a" + r + " " + r + " 0 0 1 " + -r + " " + r + "H" + x + "Z";
+  }
+  return "M" + (x + w) + " " + y + "H" + (x + r) + "a" + r + " " + r + " 0 0 0 " + -r + " " + r +
+    "v" + (hgt - 2 * r) + "a" + r + " " + r + " 0 0 0 " + r + " " + r + "H" + (x + w) + "Z";
+}
+
+/* --------------------------------------------------------------- LINE CHART */
+function lineChart(cfg) {
+  var W = cfg.W || WHALF, H = cfg.H || 250;
+  var pad = Object.assign({ t: 16, r: cfg.endLabel ? 62 : 14, b: 30, l: 46 }, cfg.pad || {});
+  var svg = s("svg", { viewBox: "0 0 " + W + " " + H, role: "img", "aria-label": cfg.aria || cfg.title || "line chart" });
+  var pw = W - pad.l - pad.r, ph = H - pad.t - pad.b;
+  var all = [];
+  cfg.series.forEach(function (se) { se.values.forEach(function (v) { if (v != null) all.push(v); }); });
+  if (cfg.refLine) all.push(cfg.refLine.v);
+  var lo = cfg.yMin != null ? cfg.yMin : Math.min.apply(null, all);
+  var hi = cfg.yMax != null ? cfg.yMax : Math.max.apply(null, all);
+  var padY = (hi - lo) * 0.12 || 1;
+  var ticks = niceTicks(cfg.yMin != null ? lo : lo - padY, cfg.yMax != null ? hi : hi + padY, cfg.yTicks || 4);
+  var tLo = ticks[0], tHi = ticks[ticks.length - 1];
+  var X = function (i) { return pad.l + (cfg.labels.length === 1 ? pw / 2 : i * pw / (cfg.labels.length - 1)); };
+  var Y = function (v) { return pad.t + ph - (v - tLo) / (tHi - tLo) * ph; };
+
+  ticks.forEach(function (t) {
+    svg.appendChild(s("line", { x1: pad.l, x2: W - pad.r, y1: Y(t), y2: Y(t), stroke: GRID, "stroke-width": 1 }));
+    svg.appendChild(st(pad.l - 8, Y(t) + 3.5, cfg.yFmt(t), { fill: MUTED, "font-size": 10.5, "text-anchor": "end", style: "font-variant-numeric:tabular-nums" }));
+  });
+  svg.appendChild(s("line", { x1: pad.l, x2: W - pad.r, y1: Y(tLo), y2: Y(tLo), stroke: AXIS, "stroke-width": 1 }));
+
+  if (cfg.refLine) {
+    svg.appendChild(s("line", { x1: pad.l, x2: W - pad.r, y1: Y(cfg.refLine.v), y2: Y(cfg.refLine.v), stroke: AXIS, "stroke-width": 1.5 }));
+    svg.appendChild(st(W - pad.r, Y(cfg.refLine.v) - 5, cfg.refLine.label, { fill: INK2, "font-size": 10.5, "text-anchor": "end", "font-weight": 700 }));
+  }
+
+  var every = cfg.tickEvery || 1;
+  cfg.labels.forEach(function (lb, i) {
+    if (i % every !== 0 && i !== cfg.labels.length - 1) return;
+    svg.appendChild(st(X(i), H - pad.b + 15, lb, { fill: MUTED, "font-size": 10.5, "text-anchor": i === 0 ? "start" : (i === cfg.labels.length - 1 ? "end" : "middle") }));
+  });
+
+  cfg.series.forEach(function (se) {
+    var d = "", started = false;
+    se.values.forEach(function (v, i) {
+      if (v == null) return;
+      d += (started ? "L" : "M") + X(i).toFixed(1) + " " + Y(v).toFixed(1) + " ";
+      started = true;
+    });
+    if (cfg.area && cfg.series.length === 1) {
+      svg.appendChild(s("path", { d: d + "L" + X(se.values.length - 1) + " " + Y(tLo) + " L" + X(0) + " " + Y(tLo) + " Z", fill: se.color, "fill-opacity": .1 }));
+    }
+    svg.appendChild(s("path", { d: d, fill: "none", stroke: se.color, "stroke-width": 2, "stroke-linejoin": "round", "stroke-linecap": "round" }));
+    var li = se.values.length - 1;
+    svg.appendChild(s("circle", { cx: X(li), cy: Y(se.values[li]), r: 4.5, fill: se.color, stroke: SURFACE, "stroke-width": 2 }));
+    if (cfg.endLabel) {
+      svg.appendChild(st(X(li) + 9, Y(se.values[li]) + 4, cfg.yFmt(se.values[li]) + (se.endSuffix || ""), { fill: cssvar("--ink"), "font-size": 11.5, "font-weight": 800 }));
+    }
+  });
+
+  // crosshair + tooltip layer
+  var hair = s("line", { y1: pad.t, y2: pad.t + ph, stroke: AXIS, "stroke-width": 1, opacity: 0 });
+  svg.appendChild(hair);
+  var dots = cfg.series.map(function (se) {
+    var c = s("circle", { r: 4.5, fill: se.color, stroke: SURFACE, "stroke-width": 2, opacity: 0 });
+    svg.appendChild(c); return c;
+  });
+  var hit = s("rect", { x: pad.l, y: pad.t, width: pw, height: ph, fill: "transparent", style: "cursor:crosshair" });
+  svg.appendChild(hit);
+  function at(ev) {
+    var r = svg.getBoundingClientRect();
+    var vx = (ev.clientX - r.left) / r.width * W;
+    var i = Math.round((vx - pad.l) / (pw / Math.max(1, cfg.labels.length - 1)));
+    i = Math.max(0, Math.min(cfg.labels.length - 1, i));
+    hair.setAttribute("x1", X(i)); hair.setAttribute("x2", X(i)); hair.setAttribute("opacity", 1);
+    dots.forEach(function (c, k) {
+      var v = cfg.series[k].values[i];
+      if (v == null) { c.setAttribute("opacity", 0); return; }
+      c.setAttribute("cx", X(i)); c.setAttribute("cy", Y(v)); c.setAttribute("opacity", 1);
+    });
+    showTip(tipRows(cfg.labelPrefix ? cfg.labelPrefix + " " + cfg.labels[i] : cfg.labels[i],
+      cfg.series.map(function (se) { return { color: se.color, name: se.name, value: se.values[i] == null ? "—" : cfg.yFmt(se.values[i]) }; })), ev);
+  }
+  hit.addEventListener("pointermove", at);
+  hit.addEventListener("pointerenter", at);
+  hit.addEventListener("pointerleave", function () {
+    hideTip(); hair.setAttribute("opacity", 0); dots.forEach(function (c) { c.setAttribute("opacity", 0); });
+  });
+  return svg;
+}
+
+/* ------------------------------------------------------------ COLUMN CHART */
+function columnChart(cfg) {
+  var W = cfg.W || WHALF, H = cfg.H || 250;
+  var pad = Object.assign({ t: 22, r: 14, b: cfg.twoLineLabels ? 42 : 30, l: 48 }, cfg.pad || {});
+  var svg = s("svg", { viewBox: "0 0 " + W + " " + H, role: "img", "aria-label": cfg.aria || cfg.title || "column chart" });
+  var pw = W - pad.l - pad.r, ph = H - pad.t - pad.b;
+  var ns = cfg.series.length, ng = cfg.groups.length;
+  var totals = cfg.groups.map(function (g, i) {
+    if (cfg.stacked) return cfg.series.reduce(function (a, se) { return a + (se.values[i] || 0); }, 0);
+    return Math.max.apply(null, cfg.series.map(function (se) { return se.values[i] || 0; }));
+  });
+  var maxV = Math.max.apply(null, totals);
+  if (cfg.ref) maxV = Math.max(maxV, cfg.ref.v);
+  var ticks = niceTicks(0, maxV, cfg.yTicks || 4);
+  var tHi = ticks[ticks.length - 1];
+  var Y = function (v) { return pad.t + ph - v / tHi * ph; };
+  var band = pw / ng;
+  var GAP = 2; // surface gap between touching fills
+  var barW = Math.min(cfg.stacked || ns === 1 ? 24 : 22, (band * 0.62 - (ns - 1) * GAP) / (cfg.stacked ? 1 : ns));
+  if (cfg.stacked) barW = Math.min(26, band * 0.5);
+
+  ticks.forEach(function (t) {
+    svg.appendChild(s("line", { x1: pad.l, x2: W - pad.r, y1: Y(t), y2: Y(t), stroke: t === 0 ? AXIS : GRID, "stroke-width": 1 }));
+    svg.appendChild(st(pad.l - 8, Y(t) + 3.5, cfg.yFmt(t), { fill: MUTED, "font-size": 10.5, "text-anchor": "end", style: "font-variant-numeric:tabular-nums" }));
+  });
+  if (cfg.ref) {
+    svg.appendChild(s("line", { x1: pad.l, x2: W - pad.r, y1: Y(cfg.ref.v), y2: Y(cfg.ref.v), stroke: AXIS, "stroke-width": 1.5 }));
+    // Anchored left: the right-hand columns are usually the tallest, and an
+    // end-anchored label would sit on top of them.
+    svg.appendChild(st(pad.l + 4, Y(cfg.ref.v) - 6, cfg.ref.label, { fill: INK2, "font-size": 10.5, "font-weight": 700 }));
+  }
+
+  cfg.groups.forEach(function (g, i) {
+    var cx = pad.l + band * i + band / 2;
+    var lines = String(g).split("\n");
+    lines.forEach(function (ln, k) {
+      svg.appendChild(st(cx, H - pad.b + 15 + k * 12, ln, { fill: MUTED, "font-size": 10.5, "text-anchor": "middle" }));
+    });
+
+    if (cfg.stacked) {
+      var acc = 0;
+      cfg.series.forEach(function (se, k) {
+        var v = se.values[i] || 0;
+        var y0 = Y(acc + v), y1 = Y(acc);
+        var hgt = Math.max(0, y1 - y0 - (k > 0 ? GAP : 0));
+        var top = k === ns - 1;
+        svg.appendChild(hoverable(s("path", {
+          d: barPath(cx - barW / 2, y0, barW, hgt, top ? 4 : 0, "up"), fill: se.color
+        }), cfg, i, k));
+        acc += v;
+      });
+      if (cfg.capLabels !== false) {
+        svg.appendChild(st(cx, Y(acc) - 7, cfg.capFmt ? cfg.capFmt(acc, i) : cfg.yFmt(acc), { fill: cssvar("--ink"), "font-size": 10.5, "font-weight": 800, "text-anchor": "middle" }));
+      }
+    } else {
+      var groupW = ns * barW + (ns - 1) * GAP;
+      cfg.series.forEach(function (se, k) {
+        var v = se.values[i] || 0;
+        var x = cx - groupW / 2 + k * (barW + GAP);
+        var col = (se.colorFor ? se.colorFor(i) : se.color);
+        svg.appendChild(hoverable(s("path", { d: barPath(x, Y(v), barW, Y(0) - Y(v), 4, "up"), fill: col }), cfg, i, k));
+      });
+      if (cfg.capLabels === "all" || (cfg.capLabels === "last" && i === ng - 1) || (cfg.capLabels === "single" && ns === 1)) {
+        // On the last group only the first series is labelled — labelling every
+        // series in a grouped pair collides at the cap.
+        (cfg.capLabels === "last" ? cfg.series.slice(0, 1) : cfg.series).forEach(function (se, k) {
+          var v = se.values[i] || 0;
+          var x = cx - groupW / 2 + k * (barW + GAP) + barW / 2;
+          svg.appendChild(st(x, Y(v) - 7, cfg.capFmt ? cfg.capFmt(v, i) : cfg.yFmt(v), { fill: cssvar("--ink"), "font-size": 10.5, "font-weight": 800, "text-anchor": "middle" }));
+        });
+      }
+    }
+  });
+
+  function hoverable(node, cfg, i, k) {
+    node.style.cursor = "default";
+    node.addEventListener("pointerenter", function (ev) {
+      var rows = cfg.series.map(function (se, kk) {
+        return { color: se.colorFor ? se.colorFor(i) : se.color, name: se.name, value: cfg.tipFmt ? cfg.tipFmt(se.values[i], i, kk) : cfg.yFmt(se.values[i] || 0) };
+      });
+      if (cfg.tipExtra) rows = rows.concat(cfg.tipExtra(i));
+      showTip(tipRows(String(cfg.groups[i]).replace(/\n/g, " "), rows), ev);
+    });
+    node.addEventListener("pointermove", moveTip);
+    node.addEventListener("pointerleave", hideTip);
+    return node;
+  }
+  return svg;
+}
+
+/* ---------------------------------------------------- HORIZONTAL BAR CHART */
+function hbarChart(cfg) {
+  var rowH = cfg.rowH || 30, labelW = cfg.labelW || 128, W = cfg.W || WHALF;
+  var padR = cfg.padR || 66, padT = 8, padB = cfg.axis === false ? 6 : 24;
+  var padL = cfg.padL || 0;   // gap between the label column and the plot
+  var H = padT + cfg.rows.length * rowH + padB;
+  var svg = s("svg", { viewBox: "0 0 " + W + " " + H, role: "img", "aria-label": cfg.aria || "bar chart" });
+  var pw = W - labelW - padL - padR;
+  var vals = cfg.rows.map(function (r) { return r.value; });
+  if (cfg.rows.some(function (r) { return r.marker != null; })) vals = vals.concat(cfg.rows.map(function (r) { return r.marker; }));
+  var maxV = Math.max.apply(null, vals.map(Math.abs));
+  var diverging = cfg.diverging || vals.some(function (v) { return v < 0; });
+  var ticks = niceTicks(diverging ? -maxV : 0, maxV, 3);
+  var tLo = diverging ? ticks[0] : 0, tHi = ticks[ticks.length - 1];
+  var X = function (v) { return labelW + padL + (v - tLo) / (tHi - tLo) * pw; };
+  var zero = X(0);
+
+  if (cfg.axis !== false) {
+    ticks.forEach(function (t) {
+      svg.appendChild(s("line", { x1: X(t), x2: X(t), y1: padT, y2: padT + cfg.rows.length * rowH, stroke: t === 0 ? AXIS : GRID, "stroke-width": 1 }));
+      svg.appendChild(st(X(t), H - 6, cfg.xFmt(t), { fill: MUTED, "font-size": 10.5, "text-anchor": "middle", style: "font-variant-numeric:tabular-nums" }));
+    });
+  } else {
+    svg.appendChild(s("line", { x1: zero, x2: zero, y1: padT, y2: padT + cfg.rows.length * rowH, stroke: AXIS, "stroke-width": 1 }));
+  }
+
+  var barH = Math.min(18, rowH - 12);
+  cfg.rows.forEach(function (r, i) {
+    var cy = padT + i * rowH + rowH / 2;
+    svg.appendChild(st(labelW - 10, cy + 4, r.label, { fill: cssvar("--ink"), "font-size": 11.5, "font-weight": 600, "text-anchor": "end" }));
+    var col = r.color || (r.value < 0 ? cssvar("--neg") : cssvar("--pos"));
+    var x0 = r.value < 0 ? X(r.value) : zero, w = Math.abs(X(r.value) - zero);
+    var g = s("path", { d: barPath(x0, cy - barH / 2, w, barH, 4, r.value < 0 ? "left" : "right"), fill: col });
+    svg.appendChild(g);
+    if (r.marker != null) {
+      var mx = X(r.marker);
+      svg.appendChild(s("line", { x1: mx, x2: mx, y1: cy - barH / 2 - 4, y2: cy + barH / 2 + 4, stroke: cssvar("--ink"), "stroke-width": 2, "stroke-linecap": "round" }));
+    }
+    var outer = r.marker != null ? Math.max(x0 + w, X(r.marker)) : x0 + w;
+    var lx = r.value < 0 ? x0 - 7 : outer + 7;
+    svg.appendChild(st(lx, cy + 4, cfg.valFmt ? cfg.valFmt(r) : cfg.xFmt(r.value), {
+      fill: cssvar("--ink"), "font-size": 11.5, "font-weight": 800, "text-anchor": r.value < 0 ? "end" : "start",
+      style: "font-variant-numeric:tabular-nums"
+    }));
+    var hit = s("rect", { x: labelW, y: cy - rowH / 2, width: pw + padL, height: rowH, fill: "transparent" });
+    hit.addEventListener("pointerenter", function (ev) {
+      var rows = [{ color: col, name: cfg.seriesName || "Value", value: cfg.xFmt(r.value) }];
+      if (r.marker != null) rows.push({ name: cfg.markerName || "Budget", value: cfg.xFmt(r.marker) });
+      if (r.note) rows.push({ name: r.noteName || "Detail", value: r.note });
+      showTip(tipRows(r.label, rows), ev);
+    });
+    hit.addEventListener("pointermove", moveTip);
+    hit.addEventListener("pointerleave", hideTip);
+    svg.appendChild(hit);
+  });
+  return svg;
+}
+
+/* ----------------------------------------------------------------- WATERFALL */
+function waterfall(cfg) {
+  var W = cfg.W || 880, H = cfg.H || 300;
+  var pad = { t: 34, r: 14, b: 48, l: 52 };
+  var svg = s("svg", { viewBox: "0 0 " + W + " " + H, role: "img", "aria-label": cfg.aria || "waterfall" });
+  var pw = W - pad.l - pad.r, ph = H - pad.t - pad.b;
+  var run = 0, geo = cfg.steps.map(function (sp) {
+    if (sp.kind === "total") { run = sp.value; return { from: 0, to: sp.value }; }
+    var from = run; run += sp.value; return { from: from, to: run };
+  });
+  var maxV = Math.max.apply(null, geo.map(function (g) { return Math.max(g.from, g.to); }));
+  var ticks = niceTicks(0, maxV, 4), tHi = ticks[ticks.length - 1];
+  var Y = function (v) { return pad.t + ph - v / tHi * ph; };
+  var band = pw / cfg.steps.length;
+  var barW = Math.min(68, band * 0.5);
+
+  ticks.forEach(function (t) {
+    svg.appendChild(s("line", { x1: pad.l, x2: W - pad.r, y1: Y(t), y2: Y(t), stroke: t === 0 ? AXIS : GRID, "stroke-width": 1 }));
+    svg.appendChild(st(pad.l - 8, Y(t) + 3.5, cfg.yFmt(t), { fill: MUTED, "font-size": 10.5, "text-anchor": "end", style: "font-variant-numeric:tabular-nums" }));
+  });
+
+  cfg.steps.forEach(function (sp, i) {
+    var g = geo[i], cx = pad.l + band * i + band / 2;
+    var top = Math.min(Y(g.from), Y(g.to)), hgt = Math.abs(Y(g.from) - Y(g.to));
+    var isTotal = sp.kind === "total";
+    var col = isTotal ? cssvar("--pos") : (sp.value < 0 ? cssvar("--neg") : cssvar("--pos"));
+    var node = s("path", { d: barPath(cx - barW / 2, top, barW, hgt, 4, isTotal ? "up" : (sp.value < 0 ? "down" : "up")), fill: col });
+    svg.appendChild(node);
+
+    // connector to the next step
+    if (i < cfg.steps.length - 1) {
+      var yc = Y(g.to);
+      svg.appendChild(s("line", { x1: cx + barW / 2, x2: pad.l + band * (i + 1) + band / 2 - barW / 2, y1: yc, y2: yc, stroke: AXIS, "stroke-width": 1 }));
+    }
+    // value label above the mark
+    svg.appendChild(st(cx, top - 9, (isTotal ? "" : (sp.value < 0 ? "−" : "+")) + cfg.yFmt(Math.abs(sp.value)), {
+      fill: cssvar("--ink"), "font-size": 12.5, "font-weight": 800, "text-anchor": "middle"
+    }));
+    String(sp.label).split("\n").forEach(function (ln, k) {
+      svg.appendChild(st(cx, H - pad.b + 16 + k * 12, ln, { fill: k === 0 ? cssvar("--ink") : MUTED, "font-size": 10.5, "font-weight": k === 0 ? 700 : 400, "text-anchor": "middle" }));
+    });
+    if (sp.sub) svg.appendChild(st(cx, H - pad.b + 16 + 12 * String(sp.label).split("\n").length, sp.sub, { fill: MUTED, "font-size": 10.5, "text-anchor": "middle" }));
+
+    var hit = s("rect", { x: cx - band / 2, y: pad.t, width: band, height: ph, fill: "transparent" });
+    hit.addEventListener("pointerenter", function (ev) {
+      showTip(tipRows(String(sp.label).replace(/\n/g, " "), [
+        { color: col, name: isTotal ? "Amount" : "Impact", value: (isTotal ? "" : sp.value < 0 ? "−" : "+") + cfg.yFmt(Math.abs(sp.value)) },
+        { name: "Running total", value: cfg.yFmt(g.to) }
+      ].concat(sp.tip || [])), ev);
+    });
+    hit.addEventListener("pointermove", moveTip);
+    hit.addEventListener("pointerleave", hideTip);
+    svg.appendChild(hit);
+  });
+  return svg;
+}
+
+/* --------------------------------------------------------- SCATTER QUADRANT */
+function scatterQuad(cfg) {
+  var W = cfg.W || WFULL, H = cfg.H || 330;
+  var pad = { t: 22, r: 26, b: 44, l: 54 };
+  var svg = s("svg", { viewBox: "0 0 " + W + " " + H, role: "img", "aria-label": cfg.aria || "quadrant scatter" });
+  var pw = W - pad.l - pad.r, ph = H - pad.t - pad.b;
+  var xs = cfg.points.map(function (p) { return p.x; }), ys = cfg.points.map(function (p) { return p.y; });
+  var xt = niceTicks(Math.min(0, Math.min.apply(null, xs) - 1), Math.max.apply(null, xs) + 1, 4);
+  var yt = niceTicks(Math.min.apply(null, ys) - 2, Math.max.apply(null, ys) + 2, 4);
+  var xLo = xt[0], xHi = xt[xt.length - 1], yLo = yt[0], yHi = yt[yt.length - 1];
+  var X = function (v) { return pad.l + (v - xLo) / (xHi - xLo) * pw; };
+  var Y = function (v) { return pad.t + ph - (v - yLo) / (yHi - yLo) * ph; };
+  // Bubble area (not radius) carries p.size, so a line twice the revenue looks
+  // twice as big rather than four times as big.
+  var maxSize = Math.max.apply(null, cfg.points.map(function (p) { return p.size || 0; }));
+  var R = function (p) { return (p.size == null || !maxSize) ? 6.5 : 6 + Math.sqrt(p.size / maxSize) * 12; };
+
+  yt.forEach(function (t) {
+    svg.appendChild(s("line", { x1: pad.l, x2: W - pad.r, y1: Y(t), y2: Y(t), stroke: GRID, "stroke-width": 1 }));
+    svg.appendChild(st(pad.l - 8, Y(t) + 3.5, cfg.yFmt(t), { fill: MUTED, "font-size": 10.5, "text-anchor": "end" }));
+  });
+  xt.forEach(function (t) {
+    svg.appendChild(st(X(t), H - pad.b + 16, cfg.xFmt(t), { fill: MUTED, "font-size": 10.5, "text-anchor": "middle" }));
+  });
+  svg.appendChild(s("line", { x1: pad.l, x2: W - pad.r, y1: Y(yLo), y2: Y(yLo), stroke: AXIS, "stroke-width": 1 }));
+
+  // quadrant dividers at the company averages
+  svg.appendChild(s("line", { x1: X(cfg.xMid), x2: X(cfg.xMid), y1: pad.t, y2: pad.t + ph, stroke: AXIS, "stroke-width": 1.5 }));
+  svg.appendChild(s("line", { x1: pad.l, x2: W - pad.r, y1: Y(cfg.yMid), y2: Y(cfg.yMid), stroke: AXIS, "stroke-width": 1.5 }));
+  (cfg.quadLabels || []).forEach(function (q) {
+    svg.appendChild(st(q.x === "l" ? pad.l + 8 : W - pad.r - 8, q.y === "t" ? pad.t + 14 : pad.t + ph - 8, q.text, {
+      fill: MUTED, "font-size": 10, "font-weight": 800, "text-anchor": q.x === "l" ? "start" : "end", "letter-spacing": ".08em"
+    }));
+  });
+
+  svg.appendChild(st(pad.l - 40, pad.t - 8, cfg.yTitle, { fill: INK2, "font-size": 10.5, "font-weight": 700 }));
+  svg.appendChild(st(W - pad.r, H - 6, cfg.xTitle, { fill: INK2, "font-size": 10.5, "font-weight": 700, "text-anchor": "end" }));
+
+  cfg.points.forEach(function (p) {
+    var cx = X(p.x), cy = Y(p.y), r = R(p);
+    var right = p.side ? p.side === "right" : cx < pad.l + pw * 0.7;
+    var col = p.color || cssvar("--s1");
+    svg.appendChild(s("circle", { cx: cx, cy: cy, r: r, fill: col, "fill-opacity": p.size == null ? 1 : .82, stroke: SURFACE, "stroke-width": 2 }));
+    // pos "top"/"bottom" centres the label above or below the bubble — the only
+    // way to separate two lines that sit on top of each other on both axes.
+    var lx = p.pos ? cx : (right ? cx + r + 5 : cx - r - 5);
+    var ly = p.pos === "top" ? cy - r - 8 : p.pos === "bottom" ? cy + r + 14 : cy + 4;
+    svg.appendChild(st(lx, ly, p.label, {
+      fill: cssvar("--ink"), "font-size": 11.5, "font-weight": 700,
+      "text-anchor": p.pos ? "middle" : (right ? "start" : "end")
+    }));
+    var hit = s("circle", { cx: cx, cy: cy, r: r + 8, fill: "transparent" });
+    hit.addEventListener("pointerenter", function (ev) {
+      showTip(tipRows(p.label, [
+        { color: col, name: cfg.xName, value: cfg.xFmt(p.x) },
+        { name: cfg.yName, value: cfg.yFmt(p.y) }
+      ].concat(p.tip || [])), ev);
+    });
+    hit.addEventListener("pointermove", moveTip);
+    hit.addEventListener("pointerleave", hideTip);
+    svg.appendChild(hit);
+  });
+  return svg;
+}
+
+/* ----------------------------------------------------------------- SPARKLINE */
+function sparkline(values, opts) {
+  opts = opts || {};
+  var W = 200, H = opts.H || 30, p = 3;
+  var svg = s("svg", { viewBox: "0 0 " + W + " " + H, "aria-hidden": "true", preserveAspectRatio: "none" });
+  var lo = Math.min.apply(null, values), hi = Math.max.apply(null, values);
+  if (hi === lo) { hi += 1; lo -= 1; }
+  var X = function (i) { return p + i * (W - 2 * p) / (values.length - 1); };
+  var Y = function (v) { return p + (H - 2 * p) - (v - lo) / (hi - lo) * (H - 2 * p); };
+  var d = values.map(function (v, i) { return (i ? "L" : "M") + X(i).toFixed(1) + " " + Y(v).toFixed(1); }).join(" ");
+  svg.appendChild(s("path", { d: d + " L" + X(values.length - 1) + " " + H + " L" + X(0) + " " + H + " Z", fill: opts.color || cssvar("--s1"), "fill-opacity": .09 }));
+  svg.appendChild(s("path", { d: d, fill: "none", stroke: opts.color || cssvar("--s1"), "stroke-width": 1.6, "vector-effect": "non-scaling-stroke", "stroke-linejoin": "round" }));
+  svg.appendChild(s("circle", { cx: X(values.length - 1), cy: Y(values[values.length - 1]), r: 2.4, fill: opts.color || cssvar("--s1") }));
+  return svg;
+}
+
+/* ------------------------------------------------------------- TABLE BUILDER */
+function dvTable(spec) {
+  var thead = h("thead", null, [h("tr", null, spec.cols.map(function (c) { return h("th", { text: c, scope: "col" }); }))]);
+  var tbody = h("tbody", null, spec.rows.map(function (r) {
+    return h("tr", { class: r.total ? "total" : null }, (r.cells || r).map(function (c) {
+      if (c && typeof c === "object") return h("td", { text: c.v, class: c.cls || null });
+      return h("td", { text: c });
+    }));
+  }));
+  return h("table", { class: "dv" }, [thead, tbody]);
+}
+
+/* ---------------------------------------------------------------- CHART CARD */
+var SRC_COLOR = {
+  "SYSPRO": "#1d3168", "Salesforce": "#2a78d6", "TELUS Blacksmith": "#57409c",
+  "HighRadius": "#eb6834", "dbt": "#1baf7a", "NIQ": "#a9a7a0", "Retailer POS": "#a9a7a0"
+};
+function srcTags(list) {
+  return h("div", { style: "display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:8px" },
+    list.map(function (nm) {
+      var key = Object.keys(SRC_COLOR).filter(function (k) { return nm.indexOf(k) === 0; })[0];
+      return h("span", { class: "src-tag mono", style: "--src:" + (SRC_COLOR[key] || "#a9a7a0"), text: nm });
+    }));
+}
+
+function card(cfg) {
+  var body = h("div", { class: "card-body" });
+  var holder = h("div", { class: "chart-holder" }, [cfg.chart]);
+  body.appendChild(holder);
+  var tools = h("div", { class: "card-tools" });
+  if (cfg.table) {
+    var tHolder = h("div", { class: "table-holder", hidden: "" }, [dvTable(cfg.table)]);
+    body.appendChild(tHolder);
+    var btn = h("button", {
+      class: "toolbtn", type: "button", "aria-pressed": "false", text: "Table",
+      onclick: function () {
+        var on = btn.getAttribute("aria-pressed") === "true";
+        btn.setAttribute("aria-pressed", on ? "false" : "true");
+        holder.hidden = !on; tHolder.hidden = on;
+      }
+    });
+    tools.appendChild(btn);
+  }
+  if (cfg.detail) {
+    tools.appendChild(h("button", {
+      class: "toolbtn", type: "button", text: "Detail →",
+      onclick: function () { openDrawer(cfg.detail); }
+    }));
+  }
+  var head = h("div", { class: "card-head" }, [
+    h("div", null, [
+      h("div", { class: "card-title" }, [
+        cfg.id ? h("span", { class: "mono", style: "color:var(--ink-3);font-weight:700;font-size:11px;margin-right:6px", text: cfg.id }) : null,
+        document.createTextNode(cfg.title)
+      ]),
+      cfg.sub ? h("div", { class: "card-sub", text: cfg.sub }) : null
+    ]),
+    tools
+  ]);
+  var el = h("section", { class: "card" + (cfg.span ? " span-all" : "") }, [head]);
+  if (cfg.scope) head.querySelector(".card-tools").insertBefore(h("span", { class: "scope-chip", text: cfg.scope }), tools.firstChild);
+  if (cfg.legend) {
+    el.appendChild(h("div", { class: "legend" }, cfg.legend.map(function (l) {
+      return h("span", { class: "legend-item" }, [
+        h("span", { class: "legend-key" + (l.sq ? " sq" : "") + (l.hollow ? " hollow" : ""), style: "--k:" + l.color }),
+        document.createTextNode(l.name)
+      ]);
+    })));
+  }
+  el.appendChild(body);
+  if (cfg.note) body.appendChild(h("div", { class: "footnote", style: "padding-left:0;padding-right:0", text: cfg.note }));
+  if (cfg.sources) body.appendChild(srcTags(cfg.sources));
+  return el;
+}
+
+/* ------------------------------------------------------- PROMOTION CALENDAR
+   A lane chart: one row per promotion, spanning the weeks it runs. Marketing
+   thinks in this shape and no other chart on the page can carry it. Execution
+   status is carried by the end glyph and the table, never by colour alone.
+   ========================================================================== */
+function promoCalendar(cfg) {
+  var rowH = 30, labelW = cfg.labelW || 196, W = cfg.W || WFULL;
+  var padT = 26, padB = 8, padR = 96;
+  var nW = cfg.weeks.length;
+  var H = padT + cfg.rows.length * rowH + padB;
+  var svg = s("svg", { viewBox: "0 0 " + W + " " + H, role: "img", "aria-label": cfg.aria || "promotion calendar" });
+  var pw = W - labelW - padR;
+  var band = pw / nW;
+  var X = function (wk) { return labelW + wk * band; };
+
+  // week gridlines + headers
+  cfg.weeks.forEach(function (wk, i) {
+    svg.appendChild(s("line", { x1: X(i), x2: X(i), y1: padT - 14, y2: padT + cfg.rows.length * rowH, stroke: GRID, "stroke-width": 1 }));
+    svg.appendChild(st(X(i) + band / 2, padT - 6, wk, { fill: MUTED, "font-size": 10.5, "text-anchor": "middle", "font-weight": 700 }));
+  });
+  svg.appendChild(s("line", { x1: X(nW), x2: X(nW), y1: padT - 14, y2: padT + cfg.rows.length * rowH, stroke: GRID, "stroke-width": 1 }));
+
+  var barH = 16;
+  cfg.rows.forEach(function (r, i) {
+    var cy = padT + i * rowH + rowH / 2;
+    svg.appendChild(st(labelW - 10, cy + 1, r.label, { fill: cssvar("--ink"), "font-size": 11.5, "font-weight": 700, "text-anchor": "end" }));
+    if (r.sub) svg.appendChild(st(labelW - 10, cy + 12, r.sub, { fill: MUTED, "font-size": 10, "text-anchor": "end" }));
+    var x0 = X(r.start) + 2, w = Math.max(6, r.span * band - 4);
+    var confirmed = r.exec === "Confirmed";
+    svg.appendChild(s("path", {
+      d: barPath(x0, cy - barH / 2 - 3, w, barH, 4, "right"),
+      fill: r.color, "fill-opacity": confirmed ? 1 : .28,
+      stroke: confirmed ? "none" : r.color, "stroke-width": confirmed ? 0 : 1.5,
+      "stroke-dasharray": confirmed ? null : "4 3"
+    }));
+    // spend + an explicit glyph for execution status, so colour is never the only cue
+    svg.appendChild(st(x0 + w + 8, cy + 1, (confirmed ? "● " : "○ ") + r.spendLabel, {
+      fill: cssvar("--ink"), "font-size": 11, "font-weight": 800, style: "font-variant-numeric:tabular-nums"
+    }));
+    var hit = s("rect", { x: labelW, y: cy - rowH / 2, width: pw, height: rowH, fill: "transparent" });
+    hit.addEventListener("pointerenter", function (ev) {
+      showTip(tipRows(r.label, [
+        { color: r.color, name: "Mechanic", value: r.mechanic },
+        { name: "Runs", value: r.runs },
+        { name: "Planned spend", value: r.spendLabel },
+        { name: "Retailer execution", value: r.exec }
+      ]), ev);
+    });
+    hit.addEventListener("pointermove", moveTip);
+    hit.addEventListener("pointerleave", hideTip);
+    svg.appendChild(hit);
+  });
+
+  // today marker
+  if (cfg.today != null) {
+    var tx = X(cfg.today);
+    svg.appendChild(s("line", { x1: tx, x2: tx, y1: padT - 14, y2: padT + cfg.rows.length * rowH, stroke: cssvar("--ink"), "stroke-width": 2 }));
+    svg.appendChild(st(tx + 4, padT - 17, "Today", { fill: cssvar("--ink"), "font-size": 10, "font-weight": 800 }));
+  }
+  return svg;
+}
+
+/* =============================================================== SAMPLE DATA
+   Channel split: dollar, case and count measures scale by the factors below.
+   Rate measures (fill, OTIF, growth, promoted volume, discount depth,
+   innovation rate) are held per channel rather than scaled, because a rate is
+   not divisible. A null in a per-channel rate map means the measure does not
+   exist in that channel and the tile says so instead of showing a zero.
+   ========================================================================== */
+
+var CH_LABEL = {
+  all: "All channels", grocery: "Grocery", club: "Club",
+  mass: "Mass", fs: "Foodservice", ecom: "E-commerce"
+};
+var CH_ACCOUNTS = {
+  all: "11 accounts",
+  grocery: "Kroger · Albertsons/Safeway · H-E-B · Publix · Ahold · Sprouts",
+  club: "Costco Wholesale",
+  mass: "Walmart · Target",
+  fs: "US Foods · Sysco",
+  ecom: "Amazon · retailer dot-com"
+};
+
+var FACTOR = {
+  rev:   { all: 1, grocery: .479, club: .200, mass: .168, fs: .124, ecom: .029 },
+  vol:   { all: 1, grocery: .502, club: .173, mass: .181, fs: .118, ecom: .026 },
+  ord:   { all: 1, grocery: .486, club: .196, mass: .171, fs: .121, ecom: .026 },
+  trade: { all: 1, grocery: .468, club: .243, mass: .214, fs: .045, ecom: .030 },
+  brand: { all: 1, grocery: .512, club: .112, mass: .208, fs: .048, ecom: .120 },
+  svc:   { all: 1, grocery: .441, club: .238, mass: .201, fs: .098, ecom: .022 },
+  pipe:  { all: 1, grocery: .28, club: .11, mass: .15, fs: .38, ecom: .08 },
+  innov: { all: 1, grocery: .534, club: .086, mass: .196, fs: .062, ecom: .122 },
+  dist:  { all: 1, grocery: .548, club: .062, mass: .144, fs: .174, ecom: .072 }
+};
+var channel = "all";
+function F(fam) { return FACTOR[fam][channel]; }
+function sc(fam, v) { return v == null ? null : v * F(fam); }
+function scArr(fam, arr) { var k = F(fam); return arr.map(function (v) { return v == null ? null : v * k; }); }
+function isAll() { return channel === "all"; }
+
+/* Foodservice runs on contract deviations and distributor allowances, not
+   retail promotion mechanics, and distributors do not levy retailer OTIF
+   fines. E-commerce fulfilment is measured, but not against a retailer OTIF
+   scorecard. Both say so rather than reporting a zero. */
+function noPromo() { return channel === "fs"; }
+function noOtif() { return channel === "fs" || channel === "ecom"; }
+
+/* Per-channel rates. */
+var FILL_BY_CH   = { all: 94.2, grocery: 95.4, club: 93.4, mass: 92.6, fs: 97.1, ecom: 96.4 };
+var OTIF_BY_CH   = { all: 87.4, grocery: 88.6, club: 86.2, mass: 85.1, fs: null, ecom: null };
+var GROW_BY_CH   = { all: 7.8, grocery: 5.9, club: 14.2, mass: 12.8, fs: 1.2, ecom: 24.6 };
+var VOLGR_BY_CH  = { all: 3.4, grocery: 2.1, club: 8.4, mass: 6.2, fs: -1.4, ecom: 19.8 };
+var PROMO_BY_CH  = { all: 38.2, grocery: 41.6, club: 34.8, mass: 44.2, fs: null, ecom: 28.4 };
+var DEPTH_BY_CH  = { all: 18.4, grocery: 17.8, club: 22.6, mass: 19.4, fs: null, ecom: 14.2 };
+var INNOV_BY_CH  = { all: 9.7, grocery: 10.8, club: 4.2, mass: 11.3, fs: 4.8, ecom: 41.2 };
+var LIVEPROMO_BY_CH = { all: 14, grocery: 7, club: 2, mass: 3, fs: null, ecom: 2 };
+function priceGrowth() { return GROW_BY_CH[channel] - VOLGR_BY_CH[channel]; }
+
+var D = {
+  asOf: "Tue Aug 11, 2026 · 6:04 AM CT",
+  sync: [
+    { nm: "SYSPRO ERP (orders, shipments, invoices, inventory)", tm: "6:04 AM", ok: true },
+    { nm: "TELUS Blacksmith TPM (promotion calendar, spend)", tm: "5:38 AM", ok: true },
+    { nm: "Salesforce (new business pipeline)", tm: "5:52 AM", ok: true },
+    { nm: "HighRadius (deductions, OTIF fines)", tm: "6:01 AM", ok: true },
+    { nm: "dbt marts rebuilt — 148 of 149 tests pass", tm: "6:04 AM", ok: true },
+    { nm: "NIQ syndicated (share, %ACV, promotion lift)", tm: "Phase 2 — not connected", ok: false },
+    { nm: "Retailer POS portals (Luminate, 84.51°, Instacart)", tm: "Phase 2 — not connected", ok: false }
+  ],
+
+  /* ---------------- DAILY ---------------- */
+  dayLabels: ["Jul 12", "Jul 13", "Jul 14", "Jul 15", "Jul 16", "Jul 17", "Jul 18", "Jul 19", "Jul 20", "Jul 21",
+    "Jul 22", "Jul 23", "Jul 24", "Jul 25", "Jul 26", "Jul 27", "Jul 28", "Jul 29", "Jul 30", "Jul 31",
+    "Aug 1", "Aug 2", "Aug 3", "Aug 4", "Aug 5", "Aug 6", "Aug 7", "Aug 8", "Aug 9", "Aug 10"],
+  fillYest: 93.8, fillAvg30: 94.6, fillTarget: 98.0,
+  fill30: [96.4, 96.1, 95.9, 96.2, 95.7, 95.4, 95.8, 95.2, 95.5, 95.0, 94.9, 95.3, 94.7, 94.5, 94.9,
+    94.4, 94.6, 94.2, 94.8, 94.1, 93.9, 94.3, 94.0, 94.5, 93.7, 94.2, 93.9, 94.4, 94.1, 93.8],
+  otifYest: 86.9, otifPrior: 87.8, otifReq: 90.0,
+  otif14: [89.1, 88.6, 89.0, 88.2, 88.6, 87.9, 88.4, 87.6, 88.1, 87.4, 87.9, 87.2, 87.8, 86.9],
+  bizLabels: ["Jul 22", "Jul 23", "Jul 24", "Jul 27", "Jul 28", "Jul 29", "Jul 30", "Jul 31",
+    "Aug 3", "Aug 4", "Aug 5", "Aug 6", "Aug 7", "Aug 10"],
+  ordersYest: 0.812, ordersWkdayAvg: 0.744, ordersCount: 118,
+  orders14: [0.744, 0.688, 0.802, 0.914, 0.766, 0.712, 0.694, 0.978, 0.836, 0.742, 0.708, 0.686, 0.774, 0.812],
+  shippedYest: 0.684, shippedPlanDay: 0.744,
+  shipped10: [0.702, 0.688, 0.741, 0.664, 0.718, 0.696, 0.752, 0.671, 0.709, 0.684],
+  cutLinesYest: 34, cutValueYest: 0.096, topCutSku: "Roasted Salsa 16oz",
+  cut10: [0.048, 0.062, 0.041, 0.078, 0.055, 0.049, 0.071, 0.058, 0.066, 0.096],
+  promosLive: 14, promoClaimedWTD: 0.486, promosStarted: 6,
+  promoUnconfirmed: 2, promoUnconfirmedSpend: 0.080,
+  promoLive10: [11, 12, 12, 13, 13, 12, 14, 13, 13, 14],
+  topLaunch: "Hatch Chile Queso 15oz", topLaunchWeek: 9, topLaunchVelocity: 1.4,
+
+  /* ---------------- WEEKLY ---------------- */
+  wkLabels: ["Jun 20", "Jun 27", "Jul 4", "Jul 11", "Jul 18", "Jul 25", "Aug 1", "Aug 8"],
+  wkShipped: [3.52, 3.88, 2.94, 3.66, 3.81, 4.02, 3.58, 3.71],
+  wkPlan: [3.60, 3.75, 3.10, 3.70, 3.78, 3.90, 3.80, 3.85],
+  wkDemand: [3.61, 3.94, 3.12, 3.79, 3.96, 4.11, 3.79, 3.94],
+  wkLY: 3.38,
+  wkFill: [96.8, 96.2, 95.4, 95.9, 95.1, 94.8, 94.4, 94.2],
+  wkOtif: [90.2, 89.6, 88.9, 89.4, 88.6, 88.1, 87.8, 87.4],
+  lostWk: 0.230, cutCasesWk: 30600,
+  orderBook: 9.24, orderBookPrior: 8.83,
+  fillByCust: [
+    { nm: "Walmart", v: 92.1, req: 95.0 },
+    { nm: "Costco Wholesale", v: 93.4, req: 98.0 },
+    { nm: "Target", v: 93.8, req: 95.0 },
+    { nm: "Kroger", v: 94.8, req: 95.0 },
+    { nm: "Albertsons / Safeway", v: 95.6, req: 95.0 },
+    { nm: "H-E-B", v: 96.2, req: 95.0 },
+    { nm: "US Foods", v: 96.8, req: 95.0 },
+    { nm: "Publix", v: 97.1, req: 95.0 },
+    { nm: "Sysco", v: 97.4, req: 95.0 }
+  ],
+  lostReasons: [
+    { nm: "Production shortfall — Salsa", v: 0.086 },
+    { nm: "Frozen Entrée capacity", v: 0.062 },
+    { nm: "Chips line changeover", v: 0.038 },
+    { nm: "Carrier no-show", v: 0.024 },
+    { nm: "Credit hold", v: 0.020 }
+  ],
+  promoWeeks: ["Aug 3", "Aug 10", "Aug 17", "Aug 24", "Aug 31", "Sep 7"],
+  promoToday: 1.15,
+  promoRows: [
+    { nm: "Costco Wholesale", ch: "club", line: "Salsa & Dips", mech: "MVM + pallet display", start: 1, span: 2, spend: 0.128, exec: "Confirmed", runs: "Aug 10 – Aug 23" },
+    { nm: "Kroger", ch: "grocery", line: "Tortillas & Chips", mech: "Feature + display", start: 1, span: 3, spend: 0.096, exec: "Confirmed", runs: "Aug 10 – Aug 30" },
+    { nm: "Walmart", ch: "mass", line: "Frozen Entrées", mech: "Rollback", start: 0, span: 4, spend: 0.084, exec: "Confirmed", runs: "Aug 3 – Aug 30" },
+    { nm: "Albertsons / Safeway", ch: "grocery", line: "Salsa & Dips", mech: "Feature", start: 3, span: 2, spend: 0.052, exec: "Planned", runs: "Aug 24 – Sep 6" },
+    { nm: "Target", ch: "mass", line: "Snack Bars", mech: "Circle offer", start: 2, span: 3, spend: 0.046, exec: "Confirmed", runs: "Aug 17 – Sep 6" },
+    { nm: "Publix", ch: "grocery", line: "Soups & Broths", mech: "BOGO", start: 1, span: 2, spend: 0.042, exec: "Not confirmed", runs: "Aug 10 – Aug 23" },
+    { nm: "H-E-B", ch: "grocery", line: "Sauces & Marinades", mech: "TPR", start: 1, span: 2, spend: 0.038, exec: "Not confirmed", runs: "Aug 10 – Aug 23" },
+    { nm: "Sprouts", ch: "grocery", line: "New items", mech: "Demo + TPR", start: 2, span: 2, spend: 0.018, exec: "Confirmed", runs: "Aug 17 – Aug 30" }
+  ],
+  pipelineNew: 2.84, pipelineNewCount: 14, stageMoves: 9, pipelineCommit: 1.24,
+  funnel: [
+    { nm: "Discovery", v: 6.82 }, { nm: "Sample & spec", v: 4.94 },
+    { nm: "Proposal", v: 3.28 }, { nm: "Negotiation", v: 1.96 }, { nm: "Commit", v: 1.24 }
+  ],
+  launches: [
+    { nm: "Hatch Chile Queso 15oz", wk: 9, rev: 0.19, vel: 1.4, cust: 6 },
+    { nm: "Thai Coconut Soup 24ct", wk: 22, rev: 0.14, vel: 1.1, cust: 4 },
+    { nm: "Chipotle Crema 12oz", wk: 17, rev: 0.09, vel: 0.8, cust: 3 },
+    { nm: "Street Corn Dip 12oz", wk: 31, rev: 0.12, vel: 1.0, cust: 5 },
+    { nm: "Birria Entrée 22oz", wk: 44, rev: 0.16, vel: 0.9, cust: 4 }
+  ],
+
+  /* ---------------- MONTHLY (July 2026, closed Aug 6) ---------------- */
+  netRev: 13.78, netRevPlan: 14.06, netRevLY: 12.78, gross: 16.42,
+  volume: 1.831, volumeLY: 1.771,
+  pricePerCase: 7.526, pricePerCaseLY: 7.216,
+  netRev13: [12.78, 12.94, 13.11, 13.02, 13.44, 13.28, 13.51, 13.39, 13.62, 13.55, 13.71, 13.66, 13.78],
+  vol13: [1.771, 1.784, 1.796, 1.782, 1.812, 1.798, 1.816, 1.804, 1.824, 1.818, 1.828, 1.822, 1.831],
+  /* Growth bridge, LY July → this July. Sums to +1.00. */
+  /* Scaled to the growth, not to revenue: anchor bars of $12.78M would leave
+     every driver an unreadable sliver at the top of the plot. The two
+     endpoints are on the card instead, in the subtitle and the table. */
+  bridge: [
+    { label: "Volume\nbase items", kind: "delta", value: 0.31, sub: "+2.4 pts" },
+    { label: "Price\nrealization", kind: "delta", value: 0.42, sub: "+3.3 pts" },
+    { label: "Mix\npack & product", kind: "delta", value: 0.14, sub: "+1.1 pts" },
+    { label: "New items\n< 24 months", kind: "delta", value: 0.28, sub: "+2.2 pts" },
+    { label: "Lost\ndistribution", kind: "delta", value: -0.15, sub: "−1.2 pts" },
+    { label: "Net growth\nJul 25 → Jul 26", kind: "total", value: 1.00, sub: "+7.8 pts" }
+  ],
+  promoMonths: ["Feb", "Mar", "Apr", "May", "Jun", "Jul"],
+  promotedPct: [35.4, 36.1, 36.8, 37.2, 37.9, 38.2],
+  depth6: [17.4, 17.6, 17.9, 18.0, 18.2, 18.4],
+  promotedLY: 35.1, depthLY: 17.6,
+  trade6Rate: [12.1, 12.2, 12.2, 12.3, 12.3, 12.4],
+  brand6Rate: [2.8, 2.7, 2.7, 2.6, 2.6, 2.5],
+  trade6: [1.94, 1.97, 1.99, 2.01, 2.00, 2.03],
+  brand6: [0.449, 0.436, 0.441, 0.425, 0.423, 0.412],
+  tradeSpend: 2.03, brandSpend: 0.412,
+  mktRate: 14.9, mktRatePlan: 14.5,
+  brandSplit: [
+    { nm: "Retail media & digital", v: 0.142, work: true },
+    { nm: "Sampling & in-store demo", v: 0.086, work: true },
+    { nm: "Social & content", v: 0.058, work: true },
+    { nm: "Agency fees", v: 0.074, work: false },
+    { nm: "Creative production", v: 0.032, work: false },
+    { nm: "Research & tracking", v: 0.020, work: false }
+  ],
+  custGrowth: [
+    { nm: "Sprouts", rev: 0.38, g: 22.4 },
+    { nm: "Target", rev: 0.56, g: 18.6 },
+    { nm: "Costco Wholesale", rev: 2.50, g: 14.2 },
+    { nm: "Walmart", rev: 1.75, g: 11.4 },
+    { nm: "Kroger", rev: 1.96, g: 9.8 },
+    { nm: "H-E-B", rev: 1.01, g: 8.6 },
+    { nm: "Publix", rev: 0.82, g: 6.2 },
+    { nm: "Albertsons / Safeway", rev: 1.13, g: 3.1 },
+    { nm: "US Foods", rev: 0.73, g: 2.4 },
+    { nm: "Sysco", rev: 0.69, g: -1.8 },
+    { nm: "All other customers", rev: 2.25, g: -4.2 }
+  ],
+  lines: [
+    { nm: "Salsa & Dips", rev: 3.34, ly: 3.19, gm: 24.3, bud: 26.4 },
+    { nm: "Tortillas & Chips", rev: 2.89, ly: 2.61, gm: 27.8, bud: 27.2 },
+    { nm: "Frozen Entrées", rev: 2.71, ly: 2.58, gm: 24.9, bud: 25.4 },
+    { nm: "Soups & Broths", rev: 1.94, ly: 1.86, gm: 29.4, bud: 28.8 },
+    { nm: "Sauces & Marinades", rev: 1.66, ly: 1.44, gm: 26.9, bud: 26.5 },
+    { nm: "Snack Bars", rev: 1.24, ly: 1.10, gm: 21.4, bud: 22.8 }
+  ],
+  fillMonth: 94.2, fillTargetM: 98.0, otifMonth: 87.4,
+  otifFines: 0.096, lostMonth: 0.849, cutCasesMonth: 112800, perfectOrder: 82.1,
+  fill13: [96.8, 96.6, 96.4, 96.2, 96.1, 95.8, 95.6, 95.4, 95.1, 94.9, 94.7, 94.4, 94.2],
+  fines13: [0.031, 0.036, 0.042, 0.048, 0.052, 0.058, 0.061, 0.068, 0.074, 0.079, 0.086, 0.091, 0.096],
+  innovRate: 9.7, innovTarget: 12.0, activeLaunches: 14, innovRev: 1.34,
+  innov13: [7.9, 8.1, 8.4, 8.6, 8.9, 9.0, 9.2, 9.1, 9.4, 9.5, 9.6, 9.5, 9.7],
+  custSku: 1436, custSkuPrior: 1441, delistsMonth: 3, gainsMonth: 2,
+  monthLabels13: ["Jul 25", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan 26", "Feb", "Mar", "Apr", "May", "Jun", "Jul 26"],
+
+  /* ---------------- QUARTERLY ---------------- */
+  qLabels: ["Q3 24", "Q4 24", "Q1 25", "Q2 25", "Q3 25", "Q4 25", "Q1 26", "Q2 26"],
+  qNetRev: [33.6, 34.8, 36.2, 37.9, 38.4, 39.1, 39.8, 41.3],
+  qPlan: [33.9, 34.6, 36.0, 37.6, 38.6, 39.4, 40.2, 41.8],
+  fyProj: 164.8, fyPlan: 166.5,
+  /* Growth decomposition only runs as far back as the prior-year comparison
+     exists in the warehouse — five quarters, not eight. Shown as five rather
+     than padded with estimates. */
+  qGrowLabels: ["Q2 25", "Q3 25", "Q4 25", "Q1 26", "Q2 26"],
+  qVolGrow: [5.1, 6.2, 4.8, 3.9, 3.4],
+  qPriceGrow: [3.5, 8.1, 7.6, 6.0, 5.6],
+  concTop5: [44.1, 44.8, 45.2, 45.6, 46.1, 46.9, 47.5, 48.2],
+  concNext5: [15.6, 15.7, 15.9, 15.8, 16.0, 15.8, 15.6, 15.5],
+  concRest: [40.3, 39.5, 38.9, 38.6, 37.9, 37.3, 36.9, 36.3],
+  qCustSku: [1284, 1312, 1358, 1402, 1431, 1448, 1441, 1436],
+  qInnov: [6.1, 6.8, 7.4, 8.2, 8.8, 9.1, 9.4, 9.7],
+  qTrade: [11.8, 11.9, 12.0, 12.1, 12.2, 12.3, 12.3, 12.4],
+  qBrand: [2.9, 2.9, 2.8, 2.7, 2.6, 2.6, 2.5, 2.5],
+  qFill: [97.1, 96.8, 96.4, 96.2, 95.8, 95.4, 94.9, 94.5],
+  qOtif: [91.2, 90.8, 90.4, 90.1, 89.4, 88.8, 88.2, 87.6],
+  qFines: [0.048, 0.061, 0.074, 0.092, 0.109, 0.158, 0.203, 0.256],
+  skuByCust: [
+    { nm: "Kroger", v: 214, mv: -3 }, { nm: "Albertsons / Safeway", v: 186, mv: 2 },
+    { nm: "H-E-B", v: 172, mv: 4 }, { nm: "Publix", v: 148, mv: 0 },
+    { nm: "Walmart", v: 132, mv: -2 }, { nm: "Costco Wholesale", v: 38, mv: 1 },
+    { nm: "Target", v: 96, mv: 3 }, { nm: "Sprouts", v: 118, mv: 6 }
+  ]
+};
+
+/* --------------------------------------------------------- ATTENTION FEEDS
+   `ch` scopes an alert to the channels where its figure is true. An alert that
+   quotes an all-channel number does not follow you into a channel view. */
+var ATTENTION = {
+  daily: [
+    { sev: "critical", label: "Service", text: "Walmart OTIF 85.1% — third day under the 90% requirement", why: "$96K of OTIF fines already taken in July. Another month under 90% puts the Q4 modular reset conversation at risk.", ch: ["all", "mass"], detail: "otif" },
+    { sev: "serious", label: "Supply", text: "Roasted Salsa 16oz out at WH-02 — 34 order lines cut, $96K of demand", why: "Tomato paste delivery slipped two days. Same SKU is the largest margin loss on the month, so this is the second time it has cost us today.", ch: ["all", "grocery", "club", "mass"], detail: "cut-lines" },
+    { sev: "serious", label: "Demand", text: "Orders received $812K, 9.1% above the same-weekday average", why: "Sauces & Marinades and the two new queso items. Good news the plant cannot currently ship — see the line above.", ch: ["all", "grocery", "mass", "ecom"] },
+    { sev: "warning", label: "Promotion", text: "2 of the 6 promotions that started Monday have no confirmed retailer execution", why: "$80K of planned spend at Publix and H-E-B with no display or feature confirmation. Unconfirmed spend still accrues.", ch: ["all", "grocery"], detail: "promo-live" },
+    { sev: "info", label: "Innovation", text: "Hatch Chile Queso 15oz enters week 9 at 1.4× planned velocity", why: "Ahead of plan in Grocery and Club. The constraint is a 30-day production lead time, not demand.", ch: ["all", "grocery", "club", "ecom"], detail: "launches" }
+  ],
+  weekly: [
+    { sev: "critical", label: "Service", text: "Case fill 94.2% — eighth consecutive week down, $230K of demand cut", why: "Against a 98% internal target and Costco's 98% requirement. Demand booked rose $410K on the week, so this is supply, not softness.", ch: ["all", "grocery", "club", "mass"], detail: "cut-lines" },
+    { sev: "serious", label: "Promotion", text: "Trade claims $486K week-to-date against a $452K accrual pace", why: "Six promotions started Monday. Marketing's calendar and finance's accrual are reading different dates — the TPM calendar is the one the accrual follows.", ch: ["all", "grocery", "club", "mass"], detail: "promo-live" },
+    { sev: "serious", label: "Distribution", text: "Kroger delisted 3 SKUs at the spring reset — $148K annualised", why: "Two Snack Bar items and one soup. No replacement items were presented, so the shelf space is gone rather than traded.", ch: ["all", "grocery"], detail: "distribution" },
+    { sev: "warning", label: "Demand", text: "Demand-to-shipped gap widened to $230K, from $90K eight weeks ago", why: "Every week of unfilled demand teaches the buyer to plan around us. This is the number that becomes next year's forecast.", ch: ["all", "grocery", "club", "mass"] },
+    { sev: "info", label: "Pipeline", text: "$2.84M of new opportunities created, 3 moved into Commit", why: "Foodservice is 38% of the new pipeline — the channel with the lowest trade rate and the flattest volume.", ch: ["all", "fs", "grocery"] }
+  ],
+  monthly: [
+    { sev: "critical", label: "Growth quality", text: "Growth is 4.4 pts price and 3.4 pts volume — volume has slowed five quarters running", why: "Price-led growth lapses itself. Whether the category is growing with us or without us is exactly the question Phase 1 cannot answer.", ch: ["all", "grocery", "club", "mass"] },
+    { sev: "serious", label: "Distribution", text: "Customer-SKU combinations flat for three quarters while revenue grew 9%", why: "All of the growth is price and mix on the same shelf space. 1,436 combinations against 1,448 two quarters ago.", ch: ["all", "grocery"], detail: "distribution" },
+    { sev: "serious", label: "Marketing mix", text: "Brand spend 2.5% of gross, down from 2.9%; trade up to 12.4%", why: "Trade is now 83% of total marketing investment. Money has moved from building demand to buying volume, and nothing on this page proves that was right.", ch: ["all", "grocery", "club", "mass"] },
+    { sev: "warning", label: "Service", text: "Case fill 94.2% against a 98% target — $849K of demand cut in July", why: "Roasted Salsa 16oz and Frozen Entrées are 71% of it. $556K of that sits inside the 98% target, so it is recoverable. $96K of OTIF fines on top.", ch: ["all", "grocery", "club", "mass"], detail: "cut-lines" },
+    { sev: "warning", label: "Innovation", text: "Innovation rate 9.7% against a 12% target", why: "14 active launches, but two of them carry 61% of the new-item revenue. The tail is not earning its shelf space.", ch: ["all", "grocery", "mass", "ecom"], detail: "launches" }
+  ],
+  quarterly: [
+    { sev: "critical", label: "Growth quality", text: "Volume growth 5.1% → 3.4% over five quarters while price carried 5.6 pts", why: "The board question is whether we are growing the business or repricing it. In dollars the two look identical.", ch: ["all", "grocery", "club", "mass"] },
+    { sev: "serious", label: "Concentration", text: "Top 5 customers are 48.2% of revenue, up 2.6 pts year-over-year", why: "Growth is concentrating in the accounts with the highest trade rates and the strictest service requirements. Both risks compound.", ch: ["all"] },
+    { sev: "serious", label: "Portfolio", text: "Snack Bars growing 12.7% at 21.4% margin — the thinnest line in the portfolio", why: "Deliberate growth in the worst-margin line is a decision. Price, cost base, or exit — but it should be chosen, not inherited.", ch: ["all", "grocery", "mass"], detail: "line-growth" },
+    { sev: "warning", label: "Investment", text: "Total marketing investment 14.9% of gross sales, and 83% of it is trade", why: "Trade has taken 0.6 pts over eight quarters; brand has given up 0.4. The mix moved without anyone deciding to move it.", ch: ["all", "grocery", "club", "mass"] },
+    { sev: "info", label: "Phase 2", text: "Share, %ACV and true promotion lift stay dark until NIQ and the retailer POS feeds land", why: "Everything on this page is what we shipped and what we spent. None of it is what the shopper did.", ch: ["all", "grocery", "club", "mass", "fs", "ecom"] }
+  ]
+};
+
+/* --------------------------------------------------------------- DRILL-DOWNS */
+var DETAILS = {
+  "otif": {
+    eyebrow: "PD2 / PM8 · Drill-down", title: "OTIF and fill rate by customer",
+    desc: "On-time-in-full against each retailer's own requirement, with fines taken January to July. Sources: SYSPRO SorMaster / shipment confirmations, fines from HighRadius reason codes.",
+    cols: ["Customer", "OTIF %", "Requirement", "Gap", "Case fill %", "Fines YTD", "Status"],
+    rows: [
+      ["Walmart", "85.1%", "90.0%", { v: "−4.9 pts", cls: "neg" }, "92.1%", "$170K", "Fines active"],
+      ["Costco Wholesale", "86.2%", "98.0%", { v: "−11.8 pts", cls: "neg" }, "93.4%", "$118K", "Fines active"],
+      ["Kroger", "88.4%", "95.0%", { v: "−6.6 pts", cls: "neg" }, "94.8%", "$131K", "Fines disputed"],
+      ["Target", "88.9%", "95.0%", { v: "−6.1 pts", cls: "neg" }, "93.8%", "$67K", "Fines active"],
+      ["Albertsons / Safeway", "91.2%", "95.0%", { v: "−3.8 pts", cls: "neg" }, "95.6%", "$38K", "Scorecard warning"],
+      ["H-E-B", "92.8%", "95.0%", { v: "−2.2 pts", cls: "neg" }, "96.2%", "$21K", "Scorecard warning"],
+      ["Publix", "94.1%", "95.0%", { v: "−0.9 pts", cls: "neg" }, "97.1%", "$10K", "Within tolerance"],
+      ["US Foods", "96.2%", "—", { v: "n/a", cls: "" }, "96.8%", "—", "No fine regime"],
+      ["Sysco", "96.8%", "—", { v: "n/a", cls: "" }, "97.4%", "—", "No fine regime"],
+      { total: true, cells: ["All customers", "87.4%", "", "", "94.2%", "$555K", ""] }
+    ],
+    foot: "Foodservice distributors do not run retailer OTIF fine regimes, which is why the Foodservice channel view shows OTIF as not applicable rather than as a blank. Every retail account is below its requirement."
+  },
+  "cut-lines": {
+    eyebrow: "PD5 / PW3 · Drill-down", title: "Order lines cut — this week",
+    desc: "Demand booked and not shipped, by SKU. Value is cut cases at net price per case. Source: SYSPRO SorDetail against shipment confirmations.",
+    cols: ["SKU", "Customer", "Cut cases", "Lost revenue", "Reason", "Warehouse", "Recoverable"],
+    rows: [
+      ["Roasted Salsa 16oz", "Costco, Kroger, H-E-B", "6,420", "$48.3K", "Tomato paste late", "WH-02", "Partly — next week"],
+      ["Guacamole Dip 12oz", "Costco, Walmart", "4,980", "$37.5K", "Avocado supply", "WH-02", "No"],
+      ["Frozen Entrée — Birria 22oz", "Walmart, Target", "4,110", "$30.9K", "Line capacity", "WH-02", "No"],
+      ["Frozen Entrée — Enchilada 24oz", "Kroger, Publix", "4,150", "$31.2K", "Line capacity", "WH-02", "No"],
+      ["Tortilla Chips 12ct", "H-E-B, Albertsons", "5,050", "$38.0K", "Line changeover", "WH-01", "Yes — Friday"],
+      ["Verde Salsa 16oz", "Sprouts, Publix", "2,180", "$16.4K", "Tomatillo supply", "WH-02", "Partly"],
+      ["Queso Dip 15oz", "US Foods, Sysco", "1,890", "$14.2K", "Carrier no-show", "WH-01", "Yes — recovered"],
+      ["All other SKUs (14)", "Mixed", "1,820", "$13.5K", "Mixed", "Mixed", "Mixed"],
+      { total: true, cells: ["27 SKUs", "", "30,600", "$230.0K", "", "", ""] }
+    ],
+    foot: "WH-02 carries 71% of the cut value, the same warehouse behind the CFO dashboard's late-order and short-ship figures. One operational fix moves both dashboards."
+  },
+  "promo-live": {
+    eyebrow: "PD6 / PW5 · Drill-down", title: "Promotions live or starting",
+    desc: "From the TELUS Blacksmith calendar, with claimed-to-date from HighRadius. Execution status is the retailer's confirmation of display or feature, not our plan.",
+    cols: ["Customer", "Product line", "Mechanic", "Runs", "Planned", "Claimed to date", "Execution"],
+    rows: [
+      ["Costco Wholesale", "Salsa & Dips", "MVM + pallet display", "Aug 10 – Aug 23", "$128K", "$96K", "Confirmed"],
+      ["Kroger", "Tortillas & Chips", "Feature + display", "Aug 10 – Aug 30", "$96K", "$74K", "Confirmed"],
+      ["Walmart", "Frozen Entrées", "Rollback", "Aug 3 – Aug 30", "$84K", "$112K", "Confirmed"],
+      ["Target", "Snack Bars", "Circle offer", "Aug 17 – Sep 6", "$46K", "—", "Confirmed"],
+      ["Publix", "Soups & Broths", "BOGO", "Aug 10 – Aug 23", "$42K", "$38K", "Not confirmed"],
+      ["H-E-B", "Sauces & Marinades", "TPR", "Aug 10 – Aug 23", "$38K", "$46K", "Not confirmed"],
+      ["Albertsons / Safeway", "Salsa & Dips", "Feature", "Aug 24 – Sep 6", "$52K", "—", "Planned"],
+      ["Sprouts", "New items", "Demo + TPR", "Aug 17 – Aug 30", "$18K", "—", "Confirmed"],
+      { total: true, cells: ["8 promotions", "", "", "", "$504K", "$366K", ""] }
+    ],
+    foot: "Walmart and H-E-B are already claiming more than planned; Publix and H-E-B have no execution confirmation. Both are the same problem seen from two ends — the calendar is not the contract."
+  },
+  "distribution": {
+    eyebrow: "PW6 / PQ5 · Drill-down", title: "Distribution breadth by customer",
+    desc: "Count of SKUs shipped to each customer in the quarter, and the movement since last quarter. Phase 1 proxy for distribution: it counts what we shipped, not what was on shelf. %ACV needs NIQ.",
+    cols: ["Customer", "SKUs shipped", "Move vs last quarter", "Gains", "Delists", "Net revenue / SKU"],
+    rows: [
+      ["Kroger", "214", { v: "−3", cls: "neg" }, "0", "3", "$9.2K"],
+      ["Albertsons / Safeway", "186", { v: "+2", cls: "pos" }, "2", "0", "$6.1K"],
+      ["H-E-B", "172", { v: "+4", cls: "pos" }, "4", "0", "$5.9K"],
+      ["Publix", "148", { v: "0", cls: "" }, "1", "1", "$5.5K"],
+      ["Walmart", "132", { v: "−2", cls: "neg" }, "1", "3", "$13.3K"],
+      ["Sprouts", "118", { v: "+6", cls: "pos" }, "6", "0", "$3.2K"],
+      ["Target", "96", { v: "+3", cls: "pos" }, "3", "0", "$5.8K"],
+      ["Costco Wholesale", "38", { v: "+1", cls: "pos" }, "1", "0", "$65.8K"],
+      ["Foodservice & other", "332", { v: "−16", cls: "neg" }, "8", "24", "$2.4K"],
+      { total: true, cells: ["Total combinations", "1,436", { v: "−5", cls: "neg" }, "26", "31", ""] }
+    ],
+    foot: "Kroger's three delists are two Snack Bar items and one soup, all at the spring reset, with no replacement items presented. That is $148K annualised and a shelf position that will be hard to win back."
+  },
+  "cust-growth": {
+    eyebrow: "PM6 · Drill-down", title: "Customer growth scorecard — July",
+    desc: "Net revenue against last July, with the commercial cost of each account beside it. Trade and deduction rates are the same figures as the CFO dashboard.",
+    cols: ["Customer", "Net revenue", "vs LY", "Growth %", "Trade % gross", "Deduction % gross", "Case fill %"],
+    rows: [
+      ["Costco Wholesale", "$2.50M", "+$0.31M", { v: "+14.2%", cls: "pos" }, "17.8%", "6.1%", "93.4%"],
+      ["Kroger", "$1.96M", "+$0.18M", { v: "+9.8%", cls: "pos" }, "14.2%", "4.0%", "94.8%"],
+      ["Walmart", "$1.75M", "+$0.18M", { v: "+11.4%", cls: "pos" }, "13.6%", "3.2%", "92.1%"],
+      ["Albertsons / Safeway", "$1.13M", "+$0.03M", { v: "+3.1%", cls: "" }, "12.9%", "2.8%", "95.6%"],
+      ["H-E-B", "$1.01M", "+$0.08M", { v: "+8.6%", cls: "pos" }, "11.4%", "2.6%", "96.2%"],
+      ["Publix", "$0.82M", "+$0.05M", { v: "+6.2%", cls: "pos" }, "9.8%", "2.4%", "97.1%"],
+      ["US Foods", "$0.73M", "+$0.02M", { v: "+2.4%", cls: "" }, "4.6%", "1.9%", "96.8%"],
+      ["Sysco", "$0.69M", "−$0.01M", { v: "−1.8%", cls: "neg" }, "4.1%", "1.7%", "97.4%"],
+      ["Target", "$0.56M", "+$0.09M", { v: "+18.6%", cls: "pos" }, "9.1%", "2.9%", "93.8%"],
+      ["Sprouts", "$0.38M", "+$0.07M", { v: "+22.4%", cls: "pos" }, "7.2%", "1.4%", "97.1%"],
+      ["All other customers", "$2.25M", "−$0.10M", { v: "−4.2%", cls: "neg" }, "6.8%", "1.2%", "95.8%"],
+      { total: true, cells: ["Total", "$13.78M", "+$1.00M", { v: "+7.8%", cls: "pos" }, "12.4%", "3.7%", "94.2%"] }
+    ],
+    foot: "The four fastest-growing accounts are also four of the five most expensive to serve. Growth and cost-to-serve are moving together, which is the argument for taking trade terms into the next negotiation."
+  },
+  "line-growth": {
+    eyebrow: "PM7 / PQ4 · Drill-down", title: "Product line — growth against margin",
+    desc: "July net revenue and growth, with gross margin and the budget it was written against. Margin figures are the CFO dashboard's figures.",
+    cols: ["Product line", "Net revenue", "vs LY", "Growth %", "GM %", "Budget GM %", "Decision"],
+    rows: [
+      ["Salsa & Dips", "$3.34M", "+$0.15M", { v: "+4.7%", cls: "" }, "24.3%", "26.4%", "Fix the cost base"],
+      ["Tortillas & Chips", "$2.89M", "+$0.28M", { v: "+10.7%", cls: "pos" }, "27.8%", "27.2%", "Protect and push"],
+      ["Frozen Entrées", "$2.71M", "+$0.13M", { v: "+5.0%", cls: "" }, "24.9%", "25.4%", "Capacity first"],
+      ["Soups & Broths", "$1.94M", "+$0.08M", { v: "+4.3%", cls: "" }, "29.4%", "28.8%", "Profitable — push volume"],
+      ["Sauces & Marinades", "$1.66M", "+$0.22M", { v: "+15.3%", cls: "pos" }, "26.9%", "26.5%", "Protect and push"],
+      ["Snack Bars", "$1.24M", "+$0.14M", { v: "+12.7%", cls: "pos" }, "21.4%", "22.8%", "Price, cost, or exit"],
+      { total: true, cells: ["Total", "$13.78M", "+$1.00M", { v: "+7.8%", cls: "pos" }, "25.9%", "26.4%", ""] }
+    ],
+    foot: "Two lines are growing double digits. One of them, Snack Bars, is the worst margin in the portfolio and 1.4 pts under its own budget — growth that costs margin points is a choice, not a win."
+  },
+  "launches": {
+    eyebrow: "PW6 / PM5 · Drill-down", title: "Active launches — items under 24 months",
+    desc: "Velocity is cases per shipping week against the launch plan. Customers is the count of accounts taking the item. Source: SYSPRO item master launch dates and shipments.",
+    cols: ["Item", "Weeks on shelf", "July net revenue", "Velocity vs plan", "Customers", "Status"],
+    rows: [
+      ["Hatch Chile Queso 15oz", "9", "$0.19M", { v: "1.4×", cls: "pos" }, "6", "Ahead — supply constrained"],
+      ["Birria Entrée 22oz", "44", "$0.16M", { v: "0.9×", cls: "" }, "4", "On plan"],
+      ["Thai Coconut Soup 24ct", "22", "$0.14M", { v: "1.1×", cls: "pos" }, "4", "On plan"],
+      ["Street Corn Dip 12oz", "31", "$0.12M", { v: "1.0×", cls: "" }, "5", "On plan"],
+      ["Chipotle Crema 12oz", "17", "$0.09M", { v: "0.8×", cls: "neg" }, "3", "Behind — distribution short"],
+      ["Mango Habanero Salsa 16oz", "58", "$0.08M", { v: "0.7×", cls: "neg" }, "3", "Behind — review at reset"],
+      ["Protein Bar — Cocoa 12ct", "63", "$0.07M", { v: "0.6×", cls: "neg" }, "2", "Behind — review at reset"],
+      ["All other launches (7)", "26–71", "$0.49M", { v: "0.8×", cls: "" }, "2–5", "Mixed"],
+      { total: true, cells: ["14 active items", "", "$1.34M", "", "", "9.7% of net revenue"] }
+    ],
+    foot: "Two items carry 61% of new-item revenue. Four are under 0.8× plan and three of those come up at the next reset — that is the shelf space to trade for the next launch, if a replacement is ready to present."
+  }
+};
+/* ======================================================================= UI */
+
+var SEV_GLYPH = { critical: "▲", serious: "◆", warning: "●", info: "○", good: "●" };
+var SEV_LABEL = { critical: "Critical", serious: "Serious", warning: "Watch", info: "Info", good: "OK" };
+
+function sevColor(sev) { return cssvar("--" + (sev === "info" ? "s1" : sev)); }
+
+function attentionFeed(kind) {
+  var rows = ATTENTION[kind].filter(function (r) { return !r.ch || r.ch.indexOf(channel) > -1; });
+  var box = h("div", { class: "attention" });
+  if (!rows.length) {
+    box.appendChild(h("div", { class: "att-empty", text: "Nothing over threshold for " + CH_LABEL[channel] + " in this period." }));
+    return box;
+  }
+  rows.slice(0, 5).forEach(function (r) {
+    var attrs = { class: "att-row", style: "--sev:" + sevColor(r.sev), type: "button" };
+    if (r.detail) attrs.onclick = function () { openDrawer(r.detail); };
+    box.appendChild(h("button", attrs, [
+      h("span", { class: "stripe", "aria-hidden": "true" }),
+      h("span", { class: "badge" }, [
+        h("span", { class: "glyph", "aria-hidden": "true", text: SEV_GLYPH[r.sev] }),
+        document.createTextNode(SEV_LABEL[r.sev])
+      ]),
+      h("span", { class: "body" }, [
+        h("strong", { text: r.label + " — " }),
+        document.createTextNode(r.text),
+        h("span", { class: "why", text: r.why })
+      ]),
+      h("span", { class: "go", text: r.detail ? "Open detail →" : "" })
+    ]));
+  });
+  return box;
+}
+
+function sectionHead(title, note) {
+  return h("div", { class: "section-head" }, [
+    h("h2", { text: title }),
+    h("span", { class: "rule" }),
+    note ? h("span", { class: "count", text: note }) : null
+  ]);
+}
+
+/* Tile builder. `dom` is the commercial-domain code shown as the top rule. */
+function tile(cfg) {
+  var kids = [
+    h("div", { class: "tile-head" }, [
+      cfg.id ? h("span", { class: "tile-id mono", text: cfg.id }) : null,
+      h("span", { class: "tile-label", text: cfg.label })
+    ]),
+    h("div", { class: "tile-value", html: cfg.value })
+  ];
+  if (cfg.delta) {
+    // Glyph = direction of travel (read off the sign in the text); colour class
+    // = whether that direction is good. An unsigned value gets no arrow at all.
+    var glyph = /^[\u2212-]/.test(cfg.delta.text) ? "\u2193" : /^\+/.test(cfg.delta.text) ? "\u2191" : null;
+    kids.push(h("div", { class: "tile-delta" }, [
+      h("span", { class: "delta " + cfg.delta.dir }, [
+        glyph ? h("span", { "aria-hidden": "true", text: glyph }) : null,
+        document.createTextNode(cfg.delta.text)
+      ]),
+      h("span", { class: "delta-vs", text: cfg.delta.vs })
+    ]));
+  }
+  if (cfg.second) kids.push(h("div", { class: "tile-second", html: cfg.second }));
+  if (cfg.spark) kids.push(h("div", { class: "tile-spark" }, [sparkline(cfg.spark, { color: cfg.sparkColor })]));
+  var attrs = { class: "tile", style: "--dom:" + cfg.dom };
+  if (cfg.detail) { attrs.type = "button"; attrs.onclick = function () { openDrawer(cfg.detail); }; return h("button", attrs, kids); }
+  return h("div", attrs, kids);
+}
+
+/* Direction helper: which way is good. */
+function dir(delta, goodWhen) {
+  if (Math.abs(delta) < 1e-9) return "flat";
+  var up = delta > 0;
+  if (goodWhen === "down") return up ? "down" : "up";
+  return up ? "up" : "down";
+}
+
+/* Tile rows pick their own column count so the last row is never a lone
+   stretched tile: up to six across, otherwise split into two even rows. */
+function tilesRow(list) {
+  var items = list.filter(Boolean);
+  var cols = items.length <= 6 ? items.length : Math.ceil(items.length / 2);
+  return h("div", { class: "tiles", style: "--tile-cols:" + cols }, items);
+}
+
+function viewIntro(question, note) {
+  return h("div", { class: "view-intro" }, [
+    h("div", { class: "view-q", text: question }),
+    h("div", { class: "view-note", text: note })
+  ]);
+}
+
+var DOM = { growth: "var(--dom-growth)", svc: "var(--dom-svc)", promo: "var(--dom-promo)", innov: "var(--dom-innov)", dist: "var(--dom-dist)" };
+
+/* Shorthand: a "not in this channel" body for a card whose measure does not
+   exist in the selected channel. */
+function naBody(text) {
+  return h("div", { class: "footnote", style: "padding:22px 0", text: text });
+}
+
+/* The promotion calendar is a list of real promotions, so a channel view
+   filters it rather than rescaling it. */
+function promoRowsFor() {
+  return D.promoRows.filter(function (p) { return isAll() || p.ch === channel; });
+}
+
+/* ------------------------------------------------------------- DAILY VIEW */
+function renderDaily(root) {
+  root.appendChild(viewIntro("Did we serve the customer yesterday, and is demand moving?",
+    "Six tiles. Service first, because nothing else on this dashboard survives a supply failure."));
+
+  var fill = FILL_BY_CH[channel], otif = OTIF_BY_CH[channel];
+  var ord = sc("ord", D.ordersYest), ordAvg = sc("ord", D.ordersWkdayAvg);
+  var shp = sc("rev", D.shippedYest), shpPlan = sc("rev", D.shippedPlanDay);
+  var cutV = sc("svc", D.cutValueYest);
+
+  root.appendChild(sectionHead("Overnight position", "Top rule colour = commercial domain: growth, service, promotion, innovation, distribution"));
+  root.appendChild(tilesRow([
+    tile({
+      id: "PD1", dom: DOM.svc, label: "Case fill rate", value: pct(fill),
+      delta: { dir: dir(fill - D.fillTarget, "up"), text: pts(fill - D.fillTarget), vs: "vs 98% target" },
+      second: "30-day average <b>" + pct(D.fillAvg30) + "</b> — eight straight weeks down",
+      spark: D.fill30, sparkColor: "var(--dom-svc)", detail: "cut-lines"
+    }),
+    tile({
+      id: "PD2", dom: DOM.svc, label: "On time in full", value: otif == null ? "—" : pct(otif),
+      delta: otif == null ? null : { dir: dir(otif - D.otifReq, "up"), text: pts(otif - D.otifReq), vs: "vs retailer requirement" },
+      second: otif == null ? "Distributors in this channel run no OTIF fine regime"
+        : "Fines <b>" + usdK(sc("svc", D.otifFines)) + "</b> taken in July",
+      spark: otif == null ? null : D.otif14, sparkColor: "var(--dom-svc)",
+      detail: otif == null ? null : "otif"
+    }),
+    tile({
+      id: "PD3", dom: DOM.growth, label: "Orders received", value: usd(ord),
+      delta: { dir: dir(ord - ordAvg, "up"), text: signedPct((ord / ordAvg - 1) * 100), vs: "vs same-weekday avg" },
+      second: "<b>" + num(D.ordersCount * F("ord")) + " orders</b> booked — demand, not shipment",
+      spark: scArr("ord", D.orders14), sparkColor: "var(--dom-growth)"
+    }),
+    tile({
+      id: "PD4", dom: DOM.growth, label: "Shipped yesterday", value: usd(shp),
+      delta: { dir: dir(shp - shpPlan, "up"), text: signedPct((shp / shpPlan - 1) * 100), vs: "vs daily plan" },
+      second: "The gap to orders received is <b>" + usdK(ord - shp) + "</b> of demand we did not serve",
+      spark: scArr("rev", D.shipped10), sparkColor: "var(--dom-growth)"
+    }),
+    tile({
+      id: "PD5", dom: DOM.svc, label: "Order lines cut", value: num(D.cutLinesYest * F("svc")),
+      delta: { dir: "down", text: usdK(cutV), vs: "of demand lost" },
+      second: "Largest: <b>" + D.topCutSku + "</b> out at WH-02",
+      spark: scArr("svc", D.cut10), sparkColor: "var(--dom-svc)", detail: "cut-lines"
+    }),
+    tile({
+      id: "PD6", dom: DOM.promo, label: "Promotions live", value: LIVEPROMO_BY_CH[channel] == null ? "—" : num(LIVEPROMO_BY_CH[channel]),
+      delta: noPromo() ? null : { dir: "flat", text: usdK(sc("trade", D.promoClaimedWTD)), vs: "claimed week-to-date" },
+      second: noPromo() ? "This channel runs contract deviations, not promotion mechanics"
+        : "<b>" + D.promoUnconfirmed + " of " + D.promosStarted + "</b> new promos lack retailer confirmation",
+      spark: noPromo() ? null : D.promoLive10, sparkColor: "var(--dom-promo)",
+      detail: noPromo() ? null : "promo-live"
+    })
+  ]));
+
+  root.appendChild(sectionHead("Needs attention", "Ranked, max 5 — thresholds are commercially owned, not hardcoded"));
+  root.appendChild(attentionFeed("daily"));
+
+  root.appendChild(sectionHead("The two trends that matter today"));
+  root.appendChild(h("div", { class: "grid two" }, [
+    card({
+      id: "PD1", title: "Case fill rate — last 30 days", span: true, scope: isAll() ? null : CH_LABEL[channel],
+      sub: "Cases shipped as a percentage of cases ordered. The rule is the 98% internal target, and the line has not touched it once this month.",
+      chart: lineChart({
+        labels: D.dayLabels, tickEvery: 5, area: true, endLabel: true, W: WFULL,
+        yFmt: function (v) { return v.toFixed(1) + "%"; },
+        refLine: { v: D.fillTarget, label: "Target 98.0%" },
+        series: [{ name: "Case fill %", color: cssvar("--dom-svc"), values: D.fill30 }]
+      }),
+      table: {
+        cols: ["Date", "Case fill %", "Change"],
+        rows: D.fill30.map(function (v, i, a) {
+          return [D.dayLabels[i], pct(v), i ? { v: pts(v - a[i - 1]), cls: v >= a[i - 1] ? "pos" : "neg" } : "—"];
+        })
+      },
+      note: "One point of fill rate is about 19,400 cases, or $146K of demand a month. The 3.8-point gap to target is $556K we booked and did not ship.",
+      sources: ["SYSPRO SorDetail vs shipment confirmations"],
+      detail: "cut-lines"
+    }),
+    card({
+      id: "PD3", title: "Orders received — last 14 business days", span: true,
+      sub: "Demand booked, not revenue shipped. The rule is the same-weekday average, because Monday is not Thursday.",
+      chart: columnChart({
+        groups: D.bizLabels, capLabels: "last", H: 240, W: WFULL,
+        yFmt: function (v) { return "$" + (v * 1000).toFixed(0) + "K"; },
+        ref: { v: sc("ord", D.ordersWkdayAvg), label: "Weekday average " + usdK(sc("ord", D.ordersWkdayAvg)) },
+        series: [{ name: "Orders booked", color: cssvar("--s1"), values: scArr("ord", D.orders14) }]
+      }),
+      table: {
+        cols: ["Date", "Orders booked"],
+        rows: scArr("ord", D.orders14).map(function (v, i) { return [D.bizLabels[i], usdK(v)]; })
+      },
+      note: "Demand is running ahead of the average in eight of the last fourteen days. The constraint on this page is supply.",
+      sources: ["SYSPRO SorMaster"]
+    })
+  ]));
+}
+
+/* ------------------------------------------------------------ WEEKLY VIEW */
+function renderWeekly(root) {
+  root.appendChild(viewIntro("Are we tracking to the month, and is the promotion actually running?",
+    "Monday-morning view. Demand against what we shipped, the service gap, and the promotion calendar."));
+
+  var shp = sc("rev", D.wkShipped[7]), plan = sc("rev", D.wkPlan[7]), ly = sc("rev", D.wkLY);
+  var dem = sc("ord", D.wkDemand[7]);
+  var gap = sc("svc", D.wkDemand[7] - D.wkShipped[7]);
+  var fill = FILL_BY_CH[channel], otif = OTIF_BY_CH[channel];
+  var ob = sc("ord", D.orderBook), obP = sc("ord", D.orderBookPrior);
+  var pipe = sc("pipe", D.pipelineNew);
+
+  root.appendChild(sectionHead("Week in seven numbers"));
+  root.appendChild(tilesRow([
+    tile({
+      id: "PW1", dom: DOM.growth, label: "Shipped last week", value: usd(shp),
+      delta: { dir: dir(shp - plan, "up"), text: signedPct((shp / plan - 1) * 100), vs: "vs plan phasing" },
+      second: "<b>" + signedPct((D.wkShipped[7] / D.wkLY - 1) * 100) + "</b> vs the same week last year",
+      spark: scArr("rev", D.wkShipped), sparkColor: "var(--dom-growth)"
+    }),
+    tile({
+      id: "PW2", dom: DOM.growth, label: "Demand booked", value: usd(dem),
+      delta: { dir: dir(D.wkDemand[7] - D.wkDemand[6], "up"), text: signedUsd(sc("ord", D.wkDemand[7] - D.wkDemand[6])), vs: "vs last week" },
+      second: "Order book <b>" + usd(ob) + "</b>, " + signedUsd(ob - obP) + " on the week",
+      spark: scArr("ord", D.wkDemand), sparkColor: "var(--dom-growth)"
+    }),
+    tile({
+      id: "PW3", dom: DOM.svc, label: "Demand not served", value: usd(gap),
+      delta: { dir: "down", text: num(sc("svc", D.cutCasesWk)) + " cases", vs: "cut this week" },
+      second: "Widest gap in the eight weeks on this page — was " + usdK(sc("svc", 0.090)) + " in June",
+      spark: scArr("svc", D.wkDemand.map(function (v, i) { return v - D.wkShipped[i]; })),
+      sparkColor: "var(--dom-svc)", detail: "cut-lines"
+    }),
+    tile({
+      id: "PW4", dom: DOM.svc, label: "Case fill / OTIF", value: pct(fill),
+      delta: { dir: dir(fill - D.fillTarget, "up"), text: pts(fill - D.fillTarget), vs: "vs 98% target" },
+      second: otif == null ? "No retailer OTIF regime in this channel"
+        : "OTIF <b>" + pct(otif) + "</b> against a " + pct(D.otifReq) + " requirement",
+      spark: D.wkFill, sparkColor: "var(--dom-svc)", detail: "otif"
+    }),
+    tile({
+      id: "PW5", dom: DOM.promo, label: "Trade claimed WTD", value: noPromo() ? "—" : usd(sc("trade", D.promoClaimedWTD)),
+      delta: noPromo() ? null : { dir: "down", text: signedPct((D.promoClaimedWTD / 0.452 - 1) * 100), vs: "vs accrual pace" },
+      second: noPromo() ? "No promotion mechanics in this channel"
+        : "<b>" + D.promosStarted + " promotions</b> started Monday, 2 unconfirmed",
+      spark: noPromo() ? null : scArr("trade", [0.441, 0.468, 0.392, 0.455, 0.472, 0.501, 0.463, 0.486]),
+      sparkColor: "var(--dom-promo)", detail: noPromo() ? null : "promo-live"
+    }),
+    tile({
+      id: "PW6", dom: DOM.innov, label: "Active launches", value: num(D.activeLaunches * F("innov")),
+      delta: { dir: "flat", text: mult(D.topLaunchVelocity), vs: "top item vs plan" },
+      second: isAll() ? "<b>" + D.topLaunch + "</b> in week " + D.topLaunchWeek + ", supply constrained"
+        : plural(D.activeLaunches * F("innov"), "item", "items") + " shipping into " + CH_LABEL[channel],
+      spark: [8, 9, 11, 12, 12, 13, 14, 14], sparkColor: "var(--dom-innov)", detail: "launches"
+    }),
+    tile({
+      id: "PW7", dom: DOM.growth, label: "New pipeline", value: usd(pipe),
+      delta: { dir: "flat", text: num(D.pipelineNewCount * F("pipe")) + " opportunities", vs: "created this week" },
+      second: "<b>" + D.stageMoves + " stage moves</b>, 3 into Commit (" + usd(sc("pipe", D.pipelineCommit)) + ")"
+    })
+  ]));
+
+  root.appendChild(sectionHead("Needs attention", "Ranked, max 5"));
+  root.appendChild(attentionFeed("weekly"));
+
+  root.appendChild(sectionHead("Demand, what we served, and the gap between them"));
+  root.appendChild(h("div", { class: "grid two" }, [
+    card({
+      id: "PW2", title: "Demand booked vs shipped — 8 weeks", span: true,
+      sub: "Two bars per week: what customers ordered, and what left the building. The white space between them is the whole service problem.",
+      legend: [{ name: "Demand booked", color: cssvar("--s1"), sq: true }, { name: "Shipped", color: cssvar("--s3"), sq: true }],
+      chart: columnChart({
+        groups: D.wkLabels, capLabels: "last", H: 250, W: WFULL,
+        yFmt: function (v) { return "$" + v.toFixed(1) + "M"; },
+        series: [
+          { name: "Demand booked", color: cssvar("--s1"), values: scArr("ord", D.wkDemand) },
+          { name: "Shipped", color: cssvar("--s3"), values: scArr("rev", D.wkShipped) }
+        ],
+        tipExtra: function (i) {
+          return [{ name: "Not served", value: usdK(sc("svc", D.wkDemand[i] - D.wkShipped[i])) }];
+        }
+      }),
+      table: {
+        cols: ["Week ending", "Demand booked", "Shipped", "Plan", "Not served"],
+        rows: D.wkLabels.map(function (l, i) {
+          var g = sc("svc", D.wkDemand[i] - D.wkShipped[i]);
+          return [l, usd(sc("ord", D.wkDemand[i])), usd(sc("rev", D.wkShipped[i])), usd(sc("rev", D.wkPlan[i])),
+            { v: usdK(g), cls: "neg" }];
+        })
+      },
+      note: "The gap has gone from $90K to $230K a week over eight weeks while demand grew. Sales is not the constraint.",
+      sources: ["SYSPRO SorMaster / SorDetail", "SYSPRO ArTrnDetail"],
+      detail: "cut-lines"
+    }),
+    card({
+      id: "PW4", title: "Case fill against each customer's requirement",
+      // The gap, not the level: on a 0-100 axis every fill rate between 92% and
+      // 97% draws the same bar and the chart says nothing.
+      sub: "Points above or below what that retailer contractually expects. Worst gap first. Four accounts are below their own line.",
+      legend: [
+        { name: "Above requirement", color: cssvar("--pos"), sq: true },
+        { name: "Below requirement", color: cssvar("--neg"), sq: true }
+      ],
+      chart: hbarChart({
+        rows: D.fillByCust.slice().sort(function (a, b) {
+          return (a.v - a.req) - (b.v - b.req);
+        }).map(function (c) {
+          var g = c.v - c.req;
+          return {
+            label: c.nm, value: g,
+            color: g < 0 ? cssvar("--neg") : cssvar("--pos"),
+            note: pct(c.v) + " vs " + pct(c.req), noteName: "Actual vs required"
+          };
+        }),
+        // padL opens a gutter between the label column and the plot, so the
+        // value label on the longest negative bar does not land on the name.
+        labelW: 148, padL: 56, padR: 62, rowH: 28, diverging: true,
+        xFmt: function (v) { return (v > 0 ? "+" : v < 0 ? "−" : "") + Math.abs(v).toFixed(0); },
+        valFmt: function (r) { return pts(r.value); },
+        seriesName: "Gap to requirement"
+      }),
+      table: {
+        cols: ["Customer", "Case fill %", "Requirement", "Gap"],
+        rows: D.fillByCust.slice().sort(function (a, b) {
+          return (a.v - a.req) - (b.v - b.req);
+        }).map(function (c) {
+          return [c.nm, pct(c.v), pct(c.req), { v: pts(c.v - c.req), cls: c.v >= c.req ? "pos" : "neg" }];
+        })
+      },
+      note: "Costco's 98% requirement is the hardest in the book and we are 4.6 points under it.",
+      sources: ["SYSPRO shipment confirmations", "Customer scorecards"],
+      detail: "otif"
+    }),
+    card({
+      id: "PW3", title: "Where the lost demand went — this week",
+      sub: "Cut cases at net price. Four of the five reasons are ours to fix.",
+      chart: hbarChart({
+        rows: D.lostReasons.map(function (r) {
+          return { label: r.nm, value: sc("svc", r.v), color: cssvar("--s1") };
+        }),
+        labelW: 168, padR: 60, rowH: 30,
+        xFmt: function (v) { return "$" + Math.round(v * 1000) + "K"; },
+        valFmt: function (r) { return usdK(r.value); },
+        seriesName: "Lost revenue"
+      }),
+      table: {
+        cols: ["Reason", "Lost revenue", "% of total"],
+        rows: D.lostReasons.map(function (r) { return [r.nm, usdK(sc("svc", r.v)), pct(r.v / D.lostWk * 100)]; })
+      },
+      note: "$186K of the $230K is production and capacity. Carrier and credit account for $44K.",
+      sources: ["SYSPRO SorDetail", "SYSPRO InvWarehouse"],
+      detail: "cut-lines"
+    }),
+    card({
+      id: "PW7", title: "New business pipeline by stage",
+      sub: "Open opportunity value in Salesforce. Weighted forecast is not shown — the stage is the honest number this early.",
+      chart: columnChart({
+        groups: D.funnel.map(function (f) { return f.nm; }), capLabels: "all", H: 230,
+        yFmt: function (v) { return "$" + v.toFixed(1) + "M"; },
+        series: [{
+          name: "Open value", color: cssvar("--ord3"), values: scArr("pipe", D.funnel.map(function (f) { return f.v; })),
+          colorFor: function (i) { return cssvar("--ord" + Math.min(4, i + 1)); }
+        }]
+      }),
+      table: {
+        cols: ["Stage", "Open value", "% of pipeline"],
+        rows: D.funnel.map(function (f) {
+          var tot = D.funnel.reduce(function (a, x) { return a + x.v; }, 0);
+          return [f.nm, usd(sc("pipe", f.v)), pct(f.v / tot * 100)];
+        })
+      },
+      note: "Foodservice is 38% of everything created this week — the channel with the lowest trade rate and the flattest volume.",
+      sources: ["Salesforce — Opportunity"]
+    }),
+    card({
+      id: "PW5", title: "Promotion calendar — next six weeks", span: true,
+      scope: noPromo() ? "Not applicable" : null,
+      sub: noPromo() ? "Foodservice runs contract deviations and distributor allowances, not retail promotion mechanics."
+        : "The eight largest promotions by planned spend, from the TELUS calendar. Solid means the retailer has confirmed display or feature; dashed and hollow means we are spending against a plan nobody has confirmed.",
+      legend: noPromo() ? null : [
+        { name: "Execution confirmed", color: cssvar("--s1"), sq: true },
+        { name: "Not confirmed / planned", color: cssvar("--s1"), hollow: true }
+      ],
+      chart: noPromo() ? naBody("No promotion mechanics in this channel.") : promoCalendar({
+        weeks: D.promoWeeks, today: D.promoToday, W: WFULL,
+        rows: promoRowsFor().map(function (p) {
+          return {
+            label: p.nm, sub: p.line, mechanic: p.mech, runs: p.runs, exec: p.exec,
+            start: p.start, span: p.span, color: cssvar("--s1"),
+            spendLabel: usdK(p.spend)
+          };
+        })
+      }),
+      table: noPromo() ? null : {
+        cols: ["Customer", "Line", "Mechanic", "Runs", "Planned spend", "Execution"],
+        rows: promoRowsFor().map(function (p) {
+          return [p.nm, p.line, p.mech, p.runs, usdK(p.spend),
+            { v: p.exec, cls: p.exec === "Confirmed" ? "pos" : "neg" }];
+        })
+      },
+      note: noPromo() ? null : "$504K of planned spend in six weeks. $80K of it — Publix and H-E-B — has no retailer confirmation, and both start this week.",
+      sources: ["TELUS Blacksmith TPM — promotion calendar", "HighRadius claims"],
+      detail: noPromo() ? null : "promo-live"
+    })
+  ]));
+}
+
+/* ----------------------------------------------------------- MONTHLY VIEW */
+function renderMonthly(root) {
+  root.appendChild(viewIntro("Where did the growth come from, and did the money work?",
+    "July 2026, closed Aug 6. The five bars on the bridge are what every other card on this tab explains."));
+
+  var nr = sc("rev", D.netRev), plan = sc("rev", D.netRevPlan);
+  var grow = GROW_BY_CH[channel], volGrow = VOLGR_BY_CH[channel], priceG = priceGrowth();
+  var vol = sc("vol", D.volume);
+  var promoted = PROMO_BY_CH[channel], depth = DEPTH_BY_CH[channel];
+  var innov = INNOV_BY_CH[channel];
+  var fill = FILL_BY_CH[channel];
+  var trade = sc("trade", D.tradeSpend), brand = sc("brand", D.brandSpend);
+
+  root.appendChild(sectionHead("July, in nine numbers"));
+  root.appendChild(tilesRow([
+    tile({
+      id: "PM1", dom: DOM.growth, label: "Net revenue", value: usd(nr),
+      delta: { dir: dir(grow, "up"), text: signedPct(grow), vs: "vs July last year" },
+      second: "<b>" + signedPct((nr / plan - 1) * 100) + "</b> vs plan " + usd(plan),
+      spark: scArr("rev", D.netRev13), sparkColor: "var(--dom-growth)"
+    }),
+    tile({
+      id: "PM3", dom: DOM.growth, label: "Volume", value: cases(vol) + '<span class="unit">cases</span>',
+      delta: { dir: dir(volGrow, "up"), text: signedPct(volGrow), vs: "vs July last year" },
+      second: volGrow < grow ? "Volume is growing <b>slower</b> than revenue — price is carrying it"
+        : "Volume is growing <b>faster</b> than revenue — mix or price is giving back",
+      spark: scArr("vol", D.vol13), sparkColor: "var(--dom-growth)"
+    }),
+    tile({
+      id: "PM2", dom: DOM.growth, label: "Price & mix", value: signedPct(priceG),
+      delta: isAll()
+        ? { dir: "flat", text: dollars(D.pricePerCase), vs: "a case, was " + dollars(D.pricePerCaseLY) }
+        : { dir: "flat", text: signedPct(volGrow) + " from volume", vs: "the other half of it" },
+      second: "Volume <b>" + signedPct(volGrow) + "</b> + price &amp; mix <b>" + signedPct(priceG) +
+        "</b> = revenue <b>" + signedPct(grow) + "</b>",
+      spark: D.netRev13.map(function (v, i) { return v / D.vol13[i]; }), sparkColor: "var(--dom-growth)"
+    }),
+    tile({
+      id: "PM4", dom: DOM.promo, label: "Volume on promotion", value: promoted == null ? "—" : pct(promoted),
+      delta: promoted == null ? null : { dir: "down", text: pts(promoted - D.promotedLY), vs: "vs last July" },
+      second: promoted == null ? "No promotion mechanics in this channel"
+        : "Average depth <b>" + pct(depth) + "</b> off list, was " + pct(D.depthLY),
+      spark: promoted == null ? null : D.promotedPct, sparkColor: "var(--dom-promo)"
+    }),
+    tile({
+      id: "PM9", dom: DOM.promo, label: "Trade investment", value: usd(trade),
+      delta: { dir: "down", text: pct(D.trade6Rate[5]) + " of gross", vs: "plan " + pct(12.0) },
+      second: "Up <b>0.3 pts</b> of gross sales since February",
+      spark: scArr("trade", D.trade6), sparkColor: "var(--dom-promo)"
+    }),
+    tile({
+      id: "PM9", dom: DOM.promo, label: "Brand investment", value: usdK(brand),
+      delta: { dir: "down", text: pct(D.brand6Rate[5]) + " of gross", vs: "was " + pct(D.brand6Rate[0]) + " in February" },
+      second: "<b>" + pct(D.brand6[5] / (D.trade6[5] + D.brand6[5]) * 100) + "</b> of marketing investment, from " +
+        pct(D.brand6[0] / (D.trade6[0] + D.brand6[0]) * 100),
+      spark: scArr("brand", D.brand6), sparkColor: "var(--dom-promo)"
+    }),
+    tile({
+      id: "PM5", dom: DOM.innov, label: "Innovation rate", value: pct(innov),
+      delta: { dir: dir(innov - D.innovTarget, "up"), text: pts(innov - D.innovTarget), vs: "vs 12% target" },
+      second: "<b>" + plural(D.activeLaunches * F("innov"), "active item", "active items") + "</b> under 24 months",
+      spark: D.innov13, sparkColor: "var(--dom-innov)", detail: "launches"
+    }),
+    tile({
+      id: "PM8", dom: DOM.svc, label: "Case fill rate", value: pct(fill),
+      delta: { dir: dir(fill - D.fillTargetM, "up"), text: pts(fill - D.fillTargetM), vs: "vs 98% target" },
+      second: "<b>" + usd(sc("svc", D.lostMonth)) + "</b> of demand cut, " + num(sc("svc", D.cutCasesMonth)) + " cases",
+      spark: D.fill13, sparkColor: "var(--dom-svc)", detail: "cut-lines"
+    }),
+    tile({
+      id: "PM8", dom: DOM.svc, label: "OTIF fines", value: noOtif() ? "—" : usdK(sc("svc", D.otifFines)),
+      delta: noOtif() ? null : { dir: "down", text: "+210%", vs: "vs July last year" },
+      second: noOtif() ? "No retailer fine regime in this channel"
+        : "Perfect order rate <b>" + pct(D.perfectOrder) + "</b> — the number retailers actually score",
+      spark: noOtif() ? null : scArr("svc", D.fines13), sparkColor: "var(--dom-svc)",
+      detail: noOtif() ? null : "otif"
+    }),
+    tile({
+      id: "PM7", dom: DOM.dist, label: "Distribution breadth", value: num(D.custSku * F("dist")),
+      delta: { dir: dir(D.custSku - D.custSkuPrior, "up"), text: signedPlural(sc("dist", D.custSku - D.custSkuPrior), "combo", "combos"), vs: "vs last quarter" },
+      second: isAll() ? "<b>" + D.gainsMonth + " gained</b>, <b>" + D.delistsMonth + " delisted</b> this month"
+        : "Customer × SKU combinations shipped in " + CH_LABEL[channel],
+      spark: D.qCustSku, sparkColor: "var(--dom-dist)", detail: "distribution"
+    })
+  ]));
+
+  root.appendChild(sectionHead("Needs attention", "Ranked, max 5"));
+  root.appendChild(attentionFeed("monthly"));
+
+  root.appendChild(sectionHead("The chart this dashboard exists for"));
+  root.appendChild(card({
+    id: "PM2", title: "Growth decomposition — the $1.00M of growth, split five ways", span: true,
+    scope: isAll() ? null : CH_LABEL[channel],
+    sub: "July 2025 net revenue " + usd(sc("rev", D.netRevLY)) + " → July 2026 " + usd(nr) + ". The scale is the growth rather than the revenue, so each driver is legible: two bars are things we sold more of, two are things we charged more for, and one is shelf space we lost.",
+    legend: [{ name: "Added to growth", color: cssvar("--pos"), sq: true }, { name: "Gave growth back", color: cssvar("--neg"), sq: true }],
+    chart: waterfall({
+      W: WFULL, H: 340, yFmt: function (v) { return "$" + v.toFixed(2) + "M"; },
+      steps: D.bridge.map(function (b) {
+        return {
+          label: b.label, kind: b.kind, value: sc("rev", b.value), sub: b.sub,
+          tip: b.kind === "delta" ? [{ name: "Share of growth", value: pct(Math.abs(b.value) / 1.00 * 100, 0) }] : []
+        };
+      })
+    }),
+    table: {
+      cols: ["Step", "Impact", "Points of growth", "Share of the $1.00M"],
+      rows: [["July 2025 net revenue", usd(sc("rev", D.netRevLY)), "—", "—"]].concat(
+        D.bridge.filter(function (b) { return b.kind === "delta"; }).map(function (b) {
+          return [b.label.replace("\n", " "), { v: signedUsd(sc("rev", b.value)), cls: b.value >= 0 ? "pos" : "neg" },
+            b.sub, pct(Math.abs(b.value) / 1.00 * 100, 0)];
+        }),
+        [{ total: true, cells: ["July 2026 net revenue", usd(nr), "+7.8 pts", "100%"] }])
+    },
+    note: "Volume on base items contributed 2.4 points. Price and mix together contributed 4.4. New items added 2.2 and lost distribution gave back 1.2 — the innovation programme is currently paying for the delists rather than adding on top of them.",
+    sources: ["SYSPRO ArTrnDetail — invoiced lines, cases and net price", "SYSPRO item master — launch dates"]
+  }));
+
+  root.appendChild(sectionHead("Who grew, what grew, and what it cost to buy"));
+  root.appendChild(h("div", { class: "grid two" }, [
+    card({
+      id: "PM6", title: "Customer growth against last July", span: true,
+      sub: "Net revenue growth by customer, ranked. Bar length is growth rate; the tooltip carries the dollars behind it.",
+      legend: [{ name: "Growing", color: cssvar("--pos"), sq: true }, { name: "Declining", color: cssvar("--neg"), sq: true }],
+      chart: hbarChart({
+        rows: D.custGrowth.map(function (c) {
+          return {
+            label: c.nm, value: c.g, color: c.g >= 0 ? cssvar("--pos") : cssvar("--neg"),
+            note: usd(c.rev), noteName: "July net revenue"
+          };
+        }),
+        labelW: 154, padR: 58, rowH: 26, diverging: true, W: WFULL,
+        xFmt: function (v) { return signedPct(v, 0); },
+        valFmt: function (r) { return signedPct(r.value); },
+        seriesName: "Growth vs LY"
+      }),
+      table: {
+        cols: ["Customer", "July net revenue", "Growth vs LY"],
+        rows: D.custGrowth.map(function (c) {
+          return [c.nm, usd(c.rev), { v: signedPct(c.g), cls: c.g >= 0 ? "pos" : "neg" }];
+        })
+      },
+      note: "The three biggest accounts are all growing double digits or close to it, which is why concentration keeps rising. Everything outside the top ten is shrinking 4.2%.",
+      sources: ["SYSPRO ArTrnDetail"],
+      detail: "cust-growth"
+    }),
+    card({
+      id: "PM7", title: "Product line growth", scope: "Consolidated",
+      sub: "July net revenue against last July. Product-line economics are reported at company level, so this card does not follow the channel picker.",
+      legend: [{ name: "This July", color: cssvar("--s1"), sq: true }, { name: "Last July", color: cssvar("--s2"), sq: true }],
+      chart: columnChart({
+        groups: D.lines.map(function (l) { return l.nm.replace(" & ", " &\n"); }),
+        capLabels: false, H: 250, twoLineLabels: true,
+        yFmt: function (v) { return "$" + v.toFixed(1) + "M"; },
+        series: [
+          { name: "This July", color: cssvar("--s1"), values: D.lines.map(function (l) { return l.rev; }) },
+          { name: "Last July", color: cssvar("--s2"), values: D.lines.map(function (l) { return l.ly; }) }
+        ],
+        tipExtra: function (i) {
+          var l = D.lines[i];
+          return [{ name: "Growth", value: signedPct((l.rev / l.ly - 1) * 100) }, { name: "Gross margin", value: pct(l.gm) }];
+        }
+      }),
+      table: {
+        cols: ["Product line", "This July", "Last July", "Growth", "GM %"],
+        rows: D.lines.map(function (l) {
+          var g = (l.rev / l.ly - 1) * 100;
+          return [l.nm, usd(l.rev), usd(l.ly), { v: signedPct(g), cls: g >= 0 ? "pos" : "neg" }, pct(l.gm)];
+        })
+      },
+      note: "Sauces & Marinades and Snack Bars are the growth story. One of them earns 26.9% and the other 21.4%.",
+      sources: ["SYSPRO ArTrnDetail + standard costs"],
+      detail: "line-growth"
+    }),
+    card({
+      id: "PM4", title: "Volume sold on promotion — 6 months", scope: noPromo() ? "Not applicable" : null,
+      sub: noPromo() ? "Foodservice pricing runs on contract deviations, so there is no promoted-versus-base split to show."
+        : "Base volume against promoted volume. Six months of promoted share climbing 2.8 points is the number to argue about.",
+      legend: noPromo() ? null : [
+        { name: "Base volume", color: cssvar("--s-neutral"), sq: true },
+        { name: "Promoted volume", color: cssvar("--s2"), sq: true }
+      ],
+      chart: noPromo() ? naBody("No promotion mechanics in this channel.") : columnChart({
+        groups: D.promoMonths, stacked: true, capLabels: false, H: 240,
+        yFmt: function (v) { return v.toFixed(0) + "%"; },
+        series: [
+          { name: "Base", color: cssvar("--s-neutral"), values: D.promotedPct.map(function (v) { return 100 - v; }) },
+          { name: "Promoted", color: cssvar("--s2"), values: D.promotedPct }
+        ],
+        tipFmt: function (v) { return pct(v); }
+      }),
+      table: noPromo() ? null : {
+        cols: ["Month", "Promoted volume", "Base volume", "Average depth"],
+        rows: D.promoMonths.map(function (m, i) {
+          return [m, pct(D.promotedPct[i]), pct(100 - D.promotedPct[i]), pct(D.depth6[i])];
+        })
+      },
+      note: noPromo() ? null : "38.2% of volume moved on a deal in July, against 35.1% last July. Whether that bought incremental cases or subsidised cases we would have sold anyway is a Phase 2 question.",
+      sources: ["TELUS Blacksmith TPM", "SYSPRO ArTrnDetail"]
+    }),
+    card({
+      id: "PM4", title: "Average discount depth — 6 months", scope: noPromo() ? "Not applicable" : null,
+      sub: noPromo() ? "No promotion mechanics in this channel."
+        : "Deliberately its own chart: promoted share is a percentage of volume and depth is a percentage of price. They do not belong on one axis.",
+      chart: noPromo() ? naBody("No promotion mechanics in this channel.") : lineChart({
+        labels: D.promoMonths, H: 240, area: true, endLabel: true, yTicks: 4,
+        yFmt: function (v) { return v.toFixed(1) + "%"; },
+        refLine: { v: D.depthLY, label: "Last July " + pct(D.depthLY) },
+        series: [{ name: "Average depth", color: cssvar("--dom-promo"), values: D.depth6 }]
+      }),
+      table: noPromo() ? null : {
+        cols: ["Month", "Average discount depth"],
+        rows: D.promoMonths.map(function (m, i) { return [m, pct(D.depth6[i])]; })
+      },
+      note: noPromo() ? null : "Deeper discounts on a larger share of volume, six months running. That combination is how a price increase quietly gives itself back.",
+      sources: ["TELUS Blacksmith TPM — promotion terms"]
+    }),
+    card({
+      id: "PM9", title: "Marketing investment — trade against brand", span: true,
+      sub: "Both in dollars, so one axis. Trade buys volume through the retailer; brand builds demand ahead of it. Total investment has been flat at 14.9% of gross all six months — the cap label is brand's share of it, because that is the number that moved.",
+      legend: [
+        { name: "Trade spend", color: cssvar("--s1"), sq: true },
+        { name: "Brand & consumer spend", color: cssvar("--s3"), sq: true }
+      ],
+      chart: columnChart({
+        groups: D.promoMonths, stacked: true, capLabels: "all", H: 250, W: WFULL,
+        yFmt: function (v) { return "$" + v.toFixed(1) + "M"; },
+        capFmt: function (v, i) { return pct(D.brand6[i] / (D.trade6[i] + D.brand6[i]) * 100) + " brand"; },
+        series: [
+          { name: "Trade", color: cssvar("--s1"), values: scArr("trade", D.trade6) },
+          { name: "Brand", color: cssvar("--s3"), values: scArr("brand", D.brand6) }
+        ],
+        tipExtra: function (i) {
+          return [
+            { name: "Trade rate", value: pct(D.trade6Rate[i]) },
+            { name: "Brand rate", value: pct(D.brand6Rate[i]) }
+          ];
+        }
+      }),
+      table: {
+        cols: ["Month", "Trade", "Brand", "Total", "Trade % gross", "Brand % gross"],
+        rows: D.promoMonths.map(function (m, i) {
+          return [m, usd(sc("trade", D.trade6[i])), usdK(sc("brand", D.brand6[i])),
+            usd(sc("trade", D.trade6[i]) + sc("brand", D.brand6[i])), pct(D.trade6Rate[i]), pct(D.brand6Rate[i])];
+        })
+      },
+      note: "Brand has gone from 18.8% of marketing investment to 16.9% in six months. Trade took 0.3 points of gross sales; brand gave up 0.3. The money did not grow, it moved.",
+      sources: ["TELUS Blacksmith TPM", "SYSPRO GL — advertising & promotion cost centres"]
+    }),
+    card({
+      id: "PM9", title: "Brand spend — working against non-working",
+      sub: "Working spend reaches a shopper. Non-working spend is the cost of producing and measuring it. 69% working is the number to hold or improve.",
+      legend: [
+        { name: "Working — reaches a shopper", color: cssvar("--s3"), sq: true },
+        { name: "Non-working", color: cssvar("--s-neutral"), sq: true }
+      ],
+      chart: hbarChart({
+        rows: D.brandSplit.map(function (b) {
+          return {
+            label: b.nm, value: sc("brand", b.v),
+            color: b.work ? cssvar("--s3") : cssvar("--s-neutral"),
+            note: b.work ? "Working" : "Non-working", noteName: "Type"
+          };
+        }),
+        labelW: 168, padR: 62, rowH: 29,
+        xFmt: function (v) { return "$" + Math.round(v * 1000) + "K"; },
+        valFmt: function (r) { return usdK(r.value); },
+        seriesName: "July spend"
+      }),
+      table: {
+        cols: ["Line", "July spend", "Type", "% of brand spend"],
+        rows: D.brandSplit.map(function (b) {
+          return [b.nm, usdK(sc("brand", b.v)), b.work ? "Working" : "Non-working", pct(b.v / D.brandSpend * 100)];
+        })
+      },
+      note: "$286K working, $126K non-working. Retail media is the largest single line and the only one this dashboard cannot yet measure a return on.",
+      sources: ["SYSPRO GL — advertising & promotion cost centres"]
+    }),
+    card({
+      id: "PM8", title: "Service and what it cost — 13 months", span: true,
+      sub: "Case fill in points and OTIF fines in dollars are two different units, so they are two charts. This is the fill rate; the fines are beneath it.",
+      chart: lineChart({
+        labels: D.monthLabels13, H: 240, tickEvery: 2, endLabel: true, W: WFULL,
+        yFmt: function (v) { return v.toFixed(1) + "%"; },
+        refLine: { v: D.fillTargetM, label: "Target 98.0%" },
+        series: [{ name: "Case fill %", color: cssvar("--dom-svc"), values: D.fill13 }]
+      }),
+      table: {
+        cols: ["Month", "Case fill %", "OTIF fines"],
+        rows: D.monthLabels13.map(function (m, i) {
+          return [m, pct(D.fill13[i]), usdK(sc("svc", D.fines13[i]))];
+        })
+      },
+      note: "Thirteen consecutive months of decline, from 96.8% to 94.2%. Fines went from $31K to $96K a month over the same period.",
+      sources: ["SYSPRO shipment confirmations", "HighRadius — OTIF reason codes"],
+      detail: "otif"
+    }),
+    card({
+      id: "PM8", title: "OTIF fines paid — 13 months", scope: noOtif() ? "Not applicable" : null,
+      sub: noOtif() ? "No retailer fine regime in this channel."
+        : "The dollars retailers took off invoices for late or incomplete delivery. Same figures as the CFO dashboard's OTIF reason code.",
+      chart: noOtif() ? naBody("No retailer OTIF fine regime in this channel.") : columnChart({
+        groups: D.monthLabels13, capLabels: "last", H: 240,
+        yFmt: function (v) { return "$" + Math.round(v * 1000) + "K"; },
+        series: [{ name: "OTIF fines", color: cssvar("--s2"), values: scArr("svc", D.fines13) }]
+      }),
+      table: noOtif() ? null : {
+        cols: ["Month", "OTIF fines"],
+        rows: D.monthLabels13.map(function (m, i) { return [m, usdK(sc("svc", D.fines13[i]))]; })
+      },
+      note: noOtif() ? null : "$791K of fines in the last twelve months — nearly twice the July brand budget, spent on being late.",
+      sources: ["HighRadius — OTIF reason codes"],
+      detail: noOtif() ? null : "otif"
+    }),
+    card({
+      id: "PM5", title: "Innovation rate — 13 months", scope: "Consolidated",
+      sub: "Net revenue from items launched inside 24 months, as a share of net revenue. The rule is the 12% target the innovation programme was funded against.",
+      chart: lineChart({
+        labels: D.monthLabels13, H: 240, tickEvery: 2, area: true, endLabel: true,
+        yFmt: function (v) { return v.toFixed(1) + "%"; },
+        refLine: { v: D.innovTarget, label: "Target 12.0%" },
+        series: [{ name: "Innovation rate", color: cssvar("--dom-innov"), values: D.innov13 }]
+      }),
+      table: {
+        cols: ["Month", "Innovation rate"],
+        rows: D.monthLabels13.map(function (m, i) { return [m, pct(D.innov13[i])]; })
+      },
+      note: "Climbing steadily and still 2.3 points short. Two of the fourteen active items carry 61% of the revenue.",
+      sources: ["SYSPRO item master launch dates", "SYSPRO ArTrnDetail"],
+      detail: "launches"
+    })
+  ]));
+}
+
+/* --------------------------------------------------------- QUARTERLY VIEW */
+function renderQuarterly(root) {
+  root.appendChild(viewIntro("Are we winning, or just charging more? And is the portfolio the right shape?",
+    "Q2 2026 closed. The structural questions, at eight-quarter depth, plus an honest account of what Phase 1 cannot answer."));
+
+  var q = 7;
+  var qNow = sc("rev", D.qNetRev[q]), qPlan = sc("rev", D.qPlan[q]);
+
+  root.appendChild(sectionHead("Quarter and full-year picture"));
+  root.appendChild(tilesRow([
+    tile({
+      id: "PQ1", dom: DOM.growth, label: "Q2 net revenue", value: usd(qNow),
+      delta: { dir: dir(D.qNetRev[q] / D.qNetRev[3] - 1, "up"), text: signedPct((D.qNetRev[q] / D.qNetRev[3] - 1) * 100), vs: "vs Q2 last year" },
+      second: "<b>" + signedPct((qNow / qPlan - 1) * 100) + "</b> vs plan " + usd(qPlan, 1),
+      spark: scArr("rev", D.qNetRev), sparkColor: "var(--dom-growth)"
+    }),
+    tile({
+      id: "PQ2", dom: DOM.growth, label: "Volume growth", value: signedPct(D.qVolGrow[4]),
+      delta: { dir: "down", text: pts(D.qVolGrow[4] - D.qVolGrow[0]), vs: "vs five quarters ago" },
+      second: "Price carried <b>" + signedPct(D.qPriceGrow[4]) + "</b> of the " + signedPct(D.qVolGrow[4] + D.qPriceGrow[4]) + " total",
+      spark: D.qVolGrow, sparkColor: "var(--dom-growth)"
+    }),
+    tile({
+      id: "PQ1", dom: DOM.growth, label: "FY26 projection", value: usd(sc("rev", D.fyProj), 1),
+      delta: { dir: "down", text: signedPct((D.fyProj / D.fyPlan - 1) * 100), vs: "vs plan " + usd(sc("rev", D.fyPlan), 1) },
+      second: "Four quarters of decelerating growth: <b>14.3% → 9.0%</b>",
+      spark: [151.2, 154.8, 157.1, 159.4, 161.2, 162.8, 163.9, 164.8].map(function (v) { return v * F("rev"); }),
+      sparkColor: "var(--dom-growth)"
+    }),
+    tile({
+      id: "PQ3", dom: DOM.growth, label: "Top 5 concentration", value: pct(D.concTop5[q]),
+      delta: { dir: "down", text: pts(D.concTop5[q] - D.concTop5[3]), vs: "vs Q2 last year" },
+      second: "Top 10 <b>" + pct(D.concTop5[q] + D.concNext5[q]) + "</b> — and they are the fastest growing",
+      spark: D.concTop5, sparkColor: "var(--dom-growth)"
+    }),
+    tile({
+      id: "PQ5", dom: DOM.dist, label: "Distribution breadth", value: num(D.qCustSku[q] * F("dist")),
+      delta: { dir: "down", text: signedPlural(sc("dist", D.qCustSku[q] - D.qCustSku[5]), "combo", "combos"), vs: "vs two quarters ago" },
+      second: "Flat for three quarters while revenue grew <b>9.0%</b>",
+      spark: D.qCustSku, sparkColor: "var(--dom-dist)", detail: "distribution"
+    }),
+    tile({
+      id: "PQ6", dom: DOM.innov, label: "Innovation rate", value: pct(D.qInnov[q]),
+      delta: { dir: "up", text: pts(D.qInnov[q] - D.qInnov[0]), vs: "vs eight quarters ago" },
+      second: "Still <b>" + pts(D.qInnov[q] - D.innovTarget) + "</b> against the 12% target",
+      spark: D.qInnov, sparkColor: "var(--dom-innov)", detail: "launches"
+    }),
+    tile({
+      id: "PQ7", dom: DOM.promo, label: "Marketing investment rate", value: pct(D.qTrade[q] + D.qBrand[q]),
+      delta: { dir: "flat", text: pts((D.qTrade[q] + D.qBrand[q]) - (D.qTrade[0] + D.qBrand[0])), vs: "vs eight quarters ago" },
+      second: "Trade <b>" + pct(D.qTrade[q]) + "</b> · brand <b>" + pct(D.qBrand[q]) + "</b> of gross sales",
+      spark: D.qTrade.map(function (v, i) { return v + D.qBrand[i]; }), sparkColor: "var(--dom-promo)"
+    }),
+    tile({
+      id: "PQ4", dom: DOM.svc, label: "Case fill rate", value: pct(D.qFill[q]),
+      delta: { dir: "down", text: pts(D.qFill[q] - D.qFill[0]), vs: "vs eight quarters ago" },
+      second: "Fines <b>" + usdK(sc("svc", D.qFines[q])) + "</b> in the quarter, was " + usdK(sc("svc", D.qFines[0])),
+      spark: D.qFill, sparkColor: "var(--dom-svc)", detail: "otif"
+    })
+  ]));
+
+  root.appendChild(sectionHead("Needs attention", "Ranked, max 5"));
+  root.appendChild(attentionFeed("quarterly"));
+
+  root.appendChild(sectionHead("The growth-quality question"));
+  root.appendChild(h("div", { class: "grid two" }, [
+    card({
+      id: "PQ2", title: "Volume against price — where growth came from", span: true,
+      scope: "Consolidated",
+      sub: "Five quarters, because that is as far back as the prior-year comparison exists in the warehouse. Stacked, because the two together are the growth rate.",
+      legend: [
+        { name: "Volume contribution", color: cssvar("--s1"), sq: true },
+        { name: "Price & mix contribution", color: cssvar("--s2"), sq: true }
+      ],
+      chart: columnChart({
+        groups: D.qGrowLabels, stacked: true, capLabels: true, H: 270, W: WFULL,
+        yFmt: function (v) { return signedPct(v, 0); },
+        capFmt: function (v) { return signedPct(v) + " total"; },
+        series: [
+          { name: "Volume", color: cssvar("--s1"), values: D.qVolGrow },
+          { name: "Price & mix", color: cssvar("--s2"), values: D.qPriceGrow }
+        ],
+        tipFmt: function (v) { return signedPct(v); }
+      }),
+      table: {
+        cols: ["Quarter", "Volume", "Price & mix", "Total growth", "Price share of growth"],
+        rows: D.qGrowLabels.map(function (l, i) {
+          var tot = D.qVolGrow[i] + D.qPriceGrow[i];
+          return [l, signedPct(D.qVolGrow[i]), signedPct(D.qPriceGrow[i]), signedPct(tot), pct(D.qPriceGrow[i] / tot * 100, 0)];
+        })
+      },
+      note: "Volume has fallen from 5.1 points of growth to 3.4 while price has run at 5.6 to 8.1. Price-led growth stops the moment the comparison laps itself, and it does not build a franchise. This is the single most important chart on the page.",
+      sources: ["SYSPRO ArTrnDetail — cases and net price per case"]
+    }),
+    card({
+      id: "PQ1", title: "Net revenue — 8 quarters",
+      sub: "Actual against plan. The dollars are healthy; the composition behind them is the argument.",
+      legend: [{ name: "Actual", color: cssvar("--s1"), sq: true }, { name: "Plan", color: cssvar("--s2"), sq: true }],
+      chart: columnChart({
+        groups: D.qLabels, capLabels: "last", H: 250,
+        yFmt: function (v) { return "$" + v.toFixed(0) + "M"; },
+        series: [
+          { name: "Actual", color: cssvar("--s1"), values: scArr("rev", D.qNetRev) },
+          { name: "Plan", color: cssvar("--s2"), values: scArr("rev", D.qPlan) }
+        ],
+        tipExtra: function (i) { return [{ name: "Variance", value: signedUsd(sc("rev", D.qNetRev[i] - D.qPlan[i])) }]; }
+      }),
+      table: {
+        cols: ["Quarter", "Actual", "Plan", "Variance"],
+        rows: D.qLabels.map(function (l, i) {
+          var v = sc("rev", D.qNetRev[i] - D.qPlan[i]);
+          return [l, usd(sc("rev", D.qNetRev[i]), 1), usd(sc("rev", D.qPlan[i]), 1), { v: signedUsd(v), cls: v >= 0 ? "pos" : "neg" }];
+        })
+      },
+      sources: ["SYSPRO GL", "SYSPRO GenBudgets"]
+    }),
+    card({
+      id: "PQ5", title: "Distribution breadth — 8 quarters", scope: "Consolidated",
+      sub: "Customer-SKU combinations shipped in the quarter. This is the Phase 1 proxy for distribution: it counts what we shipped, not what stood on a shelf.",
+      chart: lineChart({
+        labels: D.qLabels, H: 250, area: true, endLabel: true, yTicks: 4,
+        yFmt: function (v) { return num(v); },
+        series: [{ name: "Customer-SKU combinations", color: cssvar("--dom-dist"), values: D.qCustSku }]
+      }),
+      table: {
+        cols: ["Quarter", "Combinations", "Change"],
+        rows: D.qCustSku.map(function (v, i, a) {
+          return [D.qLabels[i], num(v), i ? { v: (v >= a[i - 1] ? "+" : "−") + Math.abs(v - a[i - 1]), cls: v >= a[i - 1] ? "pos" : "neg" } : "—"];
+        })
+      },
+      note: "Peaked at 1,448 in Q4 and has drifted down since. Revenue grew 9% over the same period, entirely on price, mix and the items already on shelf.",
+      sources: ["SYSPRO ArTrnDetail — distinct customer × SKU"],
+      detail: "distribution"
+    }),
+    card({
+      id: "PQ4", title: "Portfolio — growth against margin", scope: "Consolidated", span: true,
+      sub: "Bubble size is net revenue. Quadrants split at company growth (7.8%) and company gross margin (25.9%). Four different decisions on one chart.",
+      chart: scatterQuad({
+        H: 340, W: WFULL,
+        points: D.lines.map(function (l) {
+          var g = (l.rev / l.ly - 1) * 100;
+          return {
+            label: l.nm, x: g, y: l.gm, size: l.rev,
+            // Salsa & Dips and Frozen Entrées sit on top of each other on both
+            // axes; Tortillas and Sauces crowd each other's labels. Pushing two
+            // labels off the horizontal keeps all six readable.
+            pos: l.nm === "Salsa & Dips" ? "bottom" : l.nm === "Sauces & Marinades" ? "top" : null,
+            color: cssvar("--s1"),
+            tip: [{ name: "Net revenue", value: usd(l.rev) }, { name: "vs budget margin", value: pts(l.gm - l.bud) }]
+          };
+        }),
+        xMid: 7.8, yMid: 25.9,
+        xName: "Growth vs LY", yName: "Gross margin %",
+        xTitle: "Revenue growth vs last July →", yTitle: "Gross margin % ↑",
+        xFmt: function (v) { return signedPct(v, 0); },
+        yFmt: function (v) { return v.toFixed(0) + "%"; },
+        quadLabels: [
+          { x: "l", y: "t", text: "PROFITABLE, NOT GROWING — PUSH VOLUME" },
+          { x: "r", y: "t", text: "WINNING — PROTECT AND FUND" },
+          { x: "l", y: "b", text: "SLOW AND THIN — FIX THE COST BASE" },
+          { x: "r", y: "b", text: "GROWING BUT THIN — PRICE, COST, OR EXIT" }
+        ]
+      }),
+      table: {
+        cols: ["Product line", "Net revenue", "Growth", "GM %", "Quadrant"],
+        rows: D.lines.map(function (l) {
+          var g = (l.rev / l.ly - 1) * 100, fast = g >= 7.8, thick = l.gm >= 25.9;
+          return [l.nm, usd(l.rev), signedPct(g), pct(l.gm),
+            fast ? (thick ? "Winning — protect and fund" : "Growing but thin — price, cost, or exit")
+              : (thick ? "Profitable, not growing — push volume" : "Slow and thin — fix the cost base")];
+        })
+      },
+      note: "Salsa & Dips is the largest line in the worst quadrant. Snack Bars is the fastest-growing line at the worst margin. Soups & Broths earns the most and grows the least. Those are three different conversations, and none of them is \"grow the top line\".",
+      sources: ["SYSPRO ArTrnDetail + standard costs"],
+      detail: "line-growth"
+    }),
+    card({
+      id: "PQ3", title: "Customer concentration — 8 quarters", scope: "Consolidated", span: true,
+      sub: "Share of revenue. The top 5 have gained 4.1 points in two years, and everything outside the top 10 has given up 4.0.",
+      legend: [
+        { name: "Top 5 customers", color: cssvar("--s1"), sq: true },
+        { name: "Next 5", color: cssvar("--s2"), sq: true },
+        { name: "All other customers", color: cssvar("--s-neutral"), sq: true }
+      ],
+      chart: columnChart({
+        groups: D.qLabels, stacked: true, capLabels: false, H: 270, W: WFULL,
+        yFmt: function (v) { return v.toFixed(0) + "%"; },
+        series: [
+          { name: "Top 5", color: cssvar("--s1"), values: D.concTop5 },
+          { name: "Next 5", color: cssvar("--s2"), values: D.concNext5 },
+          { name: "All others", color: cssvar("--s-neutral"), values: D.concRest }
+        ],
+        tipFmt: function (v) { return pct(v); }
+      }),
+      table: {
+        cols: ["Quarter", "Top 5", "Next 5", "All others", "Top 10"],
+        rows: D.qLabels.map(function (l, i) {
+          return [l, pct(D.concTop5[i]), pct(D.concNext5[i]), pct(D.concRest[i]), pct(D.concTop5[i] + D.concNext5[i])];
+        })
+      },
+      note: "This is the same 48.2% the CFO dashboard reports as a board risk metric. On this page it is also a commercial fact: the accounts driving growth are the ones with the highest trade rates and the strictest service scorecards.",
+      sources: ["SYSPRO ArTrnDetail"],
+      detail: "cust-growth"
+    }),
+    card({
+      id: "PQ7", title: "Marketing investment rate — 8 quarters", scope: "Consolidated",
+      sub: "Trade and brand as a percentage of gross sales. Both are rates, so they share one axis honestly.",
+      legend: [
+        { name: "Trade % of gross", color: cssvar("--s1") },
+        { name: "Brand % of gross", color: cssvar("--s3") }
+      ],
+      chart: lineChart({
+        labels: D.qLabels, H: 250, yTicks: 4, yMin: 0,
+        yFmt: function (v) { return v.toFixed(1) + "%"; },
+        series: [
+          { name: "Trade", color: cssvar("--s1"), values: D.qTrade },
+          { name: "Brand", color: cssvar("--s3"), values: D.qBrand }
+        ]
+      }),
+      table: {
+        cols: ["Quarter", "Trade % gross", "Brand % gross", "Total", "Trade share of it"],
+        rows: D.qLabels.map(function (l, i) {
+          var t = D.qTrade[i] + D.qBrand[i];
+          return [l, pct(D.qTrade[i]), pct(D.qBrand[i]), pct(t), pct(D.qTrade[i] / t * 100, 0)];
+        })
+      },
+      note: "Trade +0.6 points, brand −0.4, total roughly flat. Trade is now 83% of marketing investment against 80% two years ago. Nothing in Phase 1 proves that shift earned its money.",
+      sources: ["TELUS Blacksmith TPM", "SYSPRO GL — advertising & promotion"]
+    }),
+    card({
+      id: "PQ4", title: "Service — 8 quarters", scope: "Consolidated",
+      sub: "Case fill and OTIF, both in points. The fine dollars are in the table rather than on a second axis.",
+      legend: [
+        { name: "Case fill %", color: cssvar("--dom-svc") },
+        { name: "OTIF %", color: cssvar("--s2") }
+      ],
+      chart: lineChart({
+        labels: D.qLabels, H: 250, yTicks: 4,
+        yFmt: function (v) { return v.toFixed(0) + "%"; },
+        series: [
+          { name: "Case fill", color: cssvar("--dom-svc"), values: D.qFill },
+          { name: "OTIF", color: cssvar("--s2"), values: D.qOtif }
+        ]
+      }),
+      table: {
+        cols: ["Quarter", "Case fill %", "OTIF %", "Fines in quarter"],
+        rows: D.qLabels.map(function (l, i) {
+          return [l, pct(D.qFill[i]), pct(D.qOtif[i]), usdK(sc("svc", D.qFines[i]))];
+        })
+      },
+      note: "Eight quarters of steady decline in both, and fines up more than fivefold. One point of fill rate is worth about $0.15M of monthly demand at current volumes.",
+      sources: ["SYSPRO shipment confirmations", "HighRadius"],
+      detail: "otif"
+    })
+  ]));
+
+  root.appendChild(sectionHead("Phase 2 — what this page cannot tell you", "Deliberately dashed, not hidden"));
+  root.appendChild(h("div", { class: "grid three" }, [
+    h("div", { class: "locked" }, [
+      h("span", { class: "pill", style: "--sev:" + cssvar("--s1") }, [
+        h("span", { class: "glyph", "aria-hidden": "true", text: "○" }), document.createTextNode("Phase 2 · NIQ")
+      ]),
+      h("h3", { style: "margin-top:8px", text: "Market share, %ACV and category growth" }),
+      h("p", { text: "Everything on this page is what we shipped. Whether the category grew faster than we did — and whether our 7.8% was share gained or a rising tide — needs syndicated data. This is also where real distribution lives: %ACV and points of distribution, rather than the customer-SKU count we use as a proxy today." })
+    ]),
+    h("div", { class: "locked" }, [
+      h("span", { class: "pill", style: "--sev:" + cssvar("--s1") }, [
+        h("span", { class: "glyph", "aria-hidden": "true", text: "○" }), document.createTextNode("Phase 2 · NIQ + retailer POS")
+      ]),
+      h("h3", { style: "margin-top:8px", text: "Promotion lift and true trade ROI" }),
+      h("p", { text: "We can already show what a promotion cost, how deep it went and how much volume moved on deal. Return needs a baseline — what would have sold without it. That is lift data, and without it the 38.2% of volume on promotion is a spend figure rather than a decision. The highest-value chart on the roadmap." })
+    ]),
+    h("div", { class: "locked" }, [
+      h("span", { class: "pill", style: "--sev:" + cssvar("--s1") }, [
+        h("span", { class: "glyph", "aria-hidden": "true", text: "○" }), document.createTextNode("Phase 2 · Panel + tracker")
+      ]),
+      h("h3", { style: "margin-top:8px", text: "Brand health — penetration, repeat, awareness" }),
+      h("p", { text: "Household penetration, repeat rate and buying-rate decomposition, plus aided awareness from a brand tracker. This is the only place a head of marketing can prove that brand spend does something trade spend cannot, which is why the working / non-working split on the Month tab is a stopgap." })
+    ])
+  ]));
+}
+
+/* ------------------------------------------------------------------- FORMULAS */
+var FORMULAS = [
+  { nm: "Net revenue", body: "Gross sales − Trade spend − Deductions &amp; allowances", src: "Same definition as the CFO dashboard · SYSPRO · TELUS · HighRadius" },
+  { nm: "Volume growth %", body: '<span class="frac"><span class="n">Equivalent cases this period</span><span class="d">Equivalent cases last year</span></span> − 1', src: "SYSPRO ArTrnDetail · item master case equivalents" },
+  { nm: "Net revenue per case", body: '<span class="frac"><span class="n">Net revenue</span><span class="d">Equivalent cases</span></span>', src: "SYSPRO ArTrnDetail" },
+  { nm: "Price &amp; mix contribution", body: "Net revenue growth − Volume contribution", src: "SYSPRO ArTrnDetail — decomposed per line" },
+  { nm: "Case fill rate %", body: '<span class="frac"><span class="n">Cases shipped</span><span class="d">Cases ordered</span></span>&nbsp;×&nbsp;100', src: "SYSPRO SorDetail vs shipment confirmations" },
+  { nm: "On time in full %", body: '<span class="frac"><span class="n">Orders on time and complete</span><span class="d">Orders due</span></span>&nbsp;×&nbsp;100', src: "SYSPRO shipments vs promised date" },
+  { nm: "Lost demand", body: "Cut cases × Net revenue per case", src: "SYSPRO SorDetail" },
+  { nm: "Promoted volume %", body: '<span class="frac"><span class="n">Cases sold on a promotion</span><span class="d">Total cases</span></span>&nbsp;×&nbsp;100', src: "TELUS Blacksmith TPM · SYSPRO" },
+  { nm: "Average discount depth %", body: '<span class="frac"><span class="n">List price − Net promoted price</span><span class="d">List price</span></span>&nbsp;×&nbsp;100', src: "TELUS Blacksmith TPM — promotion terms" },
+  { nm: "Trade investment rate %", body: '<span class="frac"><span class="n">Trade spend</span><span class="d">Gross sales</span></span>&nbsp;×&nbsp;100', src: "Same definition as the CFO dashboard · TELUS Blacksmith" },
+  { nm: "Total marketing investment rate %", body: '<span class="frac"><span class="n">Trade spend + Brand spend</span><span class="d">Gross sales</span></span>&nbsp;×&nbsp;100', src: "TELUS Blacksmith · SYSPRO GL A&amp;P cost centres" },
+  { nm: "Working spend %", body: '<span class="frac"><span class="n">Brand spend reaching a shopper</span><span class="d">Total brand spend</span></span>&nbsp;×&nbsp;100', src: "SYSPRO GL A&amp;P cost centres" },
+  { nm: "Innovation rate %", body: '<span class="frac"><span class="n">Net revenue from items &lt; 24 months</span><span class="d">Net revenue</span></span>&nbsp;×&nbsp;100', src: "SYSPRO item master launch dates" },
+  { nm: "Distribution breadth", body: "Count of customer × SKU combinations shipped in the period", src: "SYSPRO ArTrnDetail — Phase 1 proxy for %ACV" },
+  { nm: "Promotion lift %", body: '<span class="frac"><span class="n">Promoted volume − Baseline volume</span><span class="d">Baseline volume</span></span>&nbsp;×&nbsp;100', src: "Phase 2 — needs NIQ baseline; not computable today" }
+];
+
+function renderFormulas() {
+  var g = document.getElementById("formula-grid");
+  FORMULAS.forEach(function (f, i) {
+    g.appendChild(h("div", { class: "formula" }, [
+      h("div", { class: "num", text: String(i + 1) }),
+      h("div", null, [
+        h("div", { class: "fname", html: f.nm }),
+        h("div", { class: "fbody", html: "= " + f.body }),
+        h("div", { class: "fsrc mono", html: f.src })
+      ])
+    ]));
+  });
+}
+
+/* Two bands: the systems the data comes from, then the pipeline it travels
+   through. The commercial view needs two Phase 2 sources, not one — NIQ for
+   the category and the retailer portals for store-level sell-through. */
+var LINEAGE_SOURCES = [
+  { nm: "SYSPRO ERP", role: "Orders · shipments · invoices · items" },
+  { nm: "TELUS Blacksmith", role: "Promotion calendar · spend" },
+  { nm: "Salesforce", role: "New business pipeline" },
+  { nm: "HighRadius", role: "Deductions · OTIF fines" },
+  { nm: "NIQ syndicated", role: "Phase 2 — share, lift", phase2: true },
+  { nm: "Retailer POS", role: "Phase 2 — sell-through", phase2: true }
+];
+var LINEAGE_PIPE = [
+  { nm: "Warehouse", role: "Raw → staged → tested" },
+  { arrow: true },
+  { nm: "dbt marts", role: "One mart per cadence" },
+  { arrow: true },
+  { nm: "This screen", role: "Pre-computed · nothing to run" }
+];
+
+function stageEl(st2) {
+  if (st2.arrow) return h("span", { class: "arrow", "aria-hidden": "true", text: "→" });
+  return h("div", { class: "stage" + (st2.phase2 ? " phase2" : "") }, [
+    h("span", { class: "sname", text: st2.nm }),
+    h("span", { class: "srole", text: st2.role })
+  ]);
+}
+
+function renderLineage() {
+  var w = document.getElementById("lineage");
+  [
+    { cap: "Four source systems today, two more in Phase 2", list: LINEAGE_SOURCES },
+    { cap: "↓  then one pipeline, rebuilt every morning", list: LINEAGE_PIPE }
+  ].forEach(function (band) {
+    w.appendChild(h("div", null, [
+      h("div", { class: "lineage-cap", text: band.cap }),
+      h("div", { class: "lineage-band" }, band.list.map(stageEl))
+    ]));
+  });
+}
+
+function renderSync() {
+  var w = document.getElementById("sync-list");
+  D.sync.forEach(function (r) {
+    w.appendChild(h("div", { class: "sync-row" }, [
+      h("span", { style: "width:8px;height:8px;border-radius:50%;flex:none;background:" + (r.ok ? cssvar("--good") : cssvar("--s-neutral")) }),
+      h("span", { class: "nm", text: r.nm }),
+      h("span", { class: "tm", text: r.tm })
+    ]));
+  });
+}
+
+/* ---------------------------------------------------------------- DRAWER */
+var drawer = document.getElementById("drawer");
+var scrim = document.getElementById("scrim");
+var lastFocus = null;
+
+function openDrawer(key) {
+  var d = DETAILS[key];
+  if (!d) return;
+  lastFocus = document.activeElement;
+  document.getElementById("drawer-eyebrow").textContent = d.eyebrow;
+  document.getElementById("drawer-title").textContent = d.title;
+  document.getElementById("drawer-desc").textContent = d.desc;
+  var body = document.getElementById("drawer-body");
+  body.innerHTML = "";
+  body.appendChild(h("div", { class: "drawer-scroll" }, [dvTable({ cols: d.cols, rows: d.rows })]));
+  document.getElementById("drawer-foot").textContent = d.foot || "";
+  drawer.classList.add("open"); scrim.classList.add("open");
+  drawer.setAttribute("aria-hidden", "false");
+  document.getElementById("drawer-close").focus();
+}
+function closeDrawer() {
+  drawer.classList.remove("open"); scrim.classList.remove("open");
+  drawer.setAttribute("aria-hidden", "true");
+  if (lastFocus && lastFocus.focus) lastFocus.focus();
+}
+document.getElementById("drawer-close").addEventListener("click", closeDrawer);
+scrim.addEventListener("click", closeDrawer);
+document.addEventListener("keydown", function (e) {
+  if (e.key === "Escape") { closeDrawer(); closeFresh(); }
+});
+
+/* ------------------------------------------------------------- FRESHNESS POP */
+var freshBtn = document.getElementById("fresh-btn");
+var freshPop = document.getElementById("fresh-pop");
+function closeFresh() { freshPop.hidden = true; freshBtn.setAttribute("aria-expanded", "false"); }
+freshBtn.addEventListener("click", function (e) {
+  e.stopPropagation();
+  var open = !freshPop.hidden;
+  freshPop.hidden = open;
+  freshBtn.setAttribute("aria-expanded", open ? "false" : "true");
+});
+document.addEventListener("click", function (e) {
+  if (!freshPop.hidden && !freshPop.contains(e.target) && e.target !== freshBtn) closeFresh();
+});
+
+/* --------------------------------------------------------------------- BOOT */
+var RENDER = { daily: renderDaily, weekly: renderWeekly, monthly: renderMonthly, quarterly: renderQuarterly };
+var activeTab = "daily";
+
+function renderViews() {
+  refreshChartInk();
+  Object.keys(RENDER).forEach(function (k) {
+    var root = document.getElementById("view-" + k);
+    root.innerHTML = "";
+    RENDER[k](root);
+  });
+}
+
+document.querySelectorAll(".tab").forEach(function (btn) {
+  btn.addEventListener("click", function () {
+    activeTab = btn.dataset.tab;
+    document.querySelectorAll(".tab").forEach(function (b) {
+      b.setAttribute("aria-selected", b === btn ? "true" : "false");
+    });
+    Object.keys(RENDER).forEach(function (k) {
+      document.getElementById("view-" + k).hidden = k !== activeTab;
+    });
+    hideTip();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+});
+
+document.getElementById("channel").addEventListener("change", function (e) {
+  channel = e.target.value;
+  hideTip();
+  renderViews();
+});
+
+// Re-render on theme flip so chart ink and series colours follow the tokens.
+if (window.matchMedia) {
+  var mq = window.matchMedia("(prefers-color-scheme: dark)");
+  if (mq.addEventListener) mq.addEventListener("change", renderViews);
+}
+new MutationObserver(renderViews).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+
+renderSync();
+renderFormulas();
+renderLineage();
+renderViews();
+</script>
