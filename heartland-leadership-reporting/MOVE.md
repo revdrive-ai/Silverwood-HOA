@@ -6,22 +6,34 @@ couple of minutes.
 
 ## Why it is staged rather than pushed
 
-The Claude session that built these dashboards is scoped to `revdrive-ai/Silverwood-HOA` only.
-Both `add_repo` and the GitHub API returned the same thing for the target repo:
+The session that built these dashboards was started with only `revdrive-ai/Silverwood-HOA` selected
+in the repository picker, so that is the only repo it can touch. Adding the target repo mid-session
+failed the real GitHub reachability check:
 
 ```
-Access denied: repository "revdrive-ai/heartland-leadership-reporting" is not configured
-for this session. Allowed repositories: revdrive-ai/silverwood-hoa
+add_repo: repository "revdrive-ai/heartland-leadership-reporting" was not found on
+github.com, or this session's GitHub credential doesn't have access to it.
 ```
 
-That message is a session-scope check, so it cannot distinguish "the repo does not exist yet" from
-"the repo exists but is not granted to this workspace". Either way the fix is on the GitHub side:
+Listing everything the connected GitHub account can see returned three repos —
+`revdrive-ai/Silverwood-HOA`, `revdrive-ai/kroger-reporter` and
+`RandyPronschinske/Kroger` — and no Heartland one. Since other `revdrive-ai` repos are visible,
+the likely explanation is that **the target repo does not exist yet**.
 
-- **If the repo does not exist yet** — create it (empty, no README), then grant it.
-- **If it exists** — grant this workspace access to it in the Claude GitHub settings:
-  <https://claude.ai/admin-settings/claude-in-slack>
+There is nothing to "grant": per the
+[Claude Code on the web docs](https://code.claude.com/docs/en/claude-code-on-the-web#github-authentication-options),
+a cloud session can use any repository the connected GitHub account can see, and Claude GitHub App
+installation is not a session-level access control. So the fix is simply to make the repo exist and
+be visible to that account:
 
-Once it is reachable, a future session can push directly and this file can be deleted.
+1. Create it empty at <https://github.com/new> — owner `revdrive-ai`, name
+   `Heartland-Leadership-Reporting`. Skip the README, `.gitignore` and licence so the first push
+   is a clean fast-forward.
+2. If it already exists and Claude still cannot see it, confirm the GitHub account connected to
+   Claude has access to it on GitHub — private repos need the same authorization as public ones.
+
+Once it exists, either push it yourself (Option A) or start a fresh session with both repos
+selected in the picker (Option B).
 
 ## Option A — move it yourself (about two minutes)
 
