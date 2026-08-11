@@ -1,9 +1,8 @@
 # Heartland Foods — VP of Sales Dashboard (Draft 1)
 
 A self-contained clickable prototype of the sales dashboard: shipments, trade spend, the
-Foodservice division, and how every territory and account is tracking to forecast. Third in the
-set with `../heartland-cfo-dashboard` and `../heartland-president-dashboard`, on the same
-template and the same house chart style.
+Foodservice division, and how every territory and account is tracking to forecast. Third in the set with the CFO and President dashboards
+(`docs/cfo.md`, `docs/president.md`), on the same template and the same house chart style.
 
 Open `index.html` in a browser. No build step, no server, no dependencies.
 
@@ -113,7 +112,7 @@ Printed at the bottom of the page: **at what point in the month does a rep's for
 Revision tracking, at-risk revenue and forecast error all need one agreed cut-off, and that is a
 sales-management decision rather than a data one.
 
-## Note on this repository
+## Where this lives
 
-Not part of the Silverwood HOA site and not linked from it — it lives under `prototypes/` as a
-standalone deliverable and is not routed by the Next.js app.
+`vp-sales/index.html` in the Heartland Leadership Reporting repo. Open the site's `index.html` for the
+landing page, the shared-number tie-out across all three views, and the Phase 2 gaps.

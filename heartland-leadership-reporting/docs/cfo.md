@@ -68,7 +68,7 @@ Listed at the bottom of the page itself, so they travel with the artefact. The m
 which 3–5 month-end reports would make close easier? Whatever finance names goes on the
 Month tab first, verbatim, ahead of anything chosen here.
 
-## Note on this repository
+## Where this lives
 
-This prototype is not part of the Silverwood HOA site and is not linked from it — it lives
-under `prototypes/` as a standalone deliverable and is not routed by the Next.js app.
+`cfo/index.html` in the Heartland Leadership Reporting repo. Open the site's `index.html` for the
+landing page, the shared-number tie-out across all three views, and the Phase 2 gaps.

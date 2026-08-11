@@ -1,8 +1,8 @@
 # Heartland Foods — President & Marketing Dashboard (Draft 1)
 
 A self-contained clickable prototype of the commercial dashboard: the view the President
-and the head of marketing share. Sibling to `../heartland-cfo-dashboard`, built on the same
-template and the same house chart style.
+and the head of marketing share. Sibling to the CFO dashboard (`docs/cfo.md`), built on the same template and the same house
+chart style.
 
 Open `index.html` in a browser. No build step, no server, no dependencies — one HTML file
 with inline CSS and JS and no external requests.
@@ -110,7 +110,7 @@ number you promise your top five customers, and who owns it?** Fill rate and OTI
 three of the four tabs because nothing else on the page survives a supply failure — but the
 target and the owner are the client's to name.
 
-## Note on this repository
+## Where this lives
 
-Not part of the Silverwood HOA site and not linked from it — it lives under `prototypes/` as a
-standalone deliverable and is not routed by the Next.js app.
+`president/index.html` in the Heartland Leadership Reporting repo. Open the site's `index.html` for the
+landing page, the shared-number tie-out across all three views, and the Phase 2 gaps.
