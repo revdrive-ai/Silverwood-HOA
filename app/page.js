@@ -14,7 +14,7 @@ export default function HomePage() {
         <Image src="/images/entrance.jpg" alt="Silverwood neighborhood entrance" fill priority className="object-cover" />
         <div className="absolute inset-0 bg-primary/50" />
         <div className="relative h-full mx-auto max-w-6xl px-4 sm:px-6 flex flex-col justify-center">
-          <h1 className="font-sans font-bold text-3xl sm:text-5xl text-white max-w-2xl drop-shadow">
+          <h1 className="font-serif font-bold text-3xl sm:text-5xl text-white max-w-2xl drop-shadow">
             Welcome to Silverwood
           </h1>
           <p className="mt-3 text-cream max-w-xl text-lg drop-shadow">{site.tagline}</p>
@@ -23,13 +23,13 @@ export default function HomePage() {
               href={site.externalLinks.memberPortal}
               target="_blank"
               rel="noreferrer"
-              className="rounded-full bg-accent text-white px-5 py-2.5 font-sans font-semibold hover:bg-white hover:text-primary transition-colors"
+              className="rounded-lg bg-primary text-white px-5 py-2.5 font-sans font-semibold hover:bg-white hover:text-primary transition-colors"
             >
               Go to Member Portal
             </a>
             <Link
               href="/board"
-              className="rounded-full bg-white/90 text-primary px-5 py-2.5 font-sans font-semibold hover:bg-white transition-colors"
+              className="rounded-lg bg-white/90 text-primary px-5 py-2.5 font-sans font-semibold hover:bg-white transition-colors"
             >
               Contact the Board
             </Link>
@@ -87,7 +87,7 @@ export default function HomePage() {
           <p className="mt-3 text-subink">
             <span className="font-semibold text-primary">Pool season:</span> {site.poolInfo.season}
           </p>
-          <p className="mt-2 font-sans font-bold text-primary">{site.poolInfo.announcement}</p>
+          <p className="mt-2 font-sans font-bold text-pine">{site.poolInfo.announcement}</p>
           <p className="mt-1 text-subink">
             <span className="font-semibold text-primary">Hours:</span> {site.poolInfo.hours}
           </p>
