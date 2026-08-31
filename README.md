@@ -14,12 +14,14 @@ using Next.js 14 (App Router) + Tailwind CSS. Deployed to Vercel.
   content file.
 - `components/*` — shared header, footer, and UI pieces (cards, section
   headings, info strips).
-- Images currently hotlink to `silverwoodneighborhood.org` (the same brand
-  photos: logo, entrance sign, pool, etc.) to keep this preview deploy
-  lightweight. Optimized local copies of all of them already exist and are
-  ready to drop into `public/images/` and swap in — do this once the project
-  moves to its own GitHub repo (see "Next step" below). Until then, the site
-  depends on the old site's media staying online.
+- `public/images/*` — all site images, self-hosted. Referenced by path
+  (`/images/pool.jpg`). The site no longer depends on the old site's media.
+
+See also:
+
+- **`EDITING.md`** — how to update content, written for board members.
+- **`CLAUDE.md`** — conventions, content map, and gotchas for developers
+  (and for Claude).
 
 ## Making a content edit right now (no coding experience needed)
 
@@ -61,9 +63,8 @@ needs either:
    app that writes directly to GitHub via a personal access token). More
    work to build, but no third-party CMS dependency.
 
-Either path needs you to first put this project in a GitHub repo (currently
-it only exists in this session and on Vercel) — that's the natural next step
-once you're happy with the design and content.
+The project now lives in GitHub (`revdrive-ai/Silverwood-HOA`) with Vercel
+deploying `main` automatically, so either path is unblocked.
 
 ## Local development
 
