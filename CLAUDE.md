@@ -28,6 +28,7 @@ layout. Editing content should never require touching a component.
 | `content/news.js` | News list (`/news`) and each article (`/news/[slug]`) |
 | `content/documents.js` | Documents list and detail pages |
 | `content/newResident.js` | New Resident pages, including the phone-number and ordinance pages |
+| `content/volunteer.js` | The Volunteer page (`/volunteer`) — intro, opportunity cards, sign-up copy |
 
 Each content file exports an array plus a `getXBySlug()` helper used by the
 `[slug]` route. Entries are keyed by `slug`, which is also the URL segment —
