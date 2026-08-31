@@ -1,0 +1,17 @@
+# Dependencies
+node_modules/
+
+# Next.js build output
+.next/
+out/
+
+# Vercel CLI
+.vercel/
+
+# Logs and OS cruft
+*.log
+.DS_Store
+
+# Local env files (never commit secrets)
+.env
+.env*.local
