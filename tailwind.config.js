@@ -7,16 +7,17 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: "#2C3B35",
-        accent: "#A0703C",
-        cream: "#F1EEE7",
-        cream2: "#E8E2D6",
-        ink: "#333333",
-        subink: "#5B5B5B",
+        primary: "#2f5d46",
+        accent: "#1e4433",
+        pine: "#1e3329",
+        cream: "#eef3ee",
+        cream2: "#e3e9e5",
+        ink: "#33403a",
+        subink: "#5a675f",
       },
       fontFamily: {
-        serif: ["Georgia", "Cambria", "Times New Roman", "serif"],
-        sans: ["Calibri", "Segoe UI", "system-ui", "sans-serif"],
+        serif: ["var(--font-lora)", "Georgia", "serif"],
+        sans: ["var(--font-public-sans)", "system-ui", "sans-serif"],
       },
     },
   },
