@@ -6,12 +6,16 @@ A plain-English guide for board members. No coding experience assumed.
 
 **1. Only files inside the `content` folder change the website.**
 
-There are some leftover files sitting loose at the top level of this
-repository named `site.js`, `news.js`, and `page.js`. **They are dead copies.
-Editing them does nothing at all.** The real ones live in the `content`
-folder (and `app` for page layout). If you're ever unsure whether you're in
-the right file, check that the path shown at the top of the GitHub page
-starts with `content/`.
+Check that the path shown at the top of the GitHub page starts with
+`content/` before you edit. A file with the right name in the wrong place
+does nothing at all — the repository once collected loose copies of
+`site.js` and `news.js` at the top level, and people edited them for a while
+without any effect on the site. Those copies have been deleted.
+
+When you upload a file, watch where it lands: uploading from the repository's
+front page puts the file at the top level, which is almost never where it
+belongs. Open the folder you want first (`public/images`, for instance), then
+use *Add file → Upload files* from inside it.
 
 **2. Changes go live on their own, about a minute after you save.**
 

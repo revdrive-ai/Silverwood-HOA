@@ -71,6 +71,11 @@ Self-hosted in `public/images/`, referenced as `/images/<name>`. Names are
 lowercase-with-hyphens. Keep spaces out of filenames — they force URL
 escaping. Reference images by path string; nothing uses static imports.
 
+A GitHub-UI upload started from the repository front page lands at the repo
+**root**, not in the folder you meant. That is how a set of stale duplicate
+content files accumulated here (deleted Aug 2026). If a file appears at the
+root, it is almost certainly misplaced.
+
 ## Workflow
 
 **`main` receives direct commits from the GitHub web UI** (board members
@@ -108,14 +113,13 @@ proxy (`CONNECT tunnel failed, 403`). Use the Vercel MCP
 ## Known open items
 
 - **Domain cutover** — `silverwoodneighborhood.org` → this project (above).
-- **Stale root duplicates** — `site.js`, `news.js`, `page.js` at the repo
-  root are dead, out-of-date copies of `content/site.js`, `content/news.js`,
-  and `app/page.js`. Nothing imports them. They exist because files were
-  uploaded to the repo root by mistake. **Edits made there do nothing.**
-  They should be deleted.
-- **`README.txt`** — empty file, safe to delete. `README.md` is the real one.
 - **Contact form** (`app/board/page.js`) doesn't submit anywhere yet.
 - **PDF links** in `content/documents.js` and `content/newResident.js` still
   have `url: "#"` placeholders.
-- **Code-free editing** for board members (a CMS or an `/admin` route) is
-  still unbuilt; see `EDITING.md` for the current manual process.
+- **Code-free editing / CMS — decided against, Aug 2026.** Two board members
+  edit the site, both able to use GitHub, a handful of times a year. At that
+  scale Decap (free but every editor needs a GitHub account plus an OAuth
+  function we'd maintain) and Tina (~$29/mo beyond 2 users) both cost more
+  than they return. The GitHub web UI plus `EDITING.md` is the chosen path,
+  with larger changes going through Claude on a branch. Revisit if the number
+  of editors or the edit frequency grows.
