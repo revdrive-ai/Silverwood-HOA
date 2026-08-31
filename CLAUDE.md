@@ -62,6 +62,9 @@ Defined in `tailwind.config.js` — use the token names, not raw hex:
 - `primary` `#2f5d46`, `accent` `#1e4433`, `pine` `#1e3329` (greens)
 - `cream` `#eef3ee`, `cream2` `#e3e9e5` (backgrounds/borders)
 - `ink` `#33403a`, `subink` `#5a675f` (text)
+- `alert` `#b3261e` — the one non-green, reserved for time-sensitive notices
+  (`quickFacts` notes, the pool announcement). Don't spend it on decoration;
+  it only works because it's rare.
 - Fonts: `font-serif` (Lora) for headings, `font-sans` (Public Sans) for UI,
   both loaded as CSS variables in `app/layout.js`.
 

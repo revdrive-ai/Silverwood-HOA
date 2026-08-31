@@ -14,6 +14,9 @@ module.exports = {
         cream2: "#e3e9e5",
         ink: "#33403a",
         subink: "#5a675f",
+        // Attention colour for time-sensitive notices (pool closing dates,
+        // schedule changes). Meets AA contrast on white and on cream.
+        alert: "#b3261e",
       },
       fontFamily: {
         serif: ["var(--font-lora)", "Georgia", "serif"],

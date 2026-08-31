@@ -87,7 +87,7 @@ export default function HomePage() {
           <p className="mt-3 text-subink">
             <span className="font-semibold text-primary">Pool season:</span> {site.poolInfo.season}
           </p>
-          <p className="mt-2 font-sans font-bold text-pine">{site.poolInfo.announcement}</p>
+          <p className="mt-2 font-sans font-bold text-alert">{site.poolInfo.announcement}</p>
           <p className="mt-1 text-subink">
             <span className="font-semibold text-primary">Hours:</span> {site.poolInfo.hours}
           </p>
