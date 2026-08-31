@@ -37,7 +37,11 @@ export const site = {
   ],
   quickFacts: [
     { label: "Annual dues", value: "Due in full by March 1 each year" },
-    { label: "Pool season", value: "Memorial Day – Labor Day" },
+    {
+      label: "Pool season",
+      value: "Memorial Day – Labor Day",
+      note: "Extended! The pool now closes Sunday, September 13th at 9 PM for the season.",
+    },
     { label: "Next Annual Meeting", value: "May 2027 · Time & location TBD" },
   ],
   amenities:

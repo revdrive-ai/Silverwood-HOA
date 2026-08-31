@@ -52,6 +52,7 @@ export const news = [
     image: "/images/pool.jpg",
     summary: "Pool hours, key access, and rules for the season.",
     body: [
+      "The Board has voted to extend the pool season an extra week — the pool closes Sunday, September 13th at 9 PM for the season. This may get extended depending on usage and the weather; watch for more announcements.",
       "The community pool operates seasonally from Memorial Day weekend through Labor Day weekend. Hours vary by day: Mondays 1–9 PM (pool cleaning day), Tuesday–Thursday 9 AM–9 PM, Friday–Sunday 9 AM–10 PM.",
       "Electronic pool keys are available from Tim Sanderson or a board member. Residents must have current dues to obtain access — request a key through the contact page or via the Facebook group.",
       "Please clean all tables and pick up all trash before leaving the pool area. Staying at the pool after the posted closing time is not permitted.",
