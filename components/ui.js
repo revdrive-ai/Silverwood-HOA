@@ -58,7 +58,7 @@ export function InfoStrip({ facts }) {
         <div key={f.label} className="bg-cream rounded-xl p-4 border border-cream2">
           <div className="text-xs font-sans font-bold uppercase tracking-wide text-primary">{f.label}</div>
           <div className="mt-1 text-pine font-semibold">{f.value}</div>
-          {f.note ? <div className="mt-2 text-sm font-sans font-bold text-pine">{f.note}</div> : null}
+          {f.note ? <div className="mt-2 text-sm font-sans font-bold text-alert">{f.note}</div> : null}
         </div>
       ))}
     </div>
