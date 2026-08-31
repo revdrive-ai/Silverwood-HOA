@@ -1,1 +1,0 @@
-Silverwood restyle + pool update — 2026-08-31\n\nUpload each file into its matching repo folder (open the folder on GitHub first, then Add file > Upload files):\n\nRepo ROOT:      tailwind.config.js\napp/:           layout.js, page.js\ncomponents/:    ui.js, Header.js, Footer.js\ncontent/:       site.js, news.js\n\nCommit each upload to main. Vercel redeploys automatically.\n
