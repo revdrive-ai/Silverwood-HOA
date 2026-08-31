@@ -45,6 +45,8 @@ export const site = {
   poolInfo: {
     hours: "Mon 1–9 PM (pool cleaning day) · Tue–Thu 9 AM–9 PM · Fri–Sun 9 AM–10 PM",
     season: "Memorial Day weekend through Labor Day weekend (exact closing date depends on weather and usage)",
+    announcement:
+      "The Board has voted to extend the pool season an extra week — the pool closes Sunday, September 13th at 9 PM for the season. This may get extended depending on usage and the weather; watch for more announcements.",
     access:
       "Electronic pool keys are available from Tim Sanderson or a board member — residents must have current dues to receive one. Request a key via the contact page or the Facebook group.",
     rules:

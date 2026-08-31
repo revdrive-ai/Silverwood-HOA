@@ -1,5 +1,16 @@
 export const news = [
   {
+    slug: "new-management-wm-2026",
+    title: "New Management Company Starting October 1, 2026",
+    date: "2026",
+    image: "/images/management.jpg",
+    summary: "Starting October 1st, 2026 our new management company will be W&M HOA Property Management. More details will be sent to each homeowner in September.",
+    body: [
+      "Starting October 1st, 2026 our new management company will be W&M HOA Property Management.",
+      "More details will be sent to each homeowner in September.",
+    ],
+  },
+  {
     slug: "annual-meeting-2027",
     title: "Annual Meeting 2027",
     date: "2027",
