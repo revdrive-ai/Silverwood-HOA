@@ -114,6 +114,25 @@ Outbound `curl` to the production domain is blocked by this environment's
 proxy (`CONNECT tunnel failed, 403`). Use the Vercel MCP
 `web_fetch_vercel_url` tool to read live pages instead.
 
+## Documents (PDFs)
+
+Board PDFs go in `public/documents/`, served at `/documents/<file>.pdf`, and
+are referenced from the `files` arrays in `content/documents.js`.
+
+Verified against a production build: static files there do **not** shadow the
+`/documents` page or the `/documents/[slug]` routes — `/documents/x.pdf`
+returns the PDF while `/documents` and `/documents/bylaws-covenants` still
+return their pages.
+
+Two things to keep in mind:
+
+- `public/` has no access control. Anything there is world-readable and
+  indexable. Members-only material belongs in the member portal.
+- **The three Bylaws & Covenants links still point at
+  `silverwoodneighborhood.org/wp-content/uploads/...`** — the old WordPress
+  site. They will break when that domain is cut over to this project. Copy
+  those PDFs into `public/documents/` before any DNS change.
+
 ## Known open items
 
 - **Domain cutover** — `silverwoodneighborhood.org` → this project (above).

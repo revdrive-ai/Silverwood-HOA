@@ -87,6 +87,34 @@ Photos are cropped to a wide banner shape on the cards. **Logos get cropped
 badly** — if you're adding a logo rather than a photo, ask Claude to set it
 up so the whole logo stays visible (there's a setting for this).
 
+## Adding a document (minutes, bylaws, newsletters)
+
+PDFs live in **`public/documents`**. A file placed there is available on the
+site at `/documents/<filename>`, so `public/documents/2026-annual-minutes.pdf`
+is reachable at `/documents/2026-annual-minutes.pdf`.
+
+1. Open the **`public/documents`** folder on GitHub, then *Add file → Upload
+   files*. (Open the folder first — starting from the repository front page
+   drops the file at the top level instead.)
+2. Name it lowercase with hyphens, keep the `.pdf`: `2026-annual-minutes.pdf`.
+3. In `content/documents.js`, find the entry it belongs under — Meeting
+   Minutes, Bylaws & Covenants, Newsletters — and set the matching line in
+   its `files` list:
+
+   ```
+   { label: "2026 Annual Meeting Minutes", url: "/documents/2026-annual-minutes.pdf" },
+   ```
+
+   A `url: "#"` means the link is a placeholder and does nothing when
+   clicked. There are a number of those still waiting for files.
+
+**Before you upload minutes, one thing to decide.** Anything in
+`public/documents` is readable by anyone with the link, and search engines can
+index it. There is no member login in front of it. Bylaws are normally meant
+to be public; **meeting minutes often aren't** — they can name residents,
+reference delinquent accounts, or record enforcement discussions. If a
+document should be members-only, put it in the member portal instead of here.
+
 ## Undoing a change
 
 Every change is saved forever and can be reversed:

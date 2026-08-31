@@ -1,0 +1,15 @@
+Board documents (PDFs) go in this folder.
+
+A file placed here is served from the site root, so
+public/documents/2026-annual-minutes.pdf is reachable at
+/documents/2026-annual-minutes.pdf — that's the path to use in the `url`
+field of an entry's `files` array in content/documents.js.
+
+Naming: lowercase with hyphens, keep the .pdf extension, no spaces.
+
+Anything in this folder is publicly readable by anyone with the link and can
+be indexed by search engines. There is no member login in front of it. Keep
+documents that should be members-only in the member portal instead.
+
+This file only exists so git tracks the (otherwise empty) folder. Delete it
+once there are real documents here.
