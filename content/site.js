@@ -9,6 +9,7 @@ export const site = {
     { label: "News", href: "/news" },
     { label: "Documents", href: "/documents" },
     { label: "New Residents", href: "/new-resident" },
+    { label: "Volunteer", href: "/volunteer" },
     { label: "Board & Contact", href: "/board" },
   ],
   externalLinks: {
