@@ -10,6 +10,14 @@ export const volunteer = {
   title: "Volunteer",
   subtitle: "A few hours from a few neighbors keeps our dues where they are.",
 
+  // Wide banner across the top of the page. Set to "/images/<file>.jpg" once
+  // the photo is in public/images/; null hides the banner entirely.
+  // A generic "neighbors working together" photo belongs here rather than on
+  // one of the opportunity cards below, where it would imply it shows that
+  // specific project.
+  heroImage: null,
+  heroImageAlt: "Neighbors working together on a neighborhood planting project",
+
   why: [
     "Silverwood is run by volunteers. Dues cover the two entrances, the pool and pool house, the retention pond and fence, and the landscaping contracts — and every project the neighborhood takes on itself is a project we don't have to put out for bid.",
     "That's the whole equation: the more we can accomplish on our own, the easier it is to keep dues low. A few hours from a handful of homeowners goes a long way toward saving the Association money, and it's a good excuse to meet the people on your street.",

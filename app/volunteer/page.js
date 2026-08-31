@@ -11,6 +11,20 @@ export default function VolunteerPage() {
     <div>
       <PageHero title={volunteer.title} subtitle={volunteer.subtitle} />
 
+      {volunteer.heroImage ? (
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 pt-10">
+          <div className="relative w-full h-56 sm:h-80 rounded-xl overflow-hidden bg-cream2">
+            <Image
+              src={volunteer.heroImage}
+              alt={volunteer.heroImageAlt || volunteer.title}
+              fill
+              priority
+              className="object-cover"
+            />
+          </div>
+        </div>
+      ) : null}
+
       {/* Why it matters — the dues connection */}
       <div className="mx-auto max-w-6xl px-4 sm:px-6 py-10">
         <SectionHeading>Why It Matters</SectionHeading>
