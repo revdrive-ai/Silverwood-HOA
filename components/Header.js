@@ -20,7 +20,7 @@ export default function Header() {
               href={site.externalLinks.memberPortal}
               target="_blank"
               rel="noreferrer"
-              className="rounded-full bg-primary text-white px-4 py-2 hover:bg-accent transition-colors"
+              className="rounded-lg bg-primary text-white px-4 py-2 hover:bg-accent transition-colors"
             >
               Member Portal
             </a>

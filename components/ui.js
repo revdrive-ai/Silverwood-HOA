@@ -4,7 +4,7 @@ export function PageHero({ title, subtitle }) {
   return (
     <div className="bg-cream border-b border-cream2">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 py-10">
-        <h1 className="font-sans font-bold text-3xl sm:text-4xl text-primary tracking-tight">{title}</h1>
+        <h1 className="font-serif font-bold text-3xl sm:text-4xl text-pine tracking-tight">{title}</h1>
         {subtitle ? <p className="mt-2 text-subink max-w-2xl">{subtitle}</p> : null}
       </div>
     </div>
@@ -13,7 +13,7 @@ export function PageHero({ title, subtitle }) {
 
 export function SectionHeading({ children }) {
   return (
-    <h2 className="font-sans font-bold text-xl sm:text-2xl text-primary tracking-wide uppercase border-b-2 border-accent inline-block pb-1 mb-4">
+    <h2 className="font-serif font-bold text-2xl sm:text-3xl text-pine mb-4">
       {children}
     </h2>
   );
@@ -28,12 +28,12 @@ export function Card({ href, image, imageFit, title, description, external }) {
         href={href}
         target={external ? "_blank" : undefined}
         rel={external ? "noreferrer" : undefined}
-        className="group block bg-white border border-cream2 rounded-lg overflow-hidden hover:shadow-md transition-shadow"
+        className="group block bg-white border border-cream2 rounded-xl overflow-hidden hover:border-primary transition-colors"
       >
         {children}
       </a>
     ) : (
-      <div className="bg-white border border-cream2 rounded-lg overflow-hidden">{children}</div>
+      <div className="bg-white border border-cream2 rounded-xl overflow-hidden">{children}</div>
     );
 
   return (
@@ -55,9 +55,10 @@ export function InfoStrip({ facts }) {
   return (
     <div className="grid gap-4 sm:grid-cols-3">
       {facts.map((f) => (
-        <div key={f.label} className="bg-cream rounded-lg p-4 border border-cream2">
-          <div className="text-xs font-sans font-bold uppercase tracking-wide text-accent">{f.label}</div>
-          <div className="mt-1 text-primary font-semibold">{f.value}</div>
+        <div key={f.label} className="bg-cream rounded-xl p-4 border border-cream2">
+          <div className="text-xs font-sans font-bold uppercase tracking-wide text-primary">{f.label}</div>
+          <div className="mt-1 text-pine font-semibold">{f.value}</div>
+          {f.note ? <div className="mt-2 text-sm font-sans font-bold text-pine">{f.note}</div> : null}
         </div>
       ))}
     </div>
