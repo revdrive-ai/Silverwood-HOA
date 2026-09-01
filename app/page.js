@@ -11,7 +11,14 @@ export default function HomePage() {
     <div>
       {/* Hero */}
       <div className="relative h-[320px] sm:h-[420px] w-full">
-        <Image src="/images/entrance.jpg" alt="Silverwood neighborhood entrance" fill priority className="object-cover" />
+        <Image
+          src="/images/entrance.jpg"
+          alt="Silverwood neighborhood entrance"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
+        />
         <div className="absolute inset-0 bg-primary/50" />
         <div className="relative h-full mx-auto max-w-6xl px-4 sm:px-6 flex flex-col justify-center">
           <h1 className="font-serif font-bold text-3xl sm:text-5xl text-white max-w-2xl drop-shadow">
@@ -86,7 +93,13 @@ export default function HomePage() {
       {/* Amenities */}
       <div className="mx-auto max-w-6xl px-4 sm:px-6 py-14 grid gap-8 sm:grid-cols-2 items-center">
         <div className="relative h-64 rounded-lg overflow-hidden">
-          <Image src="/images/pool.jpg" alt="Silverwood community pool" fill className="object-cover" />
+          <Image
+            src="/images/pool.jpg"
+            alt="Silverwood community pool"
+            fill
+            sizes="(min-width: 640px) 576px, 100vw"
+            className="object-cover"
+          />
         </div>
         <div>
           <SectionHeading>Community Amenities</SectionHeading>

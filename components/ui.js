@@ -47,6 +47,8 @@ export function Card({ href, image, imageFit, imagePosition, title, description,
             src={image}
             alt={title}
             fill
+            // Card grid: 3-up at lg, 2-up at sm, full width below.
+            sizes="(min-width: 1024px) 384px, (min-width: 640px) 50vw, 100vw"
             className={
               imageFit === "contain" ? "object-contain" : `object-cover ${imagePosition || ""}`
             }

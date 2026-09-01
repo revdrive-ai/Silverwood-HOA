@@ -19,6 +19,7 @@ export default function VolunteerPage() {
               alt={volunteer.heroImageAlt || volunteer.title}
               fill
               priority
+              sizes="(min-width: 1152px) 1152px, 100vw"
               className="object-cover object-top"
             />
           </div>
@@ -44,7 +45,13 @@ export default function VolunteerPage() {
               <div key={o.title} className="bg-white border border-cream2 rounded-xl overflow-hidden flex flex-col">
                 {o.image ? (
                   <div className="relative w-full h-48 bg-cream2">
-                    <Image src={o.image} alt={o.title} fill className="object-cover" />
+                    <Image
+                      src={o.image}
+                      alt={o.title}
+                      fill
+                      sizes="(min-width: 640px) 560px, 100vw"
+                      className="object-cover"
+                    />
                   </div>
                 ) : null}
                 <div className="p-5 flex flex-col gap-3">
