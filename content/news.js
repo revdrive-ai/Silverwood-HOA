@@ -77,7 +77,9 @@ export const news = [
     slug: "silverwood-committees",
     title: "Silverwood Committees — Volunteers Welcome",
     date: "Ongoing",
-    image: null,
+    image: "/images/committees.jpg",
+    // Faces sit high in this photo; a centred crop cuts them off.
+    imagePosition: "object-top",
     summary: "The HOA is looking for volunteers for beautification, activities, and welcoming new neighbors.",
     body: [
       "The HOA is always looking for volunteers to help in a number of areas. Three established committees welcome new members:",
