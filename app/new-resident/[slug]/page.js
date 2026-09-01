@@ -32,6 +32,7 @@ export default function ResidentDetailPage({ params }) {
             src={item.image}
             alt={item.title}
             fill
+            sizes="(min-width: 768px) 768px, 100vw"
             className={item.imageFit === "contain" ? "object-contain" : "object-cover"}
           />
         </div>

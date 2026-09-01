@@ -29,6 +29,7 @@ export default function NewsDetailPage({ params }) {
             src={item.image}
             alt={item.title}
             fill
+            sizes="(min-width: 768px) 768px, 100vw"
             className={`object-cover ${item.imagePosition || ""}`}
           />
         </div>

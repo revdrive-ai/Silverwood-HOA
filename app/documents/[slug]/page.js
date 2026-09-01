@@ -24,7 +24,13 @@ export default function DocumentDetailPage({ params }) {
       <h1 className="mt-4 font-sans font-bold text-3xl text-primary">{item.title}</h1>
       {item.image ? (
         <div className="relative w-full h-56 mt-6 rounded-lg overflow-hidden">
-          <Image src={item.image} alt={item.title} fill className="object-cover" />
+          <Image
+            src={item.image}
+            alt={item.title}
+            fill
+            sizes="(min-width: 768px) 768px, 100vw"
+            className="object-cover"
+          />
         </div>
       ) : null}
       <div className="mt-6 space-y-4 text-ink leading-relaxed">
