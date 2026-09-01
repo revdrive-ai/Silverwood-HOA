@@ -63,7 +63,7 @@ export const news = [
     slug: "keep-our-neighborhood-clean",
     title: "Keep Our Neighborhood Clean",
     date: "Reminder",
-    image: null,
+    image: "/images/neighborhood-clean.jpg",
     summary: "A few covenant reminders that keep Silverwood looking its best.",
     body: [
       "Weed control: please keep yards, flower beds, tree circles, and street cracks in front of your property free of weeds.",
