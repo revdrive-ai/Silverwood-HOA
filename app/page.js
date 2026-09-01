@@ -52,7 +52,14 @@ export default function HomePage() {
         </div>
         <div className="grid gap-6 sm:grid-cols-3">
           {recentNews.map((n) => (
-            <Card key={n.slug} href={`/news/${n.slug}`} image={n.image} title={n.title} description={n.summary} />
+            <Card
+              key={n.slug}
+              href={`/news/${n.slug}`}
+              image={n.image}
+              imagePosition={n.imagePosition}
+              title={n.title}
+              description={n.summary}
+            />
           ))}
         </div>
       </div>

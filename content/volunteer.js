@@ -15,7 +15,7 @@ export const volunteer = {
   // A generic "neighbors working together" photo belongs here rather than on
   // one of the opportunity cards below, where it would imply it shows that
   // specific project.
-  heroImage: null,
+  heroImage: "/images/volunteer.jpg",
   heroImageAlt: "Neighbors working together on a neighborhood planting project",
 
   why: [

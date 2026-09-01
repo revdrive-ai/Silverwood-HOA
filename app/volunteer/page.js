@@ -19,7 +19,7 @@ export default function VolunteerPage() {
               alt={volunteer.heroImageAlt || volunteer.title}
               fill
               priority
-              className="object-cover"
+              className="object-cover object-top"
             />
           </div>
         </div>

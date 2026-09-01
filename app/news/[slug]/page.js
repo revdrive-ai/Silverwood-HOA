@@ -25,7 +25,12 @@ export default function NewsDetailPage({ params }) {
       {item.date ? <p className="mt-1 text-sm text-subink">{item.date}</p> : null}
       {item.image ? (
         <div className="relative w-full h-64 mt-6 rounded-lg overflow-hidden">
-          <Image src={item.image} alt={item.title} fill className="object-cover" />
+          <Image
+            src={item.image}
+            alt={item.title}
+            fill
+            className={`object-cover ${item.imagePosition || ""}`}
+          />
         </div>
       ) : null}
       <div className="mt-6 space-y-4 text-ink leading-relaxed">
