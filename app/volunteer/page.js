@@ -83,6 +83,24 @@ export default function VolunteerPage() {
               </div>
             ))}
           </div>
+
+          {volunteer.upcomingProjects?.length ? (
+            <div className="mt-14">
+              <h3 className="font-serif font-bold text-xl sm:text-2xl text-pine">Upcoming Projects</h3>
+              {volunteer.upcomingIntro ? (
+                <p className="mt-2 max-w-3xl text-subink">{volunteer.upcomingIntro}</p>
+              ) : null}
+              <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {volunteer.upcomingProjects.map((p) => (
+                  <div key={p.title} className="bg-white border border-cream2 rounded-xl p-5">
+                    <div className="text-xs font-sans font-bold uppercase tracking-wide text-primary">Coming up</div>
+                    <h4 className="mt-1 font-serif font-bold text-lg text-pine">{p.title}</h4>
+                    <p className="mt-2 text-sm text-ink leading-relaxed">{p.body}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : null}
         </div>
       </div>
 
