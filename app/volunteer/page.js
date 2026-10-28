@@ -42,7 +42,14 @@ export default function VolunteerPage() {
           <SectionHeading>Where We Need Help</SectionHeading>
           <div className="grid gap-6 sm:grid-cols-2">
             {volunteer.opportunities.map((o) => (
-              <div key={o.title} className="bg-white border border-cream2 rounded-xl overflow-hidden flex flex-col">
+              <div key={o.title} className="relative bg-white border border-cream2 rounded-xl overflow-hidden flex flex-col">
+                {o.completed ? (
+                  <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
+                    <div className="-rotate-12 rounded-lg border-4 border-primary bg-white/90 px-6 py-2 font-sans text-2xl font-bold uppercase tracking-widest text-primary shadow-lg">
+                      ✓ Completed
+                    </div>
+                  </div>
+                ) : null}
                 {o.image ? (
                   <div className="relative w-full h-48 bg-cream2">
                     <Image
@@ -54,7 +61,7 @@ export default function VolunteerPage() {
                     />
                   </div>
                 ) : null}
-                <div className="p-5 flex flex-col gap-3">
+                <div className={`p-5 flex flex-col gap-3 ${o.completed ? "opacity-50" : ""}`}>
                   <div>
                     <h3 className="font-serif font-bold text-xl text-pine">{o.title}</h3>
                     <div className="mt-1 text-xs font-sans font-bold uppercase tracking-wide text-primary">
