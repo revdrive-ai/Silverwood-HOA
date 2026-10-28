@@ -19,7 +19,7 @@ export const documents = [
     image: "/images/arc-request.webp",
     summary: "Exterior changes now go through the member portal; a paper backup remains for now.",
     body: [
-      "ALL REQUESTS SHOULD NOW BE DONE THROUGH THE MEMBER PORTAL. Sign up at portal.silverwoodneighborhood.org — residents say it's a big improvement over the old paper process.",
+      "ALL REQUESTS SHOULD NOW BE DONE THROUGH THE MEMBER PORTAL. Sign in or sign up with the Member Portal button at the top of any page on this site.",
       "A downloadable backup PDF form remains available for residents having technical difficulty with the portal. Note: this paper option is expected to be phased out after the annual meeting.",
       "Completed paper forms should be mailed to Suzie Smith, W&M Consulting, LLC (dba W&M HOA Management), PO Box 140432, Broken Arrow, OK 74014. Phone 918-928-9917, email admin@wandmconsulting.com.",
     ],
@@ -30,7 +30,7 @@ export const documents = [
     image: "/images/meeting-minutes.jpg",
     summary: "Archived annual meeting minutes. Current documents live in the member portal.",
     body: [
-      "Current minutes and documents are available in the member portal at portal.silverwoodneighborhood.org. Historical archive below:",
+      "Current minutes and documents are available in the member portal (Member Portal button at the top of any page). Historical archive below:",
     ],
     files: [
       { label: "2021 Annual Meeting Minutes (posted 6/15/23)", url: "#" },
@@ -51,7 +51,7 @@ export const documents = [
     body: [
       "Silverwood HOA annual dues are mandatory and due in full by March 1 of every year. Per the HOA bylaws, interest may be charged on late payments and liens may be filed against properties with unpaid dues.",
       "Dues support two neighborhood entrances (one with a guardhouse), the pool and pool house, and a retention pond with surrounding fence on the west side of the community.",
-      "Pay and manage dues through the member portal at portal.silverwoodneighborhood.org.",
+      "Pay and manage dues through the member portal (Member Portal button at the top of any page).",
     ],
   },
   {
