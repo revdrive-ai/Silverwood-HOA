@@ -28,7 +28,7 @@ export const site = {
     ],
   },
   board: [
-    { role: "President", name: "Stephanie O'Connell" },
+    { role: "President", name: "Open" },
     { role: "Vice President", name: "Gary Yaeger" },
     { role: "Director", name: "Nathan Paul" },
     { role: "Director", name: "Randy Pronschinske" },
