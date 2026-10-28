@@ -58,7 +58,6 @@ export const site = {
       icon: "pool",
       label: "Pool season",
       value: "Memorial Day – Labor Day",
-      note: "Extended: Closes Sept 13 at 9 PM",
       // Google Calendar all-day event, Memorial Day weekend–Labor Day 2027
       // (end date is the day after). Update the dates each year.
       link: {
