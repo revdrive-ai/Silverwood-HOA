@@ -1,6 +1,9 @@
+// `category` sets the coloured badge on the home page: Management, Events or
+// Community.
 export const news = [
   {
     slug: "new-management-wm-2026",
+    category: "Management",
     title: "Silverwood Now Managed by W&M HOA Management",
     date: "2026",
     image: "/images/management.jpg",
@@ -14,6 +17,7 @@ export const news = [
   },
   {
     slug: "annual-meeting-2027",
+    category: "Events",
     title: "Annual Meeting 2027",
     date: "2027",
     image: "/images/annual-meeting.jpg",
@@ -26,6 +30,7 @@ export const news = [
   },
   {
     slug: "garage-sale",
+    category: "Community",
     title: "Neighborhood Garage Sale",
     date: "2027",
     image: "/images/garage-sale.jpg",
@@ -37,6 +42,7 @@ export const news = [
   },
   {
     slug: "pool-information",
+    category: "Community",
     title: "Pool Information",
     date: "Seasonal",
     image: "/images/pool.jpg",
@@ -51,6 +57,7 @@ export const news = [
   },
   {
     slug: "keep-our-neighborhood-clean",
+    category: "Community",
     title: "Keep Our Neighborhood Clean",
     date: "Reminder",
     image: "/images/neighborhood-clean.jpg",
@@ -65,6 +72,7 @@ export const news = [
   },
   {
     slug: "silverwood-committees",
+    category: "Community",
     title: "Silverwood Committees — Volunteers Welcome",
     date: "Ongoing",
     image: "/images/committees.jpg",

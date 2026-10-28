@@ -1,8 +1,12 @@
 // Site-wide settings. This file is intentionally plain data (no logic) so it can
 // later be swapped for a CMS-driven source without touching page components.
 
+const memberPortal = "https://wandmhoapropmngmt.appfolio.com/connect";
+
 export const site = {
   name: "Silverwood HOA",
+  established: 2001,
+  homes: 125,
   tagline: "A friendly neighborhood of 125 homes near 111th & Memorial, Bixby, OK",
   nav: [
     { label: "Home", href: "/" },
@@ -13,12 +17,14 @@ export const site = {
     { label: "Board & Contact", href: "/board" },
   ],
   externalLinks: {
-    memberPortal: "https://wandmhoapropmngmt.appfolio.com/connect",
+    memberPortal,
     facebookGroup: "https://www.facebook.com/groups/187414009235035",
   },
   management: {
     company: "W&M Consulting, LLC",
     dba: "dba W&M HOA Management",
+    // The name residents know; used in the footer.
+    shortName: "W&M HOA Management",
     address: "PO Box 140432, Broken Arrow, OK 74014",
     phone: "918-928-9917",
     contacts: [
@@ -36,26 +42,45 @@ export const site = {
     { role: "Member at Large", name: "Laura Chrismon" },
     { role: "Member at Large", name: "Roberto Rodriguez" },
   ],
+  // The three cards under the home-page photo. `icon` is one of: dues, pool,
+  // meeting. `note` is optional: when present it shows as an amber notice
+  // (use it for time-sensitive changes, and delete it once it's out of date).
+  // `link` is optional.
   quickFacts: [
-    { label: "Annual dues", value: "Due in full by March 1 each year" },
     {
+      icon: "dues",
+      label: "Annual dues",
+      value: "Due in full by March 1",
+      body: "Each year. Pay early to avoid late fees.",
+      link: { label: "Pay Online →", href: memberPortal },
+    },
+    {
+      icon: "pool",
       label: "Pool season",
       value: "Memorial Day – Labor Day",
-      note: "Extended! The pool now closes Sunday, September 13th at 9 PM for the season.",
+      note: "Extended: Closes Sept 13 at 9 PM",
+      // Google Calendar all-day event, Memorial Day weekend–Labor Day 2027
+      // (end date is the day after). Update the dates each year.
+      link: {
+        label: "+ Add to Calendar",
+        href: "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Silverwood%20Pool%20Season&dates=20270529/20270907&location=Silverwood%20Pool%2C%20Bixby%2C%20OK",
+      },
     },
-    { label: "Next Annual Meeting", value: "May 2027 · Time & location TBD" },
+    {
+      icon: "meeting",
+      label: "Next Annual Meeting",
+      value: "May 2027",
+      body: "Time & Location TBD — check back for updates.",
+      link: { label: "Meeting details →", href: "/news/annual-meeting-2027" },
+    },
   ],
-  amenities:
-    "Dues support two neighborhood entrances (one with a guardhouse), a pool and pool house, and a retention pond with surrounding fence on the west side of the community.",
-  poolInfo: {
-    hours: "Mon 1–9 PM (pool cleaning day) · Tue–Thu 9 AM–9 PM · Fri–Sun 9 AM–10 PM",
-    season: "Memorial Day weekend through Labor Day weekend (exact closing date depends on weather and usage)",
-    announcement:
-      "The Board has voted to extend the pool season an extra week — the pool closes Sunday, September 13th at 9 PM for the season. This may get extended depending on usage and the weather; watch for more announcements.",
-    access:
-      "Electronic pool keys are available from Tim Sanderson or a board member — residents must have current dues to receive one. Request a key via the contact page or the Facebook group.",
-    rules:
-      "Please clean all tables and pick up all trash before leaving the pool area. Staying at the pool after the posted closing time is not permitted.",
-  },
-  footerNote: "Content on this site is maintained by Silverwood HOA board volunteers.",
+  // The green band of four links on the home page. `icon` is one of:
+  // bylaws, arc, trash, pool.
+  homeQuickLinks: [
+    { icon: "bylaws", label: "Bylaws & CC&Rs", href: "/documents/bylaws-covenants" },
+    { icon: "arc", label: "ARC Request Form", href: "/documents/arc-request-form" },
+    { icon: "trash", label: "Trash Schedule", href: "/new-resident/important-telephone-numbers" },
+    { icon: "pool", label: "Pool Rules", href: "/news/pool-information" },
+  ],
+  footerNote: "All rights reserved",
 };

@@ -30,18 +30,17 @@ Until that's switched over, your edits won't reach them.
 
 | To change... | Edit this file | Look for |
 | --- | --- | --- |
-| Pool hours | `content/site.js` | `poolInfo` → `hours` |
-| Pool announcement (the bold notice) | `content/site.js` | `poolInfo` → `announcement` |
-| The three tiles on the home page | `content/site.js` | `quickFacts` |
+| Pool hours and announcements | `content/news.js` | the "Pool Information" post |
+| The three cards on the home page | `content/site.js` | `quickFacts` |
+| The amber notice on a home-page card | `content/site.js` | `quickFacts` → `note` (delete the whole `note: "...",` line to hide it) |
+| The four links in the green band on the home page | `content/site.js` | `homeQuickLinks` |
+| Year established | `content/site.js` | `established` |
+| The coloured badge on a news card | `content/news.js` | `category`: Management, Events or Community |
 | Board member names and roles | `content/site.js` | `board` |
 | Management company contacts | `content/site.js` | `management` |
 | A news post | `content/news.js` | find the entry by its `title` |
 | Documents and their descriptions | `content/documents.js` | find the entry by its `title` |
 | New Resident pages | `content/newResident.js` | find the entry by its `title` |
-
-Pool hours appear in **two** places — `content/site.js` (the home page) and
-the "Pool Information" post in `content/news.js`. Change both, or the site
-will contradict itself.
 
 ## How to make a text edit on GitHub
 
