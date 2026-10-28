@@ -1,5 +1,6 @@
 import { site } from "../../content/site";
 import { PageHero, SectionHeading } from "../../components/ui";
+import BoardMessageForm from "../../components/BoardMessageForm";
 
 export const metadata = { title: "Board & Contact — Silverwood HOA" };
 
@@ -28,7 +29,11 @@ export default function BoardPage() {
           </div>
           <p className="mt-4 text-sm text-subink">
             For most day-to-day items — dues, ARC requests, maintenance issues — please contact our management
-            company directly (right). Board members can be reached through management for board-specific matters.
+            company directly (right). For board-specific matters, email the board at{" "}
+            <a href={`mailto:${site.boardEmail}`} className="text-accent hover:underline">
+              {site.boardEmail}
+            </a>
+            .
           </p>
         </div>
 
@@ -66,47 +71,14 @@ export default function BoardPage() {
         <div className="mx-auto max-w-3xl px-4 sm:px-6 py-14">
           <SectionHeading>Send the Board a Message</SectionHeading>
           <p className="text-subink mb-4">
-            For general questions or committee interest, use the form below. This form needs to be connected to a
-            form service (e.g. Formspree) or email address before it will actually deliver messages — see the
-            project README for setup steps.
+            For general questions or committee interest, use the form below — it opens your email app with your
+            message addressed to the board. You can also email us directly at{" "}
+            <a href={`mailto:${site.boardEmail}`} className="text-accent hover:underline">
+              {site.boardEmail}
+            </a>
+            .
           </p>
-          <form className="grid gap-4 bg-white border border-cream2 rounded-lg p-6" action="#" method="POST">
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div>
-                <label className="block text-sm font-sans font-semibold text-primary mb-1">Name</label>
-                <input
-                  type="text"
-                  name="name"
-                  required
-                  className="w-full rounded border border-cream2 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-sans font-semibold text-primary mb-1">Email</label>
-                <input
-                  type="email"
-                  name="email"
-                  required
-                  className="w-full rounded border border-cream2 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
-                />
-              </div>
-            </div>
-            <div>
-              <label className="block text-sm font-sans font-semibold text-primary mb-1">Message</label>
-              <textarea
-                name="message"
-                rows={5}
-                required
-                className="w-full rounded border border-cream2 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
-              />
-            </div>
-            <button
-              type="submit"
-              className="justify-self-start rounded-full bg-primary text-white px-6 py-2.5 font-sans font-semibold hover:bg-accent transition-colors"
-            >
-              Send Message
-            </button>
-          </form>
+          <BoardMessageForm to={site.boardEmail} />
         </div>
       </div>
     </div>
