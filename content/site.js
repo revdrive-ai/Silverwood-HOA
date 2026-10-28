@@ -22,7 +22,7 @@ export const site = {
     address: "PO Box 140432, Broken Arrow, OK 74014",
     phone: "918-928-9917",
     contacts: [
-      { name: "Suzie Smith", role: "Primary contact" },
+      { name: "Suzie Smith", role: "Main contact", email: "admin@wandmconsulting.com" },
     ],
   },
   board: [
