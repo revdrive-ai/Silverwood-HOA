@@ -159,7 +159,7 @@ export function NewsCard({ item }) {
   return (
     <Link
       href={`/news/${item.slug}`}
-      className="group flex flex-col overflow-hidden rounded-2xl bg-white shadow-[0_2px_12px_rgba(30,63,32,0.06)] transition-[transform,box-shadow] duration-300 hover:-translate-y-1 hover:shadow-[0_12px_32px_rgba(30,63,32,0.14)]"
+      className="group flex flex-col overflow-hidden rounded-2xl border border-forest/50 bg-forest/[0.07] shadow-[0_2px_12px_rgba(30,63,32,0.06)] transition-[transform,box-shadow,border-color] hover:border-forest duration-300 hover:-translate-y-1 hover:shadow-[0_12px_32px_rgba(30,63,32,0.14)]"
     >
       <div className="relative h-[220px] overflow-hidden bg-sage">
         <Image
