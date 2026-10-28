@@ -26,11 +26,12 @@ export const volunteer = {
   opportunities: [
     {
       title: "Christmas Lights",
-      when: "November — date to be announced",
+      when: "Saturday, November 14 · 10 AM – 1 PM",
       image: null,
       body: [
-        "We put up the holiday lights at the neighborhood entrances in November, ahead of the season. With enough hands it's a couple of hours: hanging strands, clipping them in, and running extension cords.",
-        "No experience needed. Bring gloves, and a ladder if you have one.",
+        "Let's light up Silverwood! Join your neighbors on Saturday, November 14, from 10 AM to 1 PM as we deck out the neighborhood entrances for the holidays. It's the perfect way to kick off the season: meet the folks down the street, share a few laughs, and make our neighborhood Christmas look great.",
+        "No experience needed. Many hands make quick work of hanging strands, clipping them in, and running extension cords. Bring gloves, and a ladder if you have one.",
+        "Volunteers 13 and older are welcome on their own. Kids under 13 are welcome too, with a parent alongside them.",
       ],
       helpful: "Ladders, extension cords, gloves, and a tolerance for cold fingers.",
     },
