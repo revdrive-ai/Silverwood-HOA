@@ -26,6 +26,7 @@ export const newResidentPages = [
         { label: "ONG", value: "834-8000" },
       ]},
       { heading: "Trash", items: [
+        { label: "Trash day", value: "Monday" },
         { label: "Controlled Waste", value: "582-1147" },
         { label: "American Waste Control", value: "446-0023" },
       ]},
