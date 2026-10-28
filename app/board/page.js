@@ -14,11 +14,11 @@ export default function BoardPage() {
       <div className="mx-auto max-w-6xl px-4 sm:px-6 py-10 grid gap-12 lg:grid-cols-2">
         <div>
           <SectionHeading>Board of Directors</SectionHeading>
-          <div className="border border-cream2 rounded-lg overflow-hidden">
+          <div className="border border-primary/60 rounded-lg overflow-hidden shadow-sm">
             <table className="w-full text-sm">
-              <tbody className="divide-y divide-cream2">
+              <tbody className="divide-y divide-primary/20">
                 {site.board.map((b) => (
-                  <tr key={b.name} className="odd:bg-white even:bg-cream">
+                  <tr key={b.name} className="odd:bg-cream even:bg-primary/[0.08]">
                     <td className="px-4 py-3 font-sans font-semibold text-primary w-1/2">{b.role}</td>
                     <td className="px-4 py-3 text-ink">{b.name}</td>
                   </tr>
@@ -38,7 +38,7 @@ export default function BoardPage() {
 
         <div>
           <SectionHeading>Management Company</SectionHeading>
-          <div className="bg-cream border border-cream2 rounded-lg p-5">
+          <div className="bg-cream border border-primary/60 rounded-lg p-5 shadow-sm">
             <div className="font-sans font-bold text-primary text-lg">{site.management.company}</div>
             {site.management.dba && <p className="text-sm text-subink italic">{site.management.dba}</p>}
             <p className="mt-1 text-subink">{site.management.address}</p>
