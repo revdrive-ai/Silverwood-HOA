@@ -2,6 +2,19 @@
 // Community.
 export const news = [
   {
+    slug: "pool-fence-pergola-refresh-2026",
+    category: "Community",
+    title: "Pool Fence and Pergola Refreshed",
+    date: "Fall 2026",
+    image: "/images/pool.jpg",
+    summary: "The pool fence has been repaired and restained, and the pergola has a fresh coat of stain too.",
+    body: [
+      "Good news for next pool season: the work around the pool is done. Every damaged board in the pool fence has been repaired, and the whole fence has been restained.",
+      "While we were at it, the pergola got a fresh coat of stain as well, so the whole pool area is looking sharp and better protected from the weather.",
+      "Thank you to everyone who pitched in. Projects like this one, done by neighbors instead of contractors, are a big part of how we keep dues where they are. Want to help with the next one? See the upcoming projects on the Volunteer page.",
+    ],
+  },
+  {
     slug: "new-management-wm-2026",
     category: "Management",
     title: "Silverwood Now Managed by W&M HOA Management",
