@@ -5,6 +5,9 @@
 // To add a photo to an opportunity, upload it to public/images/ and set
 // `image` to "/images/<file>.jpg". Leave it as null and the card simply
 // renders without a picture.
+//
+// When a project is done, add `completed: true` to it. Its card fades and
+// gets a "Completed" stamp across the front.
 
 export const volunteer = {
   title: "Volunteer",
@@ -37,7 +40,8 @@ export const volunteer = {
     },
     {
       title: "Pool Fence Repair & Staining",
-      when: "Scheduling now — likely a weekend work day",
+      completed: true,
+      when: "Done — thank you to everyone who pitched in!",
       image: null,
       body: [
         "The fence around the pool needs some repair work and a fresh coat of stain. Contracted out, a job like this costs the Association real money; as a weekend work party with a few neighbors, it costs us materials.",
@@ -48,7 +52,7 @@ export const volunteer = {
   ],
 
   howToHelp: [
-    "Interested in either project? Post in the neighborhood Facebook group, or reach out through the Board & Contact page and say which one you'd like to help with. We'll follow up with the date once it's set.",
+    "Interested in helping with the Christmas lights? Just show up on Saturday, November 14, or let us know you're coming by posting in the neighborhood Facebook group or reaching out through the Board & Contact page.",
     "There's no ongoing commitment — helping with one work day doesn't sign you up for anything else.",
   ],
 

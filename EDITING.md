@@ -36,6 +36,7 @@ Until that's switched over, your edits won't reach them.
 | The four links in the green band on the home page | `content/site.js` | `homeQuickLinks` |
 | Year established | `content/site.js` | `established` |
 | The coloured badge on a news card | `content/news.js` | `category`: Management, Events or Community |
+| Mark a volunteer project as done | `content/volunteer.js` | add `completed: true,` to that project (adds the "Completed" stamp) |
 | Board member names and roles | `content/site.js` | `board` |
 | Management company contacts | `content/site.js` | `management` |
 | A news post | `content/news.js` | find the entry by its `title` |
