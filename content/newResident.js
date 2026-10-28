@@ -47,7 +47,8 @@ export const newResidentPages = [
   {
     slug: "tornado-siren-locations",
     title: "Tornado Siren Locations",
-    image: null,
+    // Illustration of an outdoor warning siren (drawn for this site, not a photo).
+    image: "/images/tornado-siren.jpg",
     summary: "Siren locations and map for the City of Bixby.",
     body: [
       "The City of Bixby warning sirens map below shows where the outdoor sirens are located across the city. For the latest information, visit the City of Bixby Storm Siren Map page.",
