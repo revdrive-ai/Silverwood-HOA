@@ -32,7 +32,7 @@ export const volunteer = {
       when: "Saturday, November 14 · 10 AM – 1 PM",
       image: null,
       body: [
-        "Let's light up Silverwood! Join your neighbors on Saturday, November 14, from 10 AM to 1 PM as we deck out the neighborhood entrances for the holidays. It's the perfect way to kick off the season: meet the folks down the street, share a few laughs, and make our neighborhood Christmas look great.",
+        "Let's light up Silverwood! Join your neighbors on Saturday, November 14, from 10 AM to 1 PM as we deck out the neighborhood entrances for the holidays. We'll meet at the front entrance, by the little guardhouse. It's the perfect way to kick off the season: meet the folks down the street, share a few laughs, and make our neighborhood Christmas look great.",
         "No experience needed. Many hands make quick work of hanging strands, clipping them in, and running extension cords. Bring gloves, and a ladder if you have one.",
         "Volunteers 13 and older are welcome on their own. Kids under 13 are welcome too, with a parent alongside them.",
       ],
@@ -52,7 +52,7 @@ export const volunteer = {
   ],
 
   howToHelp: [
-    "Interested in helping with the Christmas lights? Just show up on Saturday, November 14, or let us know you're coming by posting in the neighborhood Facebook group or reaching out through the Board & Contact page.",
+    "Interested in helping with the Christmas lights? Just show up at the front entrance guardhouse on Saturday, November 14 at 10 AM, or let us know you're coming by posting in the neighborhood Facebook group or reaching out through the Board & Contact page.",
     "There's no ongoing commitment — helping with one work day doesn't sign you up for anything else.",
   ],
 
