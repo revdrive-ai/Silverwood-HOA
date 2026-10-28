@@ -52,7 +52,7 @@ export const volunteer = {
   ],
 
   howToHelp: [
-    "Interested in either project? Post in the neighborhood Facebook group, or reach out through the Board & Contact page and say which one you'd like to help with. We'll follow up with the date once it's set.",
+    "Interested in helping with the Christmas lights? Just show up on Saturday, November 14, or let us know you're coming by posting in the neighborhood Facebook group or reaching out through the Board & Contact page.",
     "There's no ongoing commitment — helping with one work day doesn't sign you up for anything else.",
   ],
 
