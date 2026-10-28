@@ -25,6 +25,7 @@ export const site = {
       { name: "Suzie Smith", role: "Main contact", email: "admin@wandmconsulting.com" },
     ],
   },
+  boardEmail: "silverwoodhoaboardbixby@gmail.com",
   board: [
     { role: "President", name: "Open" },
     { role: "Vice President", name: "Gary Yaeger" },
