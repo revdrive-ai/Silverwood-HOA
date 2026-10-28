@@ -31,12 +31,12 @@ export function Card({ href, image, imageFit, imagePosition, title, description,
         href={href}
         target={external ? "_blank" : undefined}
         rel={external ? "noreferrer" : undefined}
-        className="group block bg-white border border-cream2 rounded-xl overflow-hidden hover:border-primary transition-colors"
+        className="group block bg-cream border border-primary/60 rounded-xl overflow-hidden shadow-sm hover:border-primary hover:shadow-md transition-[border-color,box-shadow]"
       >
         {children}
       </a>
     ) : (
-      <div className="bg-white border border-cream2 rounded-xl overflow-hidden">{children}</div>
+      <div className="bg-cream border border-primary/60 rounded-xl overflow-hidden shadow-sm">{children}</div>
     );
 
   return (
