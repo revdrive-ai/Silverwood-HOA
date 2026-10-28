@@ -24,7 +24,7 @@ layout. Editing content should never require touching a component.
 
 | File | Drives |
 | --- | --- |
-| `content/site.js` | Site name/tagline, nav, board roster, management contacts, home-page quick facts, pool info, footer note |
+| `content/site.js` | Site name/tagline, year established, nav, board roster, management contacts, home-page status cards (`quickFacts`) and quick-links band (`homeQuickLinks`), footer note |
 | `content/news.js` | News list (`/news`) and each article (`/news/[slug]`) |
 | `content/documents.js` | Documents list and detail pages |
 | `content/newResident.js` | New Resident pages, including the phone-number and ordinance pages |
@@ -42,15 +42,29 @@ Common entry fields: `slug`, `title`, `date`, `image`, `summary`, `body`
 `components/ui.js`:
 
 - **`Card`** — the grid card used on the news/documents/new-resident index
-  pages and the home page. Renders `image` as a 160px banner **above** the
+  pages. Renders `image` as a 160px banner **above** the
   text, cropped with `object-cover`.
   - `imageFit="contain"` switches that slot to a padded white field with
     `object-contain`. Use it for **logos/wordmarks**, which `object-cover`
     would crop badly. The PSO logo on the Power Outage card uses this.
-- **`InfoStrip`** — the three quick-fact tiles on the home page, fed by
-  `site.quickFacts`. Each fact takes `label`, `value`, and an optional `note`
-  (rendered bold underneath — used for the pool-season extension notice).
 - **`PageHero`**, **`SectionHeading`** — section furniture.
+
+`components/home.js` — the homepage sections (redesigned Oct 2026 from a
+design brief): `Hero`, `StatusCards`, `QuickLinksBar`, `NewsCard`,
+`Highlights`. Everything they show comes from `content/`:
+
+- **`StatusCards`** — the three cards overlapping the hero, fed by
+  `site.quickFacts`. Each takes `icon` (`dues`/`pool`/`meeting`), `label`,
+  `value`, optional `body`, optional `note` (an amber notice pill, shown only
+  when present — used for the pool-season extension), optional `link`.
+- **`QuickLinksBar`** — the green band, fed by `site.homeQuickLinks`.
+- **`NewsCard`** — the first three entries of `news.js`; the badge colour
+  comes from each entry's `category` (Management/Events/Community).
+- Icons are Font Awesome (npm packages, not the CDN). Content files name
+  icons by key; `components/home.js` maps keys to icons.
+
+`components/Header.js` is a client component (it needs the current path for
+the active-link style and state for the mobile menu).
 
 Note that detail pages render `item.image` themselves rather than through
 `Card` (see `app/new-resident/[slug]/page.js`), so an image treatment often
@@ -63,11 +77,18 @@ Defined in `tailwind.config.js` — use the token names, not raw hex:
 - `primary` `#2f5d46`, `accent` `#1e4433`, `pine` `#1e3329` (greens)
 - `cream` `#eef3ee`, `cream2` `#e3e9e5` (backgrounds/borders)
 - `ink` `#33403a`, `subink` `#5a675f` (text)
-- `alert` `#b3261e` — the one non-green, reserved for time-sensitive notices
-  (`quickFacts` notes, the pool announcement). Don't spend it on decoration;
-  it only works because it's rare.
+- `alert` `#b3261e` — reserved for time-sensitive notices. Currently unused
+  (the home-page notice is now the amber pill). Don't spend it on decoration.
 - Fonts: `font-serif` (Lora) for headings, `font-sans` (Public Sans) for UI,
   both loaded as CSS variables in `app/layout.js`.
+
+Two palettes coexist. The inner pages use the tokens above. The homepage,
+header and footer use the Oct 2026 redesign tokens: `forest` `#1e3f20`,
+`forest2` `#2c5530`, `gold` `#d4a373`, `goldlight` `#f0c97f`, `alabaster`
+`#f5f7f2`, `sage` `#eff4ec`, `charcoal`, `muted`, `line`, with `font-display`
+(Playfair Display) and `font-body` (Inter). `gold` is too light for text on a
+light background (2.3:1); use `golddeep` `#8b5e34` for gold links there.
+Restyling the inner pages to match is a separate, not-yet-done job.
 
 ## Images
 
