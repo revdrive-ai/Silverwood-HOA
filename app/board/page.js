@@ -1,6 +1,5 @@
 import { site } from "../../content/site";
 import { PageHero, SectionHeading } from "../../components/ui";
-import BoardMessageForm from "../../components/BoardMessageForm";
 
 export const metadata = { title: "Board & Contact — Silverwood HOA" };
 
@@ -71,14 +70,12 @@ export default function BoardPage() {
         <div className="mx-auto max-w-3xl px-4 sm:px-6 py-14">
           <SectionHeading>Send the Board a Message</SectionHeading>
           <p className="text-subink mb-4">
-            For general questions or committee interest, use the form below — it opens your email app with your
-            message addressed to the board. You can also email us directly at{" "}
-            <a href={`mailto:${site.boardEmail}`} className="text-accent hover:underline">
+            For general questions or committee interest, email the board directly at{" "}
+            <a href={`mailto:${site.boardEmail}`} className="text-accent font-semibold hover:underline">
               {site.boardEmail}
             </a>
             .
           </p>
-          <BoardMessageForm to={site.boardEmail} />
         </div>
       </div>
     </div>
