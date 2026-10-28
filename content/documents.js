@@ -33,6 +33,7 @@ export const documents = [
       "Current minutes and documents are available in the member portal (Member Portal button at the top of any page). Historical archive below:",
     ],
     files: [
+      { label: "2026 Annual Meeting Minutes (May 12, 2026)", url: "/documents/2026-annual-meeting-minutes.pdf" },
       { label: "2021 Annual Meeting Minutes (posted 6/15/23)", url: "#" },
       { label: "2022 Annual Meeting Minutes", url: "#" },
       { label: "2021 HOA Meeting Minutes", url: "#" },
