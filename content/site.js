@@ -23,6 +23,7 @@ export const site = {
     phone: "918-928-9917",
     contacts: [
       { name: "Suzie Smith", role: "Main contact", email: "admin@wandmconsulting.com" },
+      { name: "T. James Weinacht, CPA, CGMA, CFE", role: "Community Manager" },
     ],
   },
   boardEmail: "silverwoodhoaboardbixby@gmail.com",
