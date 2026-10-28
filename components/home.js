@@ -101,9 +101,11 @@ export function StatusCards({ facts }) {
   return (
     <div className="grid gap-6 lg:grid-cols-3">
       {facts.map((f) => (
+        // Solid colour, not a translucent tint like NewsCard: these cards
+        // overlap the hero photo, which would show through.
         <div
           key={f.label}
-          className="flex gap-4 rounded-2xl border-t-4 border-forest bg-white p-6 shadow-[0_4px_24px_rgba(30,63,32,0.10)]"
+          className="flex gap-4 rounded-2xl border border-t-4 border-forest/50 border-t-forest bg-[#e6eae3] p-6 shadow-[0_4px_24px_rgba(30,63,32,0.10)]"
         >
           <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-gold/20 text-golddeep">
             <FontAwesomeIcon icon={cardIcons[f.icon] || faStar} className="h-5 w-5" aria-hidden="true" />
