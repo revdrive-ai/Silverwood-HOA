@@ -30,9 +30,9 @@ export const site = {
   board: [
     { role: "President", name: "Open" },
     { role: "Vice President", name: "Gary Yaeger" },
-    { role: "Director", name: "Nathan Paul" },
-    { role: "Director", name: "Randy Pronschinske" },
-    { role: "Member at Large", name: "Tim Sanderson" },
+    { role: "Treasurer", name: "Randy Pronschinske" },
+    { role: "Secretary", name: "Tim Sanderson" },
+    { role: "Member at Large", name: "Nathan Paul" },
     { role: "Member at Large", name: "Laura Chrismon" },
     { role: "Member at Large", name: "Roberto Rodriguez" },
   ],
