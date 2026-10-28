@@ -21,7 +21,7 @@ export const documents = [
     body: [
       "ALL REQUESTS SHOULD NOW BE DONE THROUGH THE MEMBER PORTAL. Sign up at portal.silverwoodneighborhood.org — residents say it's a big improvement over the old paper process.",
       "A downloadable backup PDF form remains available for residents having technical difficulty with the portal. Note: this paper option is expected to be phased out after the annual meeting.",
-      "Completed paper forms should be mailed to Robson Property Management, 901 N Forest Ridge Blvd, Broken Arrow, OK 74014. Phone 918-994-6562, email k.reid@rp-management.com.",
+      "Completed paper forms should be mailed to Suzie Smith, W&M Consulting, LLC (dba W&M HOA Management), PO Box 140432, Broken Arrow, OK 74014. Phone 918-928-9917, email admin@wandmconsulting.com.",
     ],
   },
   {
