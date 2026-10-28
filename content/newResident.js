@@ -50,13 +50,13 @@ export const newResidentPages = [
     image: null,
     summary: "Siren locations and map for the City of Bixby.",
     body: [
-      "A City of Bixby document shows the list of siren locations and a map for the area.",
+      "The City of Bixby warning sirens map below shows where the outdoor sirens are located across the city. For the latest information, visit the City of Bixby Storm Siren Map page.",
       "The City of Bixby Emergency Management Office works to mitigate loss of life and property in emergencies such as tornadoes, storms, wildfires, floods, and man-made disasters.",
     ],
     files: [
-      { label: "City of Bixby Warning Sirens Map (PDF)", url: "#" },
+      { label: "City of Bixby Warning Sirens Map (PDF)", url: "/documents/bixby-warning-sirens-map.pdf" },
+      { label: "City of Bixby Storm Siren Map (city website)", url: "https://www.bixbyok.gov/852/Storm-Siren-Map" },
     ],
-    note: "Board: link the current PDF from the old site or the City of Bixby.",
   },
   {
     slug: "power-outage",
