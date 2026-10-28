@@ -51,6 +51,37 @@ export const volunteer = {
     },
   ],
 
+  // Projects on the list but not yet scheduled. Each gets its own card under
+  // "Upcoming Projects". Once one has a date, move it up into `opportunities`.
+  upcomingIntro:
+    "Here's what's on the list next. Dates aren't set yet. If one of these is up your alley, or you know someone who does this kind of work, let us know.",
+  upcomingProjects: [
+    {
+      title: "Retention Pond Brush Removal",
+      body: "Clear the brush from the back of the retention pond and clean up the area, including taking out several bad trees.",
+    },
+    {
+      title: "East Front Fence Replacement",
+      body: "Replace the front fence on the east side, the stretch from our main entrance over to the Enclave entrance.",
+    },
+    {
+      title: "Front Brick Fence Tuck-Pointing",
+      body: "Mortar has come loose or fallen out in several places along the front brick fence. Those joints need to be tuck-pointed and the mortar replaced.",
+    },
+    {
+      title: "Guardhouse Trim Painting",
+      body: "Finish painting the trim on the guardhouse at the front entrance so it's all black.",
+    },
+    {
+      title: "Pool Fence Top Rail",
+      body: "Add a top rail to the pool fence to protect it and help it last longer.",
+    },
+    {
+      title: "West 111th Street Fence Repair",
+      body: "Repair the fence along 111th Street on the west side, the stretch in front of the retention pond.",
+    },
+  ],
+
   howToHelp: [
     "Interested in helping with the Christmas lights? Just show up at the front entrance guardhouse on Saturday, November 14 at 10 AM, or let us know you're coming by posting in the neighborhood Facebook group or reaching out through the Board & Contact page.",
     "There's no ongoing commitment — helping with one work day doesn't sign you up for anything else.",
