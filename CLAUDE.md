@@ -145,14 +145,13 @@ Verified against a production build: static files there do **not** shadow the
 returns the PDF while `/documents` and `/documents/bylaws-covenants` still
 return their pages.
 
-Two things to keep in mind:
+Keep in mind:
 
 - `public/` has no access control. Anything there is world-readable and
   indexable. Members-only material belongs in the member portal.
-- **The three Bylaws & Covenants links still point at
-  `silverwoodneighborhood.org/wp-content/uploads/...`** — the old WordPress
-  site. They will break when that domain is cut over to this project. Copy
-  those PDFs into `public/documents/` before any DNS change.
+- The Bylaws & Covenants PDFs (covenants, bylaws and amendments, articles of
+  incorporation) are self-hosted here as of Oct 2026, so the domain cutover
+  won't break them.
 
 ## Known open items
 
