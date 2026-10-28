@@ -1,13 +1,15 @@
 export const news = [
   {
     slug: "new-management-wm-2026",
-    title: "New Management Company Starting October 1, 2026",
+    title: "Silverwood Now Managed by W&M HOA Management",
     date: "2026",
     image: "/images/management.jpg",
-    summary: "Starting October 1st, 2026 our new management company will be W&M HOA Property Management. More details will be sent to each homeowner in September.",
+    summary: "As of October 1, 2026, W&M HOA Management is Silverwood's new managing agent.",
     body: [
-      "Starting October 1st, 2026 our new management company will be W&M HOA Property Management.",
-      "More details will be sent to each homeowner in September.",
+      "As of October 1, 2026, W&M Consulting, LLC (dba W&M HOA Management) has been hired by your Board of Directors as the new managing agent, handling the day-to-day operations of the Association.",
+      "Residents should update their records with the new management contact — Robson Property Management is no longer the Association's manager.",
+      "Dues payments, ARC requests, and Association documents are now handled through the new Member Portal (Member Portal button at the top of any page).",
+      "Management contact: W&M HOA Management · PO Box 140432, Broken Arrow, OK 74014 · 918-928-9917 · Suzie Smith, admin@wandmconsulting.com",
     ],
   },
   {
@@ -18,7 +20,7 @@ export const news = [
     summary: "The 2027 Annual Meeting is set for May 2027. Time and location TBD.",
     body: [
       "The Silverwood HOA's 2027 Annual Meeting will be held in May 2027. Time and location are still to be determined.",
-      "Residents will receive mailed notices from Robson Property Management containing information about adding agenda items, nominations to serve on the board, and proxy voting forms.",
+      "Residents will receive mailed notices from W&M HOA Management containing information about adding agenda items, nominations to serve on the board, and proxy voting forms.",
       "Members who are unable to attend in person are encouraged to complete and return a proxy form prior to the meeting.",
     ],
   },
@@ -31,18 +33,6 @@ export const news = [
     body: [
       "We are planning to schedule the 2027 Garage sales in April so it is timed with nearby communities.",
       "Banners will be displayed around the neighborhood during the week of the sale. Watch the Facebook group and the member portal for reminders once the date is confirmed.",
-    ],
-  },
-  {
-    slug: "new-management-robson",
-    title: "Silverwood Now Managed by Robson Property Management",
-    date: "2024",
-    image: "/images/management.jpg",
-    summary: "Robson Property Management (RPM) has been hired by the Board as the new managing agent.",
-    body: [
-      "Robson Property Management (RPM) has been hired by your Board of Directors as the new managing agent, handling the day-to-day operations of the Association.",
-      "Residents should update their records with the new management contact — previous contact channels are no longer monitored for Association communications.",
-      "Management contact: 901 N Forest Ridge Blvd, Broken Arrow, OK 74014 · 918-994-6562 · Shari Hawkins, s.hawkins@rp-management.com · www.rp-management.com",
     ],
   },
   {
