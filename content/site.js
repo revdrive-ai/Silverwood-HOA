@@ -17,14 +17,12 @@ export const site = {
     facebookGroup: "https://www.facebook.com/groups/187414009235035",
   },
   management: {
-    company: "Robson Property Management (RPM)",
-    address: "901 N Forest Ridge Blvd, Broken Arrow, OK 74014",
-    phone: "918-994-6562",
-    website: "https://www.rp-management.com",
+    company: "W&M Consulting, LLC",
+    dba: "dba W&M HOA Management",
+    address: "PO Box 140432, Broken Arrow, OK 74014",
+    phone: "918-928-9917",
     contacts: [
-      { name: "Shari Hawkins", role: "Management transition / general", email: "s.hawkins@rp-management.com" },
-      { name: "Shannon Cooke", role: "Resident services", email: "s.cooke@rp-management.com" },
-      { name: "K. Reid", role: "ARC requests / dues", email: "k.reid@rp-management.com" },
+      { name: "Suzie Smith", role: "Primary contact" },
     ],
   },
   board: [
