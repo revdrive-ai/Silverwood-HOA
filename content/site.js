@@ -13,7 +13,7 @@ export const site = {
     { label: "Board & Contact", href: "/board" },
   ],
   externalLinks: {
-    memberPortal: "http://portal.silverwoodneighborhood.org",
+    memberPortal: "https://wandmhoapropmngmt.appfolio.com/connect",
     facebookGroup: "https://www.facebook.com/groups/187414009235035",
   },
   management: {
