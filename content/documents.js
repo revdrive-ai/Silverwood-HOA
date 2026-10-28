@@ -5,12 +5,14 @@ export const documents = [
     image: "/images/bylaws.jpg",
     summary: "The governing documents for Silverwood HOA, plus adopted amendments.",
     body: [
-      "This page is the central repository for Silverwood HOA's governing documents — the original bylaws and covenants, plus amendments adopted since.",
+      "This page is the central repository for Silverwood HOA's governing documents: the covenants, the original bylaws and the amendments adopted since, and the Association's articles of incorporation.",
     ],
     files: [
-      { label: "Silverwood Bylaws and Covenants", url: "https://silverwoodneighborhood.org/wp-content/uploads/2023/06/Silverwood-By-Laws-and-Convenants.pdf" },
-      { label: "Amendment 1 (May 7, 2012)", url: "https://silverwoodneighborhood.org/wp-content/uploads/2023/06/2012.05.07-Amended-Bylaws-Silverwood.pdf" },
-      { label: "Amendment 3 (August 9, 2019)", url: "https://silverwoodneighborhood.org/wp-content/uploads/2023/06/2nd-ByLaw-Amendment-SIGNED-080919.docx-3.pdf" },
+      { label: "Deed of Dedication and Restrictive Covenants", url: "/documents/covenants.pdf" },
+      { label: "Bylaws", url: "/documents/bylaws.pdf" },
+      { label: "Amended Bylaws (May 2012)", url: "/documents/amended-bylaws-2012.pdf" },
+      { label: "Second Amendment to the Bylaws (August 9, 2019)", url: "/documents/second-amendment-bylaws-2019.pdf" },
+      { label: "Articles of Incorporation (filed September 19, 2001)", url: "/documents/articles-of-incorporation.pdf" },
     ],
   },
   {
