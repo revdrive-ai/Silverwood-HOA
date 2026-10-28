@@ -42,7 +42,7 @@ export default function VolunteerPage() {
           <SectionHeading>Where We Need Help</SectionHeading>
           <div className="grid gap-6 sm:grid-cols-2">
             {volunteer.opportunities.map((o) => (
-              <div key={o.title} className="relative bg-white border border-cream2 rounded-xl overflow-hidden flex flex-col">
+              <div key={o.title} className="relative bg-primary/[0.08] border border-primary/60 rounded-xl shadow-sm overflow-hidden flex flex-col">
                 {o.completed ? (
                   <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
                     <div className="-rotate-12 rounded-lg border-4 border-primary bg-white/90 px-6 py-2 font-sans text-2xl font-bold uppercase tracking-widest text-primary shadow-lg">
@@ -92,7 +92,7 @@ export default function VolunteerPage() {
               ) : null}
               <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {volunteer.upcomingProjects.map((p) => (
-                  <div key={p.title} className="bg-white border border-cream2 rounded-xl p-5">
+                  <div key={p.title} className="bg-primary/[0.08] border border-primary/60 rounded-xl shadow-sm p-5">
                     <div className="text-xs font-sans font-bold uppercase tracking-wide text-primary">Coming up</div>
                     <h4 className="mt-1 font-serif font-bold text-lg text-pine">{p.title}</h4>
                     <p className="mt-2 text-sm text-ink leading-relaxed">{p.body}</p>
