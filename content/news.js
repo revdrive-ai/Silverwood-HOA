@@ -6,7 +6,7 @@ export const news = [
     category: "Community",
     title: "Pool Fence and Pergola Refreshed",
     date: "Fall 2026",
-    image: "/images/pool.jpg",
+    image: "/images/pool-fence-pergola-2026.jpg",
     summary: "The pool fence has been repaired and restained, and the pergola has a fresh coat of stain too.",
     body: [
       "Good news for next pool season: the work around the pool is done. Every damaged board in the pool fence has been repaired, and the whole fence has been restained.",
